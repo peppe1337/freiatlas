@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="3.75 3.75 362.2 56.5" overflow="visible" role="img" aria-label="Freiatlas">
+  <style>
+    .fa-line{stroke:#E8EAE6}.fa-dot{fill:#7FB0CC}
+    .fa-word{fill:#E8EAE6;font-family:'Newsreader Variable','Newsreader',Georgia,'Times New Roman',serif;font-weight:500;font-size:79.21px;font-variation-settings:'opsz' 36;letter-spacing:-0.01em}
+  </style>
+  <defs>
+    <mask id="fa-gap-lockup-dark" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#fff"/>
+      <circle cx="40.8" cy="20" r="8" fill="#000"/>
+    </mask>
+  </defs>
+  <circle class="fa-line" cx="32" cy="32" r="26" fill="none" stroke-width="4.5"/>
+  <g class="fa-line" mask="url(#fa-gap-lockup-dark)" fill="none" stroke-linecap="round">
+    <path d="M6 32H58" stroke-width="4.5"/>
+    <path d="M32 6A10 26 0 0 1 32 58" stroke-width="3.5"/>
+  </g>
+  <circle class="fa-dot" cx="40.8" cy="20" r="5.5"/>
+  <text class="fa-word" x="85.55" y="60.25" textLength="282.54" lengthAdjust="spacingAndGlyphs">Freiatlas</text>
+</svg>

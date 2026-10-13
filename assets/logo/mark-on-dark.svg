@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Freiatlas">
+  <defs>
+    <mask id="fa-gap-dark" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#fff"/>
+      <circle cx="40.8" cy="20" r="8" fill="#000"/>
+    </mask>
+  </defs>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#E8EAE6" stroke-width="4.5"/>
+  <g mask="url(#fa-gap-dark)" fill="none" stroke="#E8EAE6" stroke-linecap="round">
+    <path d="M6 32H58" stroke-width="4.5"/>
+    <path d="M32 6A10 26 0 0 1 32 58" stroke-width="3.5"/>
+  </g>
+  <circle cx="40.8" cy="20" r="5.5" fill="#7FB0CC"/>
+</svg>

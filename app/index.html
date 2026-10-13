@@ -1,0 +1,2212 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Freiatlas</title>
+<meta name="description" content="Wo kannst du mit deinem Vermögen finanziell unabhängig leben, und wie viel Arbeit wäre dafür nötig? Interaktive Weltkarte für FIRE und Auswandern, mit 99 Orten in 50 Ländern.">
+<meta property="og:title" content="Freiatlas">
+<meta property="og:description" content="Wo reicht dein Vermögen für finanzielle Unabhängigkeit? Weltkarte mit 99 Orten, Zeitachse und eigenen Annahmen.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#34607a">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+:root {
+  --bg: #F4F4EF;
+  --surface: #ffffff;
+  --surface-2: #ECECE5;
+  --ink: #1C2126;
+  --ink-2: #4A5560;
+  --muted: #606B74;
+  --border: #D6D7CE;
+  --ocean: #e9eff1;
+  --map-stroke: #ffffff;
+  --nodata: #D9D9D9;
+  --accent: #34607a;
+  --accent-soft: #e3ecf1;
+  --accent-ink: #ffffff;
+  --hatch-bg: #ffffff;
+  --track: #e6e9e5;
+  --pt-stroke: rgba(28, 33, 38, .75);
+  --fa-line: #23475C;
+  --fa-dot: #34607A;
+  --shadow: 0 1px 2px rgba(20, 30, 25, .05), 0 6px 20px rgba(20, 30, 25, .05);
+  --shadow-lg: 0 4px 10px rgba(20, 30, 25, .08), 0 16px 40px rgba(20, 30, 25, .12);
+  --green: #2E9E5B;
+  --yellow: #F2C94C;
+  --orange: #D9731A;
+  --red: #C0392B;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111416;
+    --surface: #1a1e21;
+    --surface-2: #22272b;
+    --ink: #E8EAE6;
+    --ink-2: #B4BBC0;
+    --muted: #8A949C;
+    --border: #2F363B;
+    --ocean: #151c21;
+    --map-stroke: #111416;
+    --nodata: #3a4146;
+    --accent: #7FB0CC;
+    --accent-soft: #223440;
+    --accent-ink: #0e1a21;
+    --hatch-bg: #1a1e21;
+    --track: #2b3135;
+    --pt-stroke: rgba(255, 255, 255, .85);
+    --fa-line: #E8EAE6;
+    --fa-dot: #7FB0CC;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 20px rgba(0, 0, 0, .25);
+    --shadow-lg: 0 4px 10px rgba(0, 0, 0, .35), 0 16px 40px rgba(0, 0, 0, .45);
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 "Source Sans 3 Variable", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.wrap { max-width: 1240px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 26px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -.01em; }
+.brand-lockup { display: flex; align-items: center; gap: 12px; font: 500 30px/1 "Newsreader Variable", Georgia, "Times New Roman", serif; font-optical-sizing: auto; letter-spacing: -.005em; margin: 0 0 8px; }
+.brand-mark { width: 30px; height: 30px; flex: none; }
+h2 { font-size: 17px; margin: 0; letter-spacing: -.005em; }
+.lede { margin: 0; color: var(--ink-2); max-width: 70ch; }
+.page-head { margin-bottom: 20px; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+section + section { margin-top: 16px; }
+
+/* Konfigurator */
+.config { padding: 18px 20px; }
+.config-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  align-items: flex-start;
+}
+.field { min-width: 0; max-width: 100%; }
+.config-grid .money { width: 220px; }
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+  max-width: 100%;
+}
+.seg button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 14px;
+  padding: 6px 12px;
+  min-width: 36px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.seg button:hover:not(:disabled):not([aria-pressed="true"]) { background: var(--border); color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.seg button:disabled { opacity: .35; cursor: not-allowed; }
+.seg button:focus-visible, .btn:focus-visible, input:focus-visible, summary:focus-visible, th button:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+.money {
+  display: flex;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 12px;
+  max-width: 260px;
+}
+.money input, .adv input {
+  appearance: textfield;
+  -moz-appearance: textfield;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 7px 0;
+  width: 100%;
+  min-width: 0;
+  outline: none;
+}
+.money input::-webkit-outer-spin-button, .money input::-webkit-inner-spin-button,
+.adv input::-webkit-outer-spin-button, .adv input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.money .unit { color: var(--muted); padding-left: 6px; }
+.money:focus-within { border-color: var(--accent); }
+.money.invalid { border-color: var(--red); }
+.linkbtn {
+  appearance: none; border: 0; background: none; padding: 0; margin-top: 6px;
+  color: var(--accent); font: inherit; font-size: 12.5px; cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
+}
+.advanced { margin-top: 18px; border-top: 1px solid var(--border); padding-top: 12px; }
+.advanced summary {
+  cursor: pointer; color: var(--ink-2); font-size: 14px; font-weight: 600; list-style: none;
+  display: inline-flex; align-items: center; gap: 8px; user-select: none;
+}
+.advanced summary::-webkit-details-marker { display: none; }
+.advanced summary::before {
+  content: ""; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg); transition: transform .15s; margin-right: 2px;
+}
+.advanced[open] summary::before { transform: rotate(45deg); }
+.adv-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 24px; margin-top: 14px;
+}
+.adv .money { max-width: none; }
+.adv input { font-size: 15px; font-weight: 500; }
+.adv-note { font-size: 12.5px; color: var(--muted); margin: 4px 0 0; }
+
+/* Karte */
+.map-card { padding: 16px 16px 12px; }
+.map-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; padding: 2px 4px 12px; }
+.map-sub { color: var(--ink-2); font-size: 14px; }
+.map-wrap {
+  position: relative;
+  height: 64vh;
+  min-height: 340px;
+  background: var(--ocean);
+  border-radius: 10px;
+  overflow: hidden;
+}
+#map { display: block; width: 100%; height: 100%; touch-action: pan-x pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+#map.zoomed { touch-action: none; }
+#map:active { cursor: grabbing; }
+.country { stroke: var(--map-stroke); stroke-width: .6; vector-effect: non-scaling-stroke; stroke-linejoin: round; transition: fill .25s; }
+.country.nodata { fill: var(--nodata); }
+.country.has-data { cursor: pointer; }
+.hl { fill: none; stroke: var(--ink); stroke-width: 1.6; vector-effect: non-scaling-stroke; pointer-events: none; stroke-linejoin: round; }
+.hatch-bg { fill: var(--hatch-bg); }
+.country.has-data { transition: fill .25s, fill-opacity .2s; }
+#map.detail .country.has-data { fill-opacity: .5; }
+.pt { cursor: pointer; }
+.pt .hit { fill: transparent; }
+.pt .dot { stroke: var(--pt-stroke); stroke-width: 1.1; vector-effect: non-scaling-stroke; transition: fill .25s; }
+.pt.on .dot { stroke-width: 2.6; }
+.pt.sel .dot { stroke: var(--ink); stroke-width: 3; }
+.pt.dim { opacity: .35; }
+.lbl text { paint-order: stroke; stroke: var(--surface); stroke-linejoin: round; pointer-events: none; }
+.place-labels text { fill: var(--ink); font-weight: 650; }
+.cities text { fill: var(--ink-2); }
+.cities circle { fill: var(--ink-2); }
+.map-msg { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 14px; padding: 24px; text-align: center; }
+.zoom-ctl { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; }
+.btn {
+  appearance: none; width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--ink); font: inherit; font-size: 18px; line-height: 1; cursor: pointer;
+  box-shadow: var(--shadow); display: grid; place-items: center; padding: 0;
+}
+.btn:hover { background: var(--surface-2); }
+.btn svg { width: 16px; height: 16px; }
+.legend {
+  display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-2);
+}
+.legend-item { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.legend-item.opt-off { display: none; }
+.map-wrap .legend {
+  position: absolute; left: 10px; bottom: 10px; max-width: calc(100% - 20px);
+  flex-direction: column; gap: 5px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; box-shadow: var(--shadow);
+}
+.sw {
+  display: inline-block; width: 13px; height: 13px; border-radius: 4px; flex: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08);
+}
+.sw-green { background: var(--green); }
+.sw-yellow { background: var(--yellow); }
+.sw-orange { background: var(--orange); }
+.sw-red { background: var(--red); }
+.sw-nodata { background: var(--nodata); }
+.sw.hatched { background-image: repeating-linear-gradient(45deg, transparent 0 3px, var(--hatch-bg) 3px 6px); }
+.sw-hatch { background: repeating-linear-gradient(45deg, var(--muted) 0 2px, var(--hatch-bg) 2px 5px); }
+.sw-dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; flex: none; margin: 0 1px; background: var(--surface); border: 1.5px solid var(--ink-2); }
+
+/* Geburtsjahre */
+.births { display: flex; flex-wrap: wrap; gap: 6px; min-height: 38px; align-items: center; }
+.birth {
+  display: inline-flex; align-items: center; gap: 6px; background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 3px 3px 3px 10px; font-size: 12.5px; color: var(--muted);
+}
+.birth select {
+  border: 0; background: var(--surface); color: var(--ink); font: inherit; font-size: 14px; font-weight: 600;
+  padding: 4px 6px; border-radius: 7px; cursor: pointer;
+}
+.births .none { color: var(--muted); font-size: 13.5px; }
+.field-note { font-size: 12px; color: var(--muted); margin: 6px 0 0; max-width: 34ch; }
+
+/* Zeitachse */
+.tl { padding: 0 4px 14px; }
+.tl-top { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 10px; }
+.tl-play { width: 38px; height: 38px; flex: none; }
+.tl-play svg { width: 14px; height: 14px; }
+.tl-now { line-height: 1.25; min-width: 0; flex: 1 1 0; }
+.tl-now b { font-size: 21px; letter-spacing: -.01em; }
+.tl-sub { display: block; font-size: 12.5px; color: var(--ink-2); }
+.tl-save { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.tl-save .field-label { margin: 0; }
+.tl-save .money { width: 160px; padding: 0 10px; }
+.tl-save input { font-size: 14px; padding: 6px 0; }
+.tl-chart { position: relative; height: 84px; cursor: pointer; touch-action: pan-y; user-select: none; -webkit-user-select: none; border-radius: 6px; }
+.tl-chart:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.tl-chart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.tl-chart .bar { transition: opacity .15s; }
+.tl-chart .axis { font-size: 11px; fill: var(--muted); }
+.tl-chart .axis.now { fill: var(--ink); font-weight: 700; }
+.tl-chart .cursor { fill: var(--ink); }
+
+/* Jahresstreifen im Tooltip */
+.strip { display: grid; gap: 1px; height: 9px; margin-top: 8px; }
+.strip i { border-radius: 2px; }
+.strip i.now { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 3px var(--ink); position: relative; z-index: 1; }
+.strip-axis { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); margin-top: 3px; }
+.strip-axis b { color: var(--ink); font-weight: 600; }
+.hint { margin: 10px 4px 0; font-size: 12.5px; color: var(--muted); }
+.hint .touch { display: none; }
+@media (pointer: coarse) { .hint .mouse { display: none; } .hint .touch { display: inline; } }
+
+/* Tooltip */
+.tooltip {
+  position: fixed; z-index: 50; left: 0; top: 0;
+  width: 360px; max-width: calc(100vw - 16px);
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-lg);
+  padding: 12px 14px; font-size: 13px; line-height: 1.4;
+  pointer-events: none; opacity: 0; visibility: hidden; transition: opacity .12s;
+}
+.tooltip.show { opacity: 1; visibility: visible; }
+.tooltip.sheet {
+  left: 50% !important; top: auto !important; bottom: 10px; transform: translateX(-50%);
+  width: min(440px, calc(100vw - 16px)); max-height: 62vh; overflow: auto; pointer-events: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tt-close {
+  display: none; position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--ink); font-size: 18px; line-height: 1; cursor: pointer;
+}
+.tooltip.sheet .tt-close { display: grid; place-items: center; }
+.tt-title { font-size: 16px; font-weight: 700; padding-right: 34px; }
+.tt-visa { color: var(--ink-2); margin-top: 2px; }
+.tt-place { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.tt-place-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.tt-name { font-weight: 650; font-size: 14px; }
+.tt-cat { color: var(--muted); }
+.tt-pick {
+  margin-left: auto; font-size: 11px; font-weight: 600; color: var(--accent);
+  background: var(--accent-soft); border-radius: 999px; padding: 1px 8px; white-space: nowrap;
+}
+.tt-need { margin: 4px 0 6px; color: var(--ink-2); }
+.tt-need b { color: var(--ink); }
+.tt-table { width: 100%; border-collapse: collapse; }
+.tt-table th, .tt-table td { padding: 3px 0; text-align: right; font-weight: 400; }
+.tt-table th:first-child { text-align: left; color: var(--ink-2); }
+.tt-table thead th { color: var(--muted); font-size: 11.5px; font-weight: 600; text-align: right; }
+.tt-table thead th:first-child { text-align: left; }
+.tt-table td.pc { width: 76px; }
+.ok { display: inline-block; width: 14px; text-align: center; color: var(--green); font-weight: 700; margin-left: 3px; }
+.tt-foot { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+
+/* Kennzahlen */
+.kpis { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 12px; }
+.kpi { padding: 14px 16px; }
+.kpi-label { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.kpi-value { font-size: 28px; font-weight: 700; line-height: 1.15; margin-top: 4px; letter-spacing: -.01em; }
+.kpi-sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.kpi-wealth .kpi-value { font-size: 30px; }
+
+/* Meilensteine */
+.ms-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; margin: 0 2px 10px; }
+.ms-head .meta { color: var(--muted); font-size: 13px; }
+.milestones { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ms { padding: 16px 18px; }
+.ms-kicker { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.ms-place { font-size: 21px; font-weight: 700; margin-top: 4px; line-height: 1.2; }
+.ms-meta { color: var(--ink-2); font-size: 13.5px; margin-top: 2px; }
+.ms-nums { display: flex; flex-wrap: wrap; gap: 6px 28px; margin-top: 12px; }
+.ms-num span { display: block; font-size: 12px; color: var(--muted); }
+.ms-num b { font-size: 17px; }
+.bar { height: 8px; background: var(--track); border-radius: 999px; overflow: hidden; margin-top: 12px; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width .3s; }
+.bar-label { font-size: 12px; color: var(--muted); margin-top: 5px; }
+.ms-empty { color: var(--ink-2); margin-top: 8px; }
+
+/* Tabelle */
+.table-card { padding: 16px 0 6px; }
+.table-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; padding: 0 18px 10px; }
+.table-head .meta { color: var(--muted); font-size: 13px; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.places { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 820px; }
+.places th, .places td { padding: 8px 12px; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border); }
+.places thead th { position: sticky; top: 0; background: var(--surface); z-index: 1; padding: 0; border-bottom: 1px solid var(--border); }
+.places thead th button {
+  appearance: none; border: 0; background: none; width: 100%; text-align: inherit; font: inherit; font-size: 12.5px;
+  font-weight: 600; color: var(--muted); padding: 10px 12px; cursor: pointer; display: flex; gap: 5px; align-items: center;
+}
+.places thead th.num button { justify-content: flex-end; }
+.places thead th button:hover { color: var(--ink); }
+.places thead th:first-child { padding-left: 6px; }
+.places thead th:last-child { padding-right: 6px; }
+.places thead th[aria-sort] button { color: var(--ink); }
+.arrow { display: inline-block; width: 9px; font-size: 10px; }
+.places td.num, .places th.num { text-align: right; }
+.places tbody tr:hover td { background: var(--surface-2); }
+.places tr > :first-child { padding-left: 18px; position: sticky; left: 0; background: var(--surface); }
+.places tbody tr:hover td:first-child { background: var(--surface-2); }
+.places tr > :last-child { padding-right: 18px; }
+.places td.name { font-weight: 600; }
+.places td.cat, .places td.land { color: var(--ink-2); }
+.status { display: inline-flex; align-items: center; gap: 7px; }
+.places tr.dim td { color: var(--muted); }
+.places tr.dim td.name { font-weight: 500; }
+.visa-tag { font-size: 11.5px; color: var(--muted); margin-left: 6px; }
+
+/* Stufen-Editor */
+.label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.label-row .linkbtn { margin: 0 0 6px; font-size: 12px; }
+.badge {
+  display: inline-block; font-size: 11px; font-weight: 600; color: var(--accent); background: var(--accent-soft);
+  border-radius: 999px; padding: 1px 8px; margin-left: 4px; vertical-align: 1px;
+}
+.badge[hidden] { display: none; }
+.se { margin-top: 14px; max-width: 820px; }
+.se-top { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; margin-bottom: 4px; }
+.se-note { margin: 0; font-size: 12.5px; color: var(--muted); flex: 1 1 300px; }
+.se-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.se-name { font-weight: 600; font-size: 14px; }
+.se-desc {
+  display: block; width: 100%; border: 0; border-bottom: 1px dashed transparent; background: transparent;
+  color: var(--ink-2); font: inherit; font-size: 13px; padding: 1px 0; margin: 1px 0;
+}
+.se-desc { resize: none; overflow: hidden; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.35; field-sizing: content; }
+.se-desc:hover { border-bottom-color: var(--border); }
+.se-desc:focus { outline: none; border-bottom-color: var(--accent); }
+.se-scale { font-size: 12px; color: var(--muted); }
+.se-amt { display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
+.se-amt .money { width: 128px; padding: 0 10px; max-width: none; }
+.se-amt input { font-size: 15px; padding: 6px 0; text-align: right; }
+.se-amt .unit { white-space: nowrap; }
+.se-undo {
+  appearance: none; border: 0; background: none; color: var(--accent); cursor: pointer; width: 28px; height: 28px;
+  border-radius: 7px; display: grid; place-items: center; visibility: hidden; padding: 0;
+}
+.se-undo svg { width: 14px; height: 14px; }
+.se-undo:hover { background: var(--accent-soft); }
+.se-row.changed .se-undo { visibility: visible; }
+.se-row.changed .money { border-color: var(--accent); }
+.se-file { font-size: 11.5px; color: var(--accent); }
+.se-sub { font-weight: 600; font-size: 14px; margin: 18px 0 2px; }
+.se-sub span { font-weight: 400; color: var(--muted); font-size: 12.5px; margin-left: 6px; }
+.se-crow { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.se-crow input[type="text"] {
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--ink); border-radius: 10px;
+  font: inherit; font-size: 14px; padding: 7px 10px; min-width: 0; width: 100%;
+}
+.se-crow select {
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--ink); border-radius: 10px;
+  font: inherit; font-size: 13.5px; padding: 7px 8px;
+}
+.se-del {
+  appearance: none; border: 1px solid var(--border); background: var(--surface); color: var(--ink-2); border-radius: 9px;
+  width: 32px; height: 32px; font-size: 18px; line-height: 1; cursor: pointer;
+}
+.se-foot { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: flex-end; margin-top: 18px; }
+.se-foot .money { width: 120px; }
+.btn-text {
+  appearance: none; border: 1px solid var(--border); background: var(--surface-2); color: var(--ink); border-radius: 9px;
+  padding: 8px 12px; font: inherit; font-size: 13.5px; cursor: pointer;
+}
+.btn-text:hover { background: var(--border); }
+.btn-text:focus-visible, .se-undo:focus-visible, .se-del:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Detailansicht */
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 60; width: min(440px, 100vw);
+  background: var(--surface); color: var(--ink); border-left: 1px solid var(--border); box-shadow: var(--shadow-lg);
+  overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 18px 20px 28px;
+  transform: translateX(100%); visibility: hidden; transition: transform .22s ease, visibility 0s linear .22s;
+}
+.drawer.open { transform: none; visibility: visible; transition: transform .22s ease; }
+.drawer .tt-close { display: grid; place-items: center; top: 14px; right: 14px; }
+.dr-title { font-size: 21px; font-weight: 700; margin: 0; padding-right: 40px; line-height: 1.2; }
+.dr-meta { color: var(--ink-2); font-size: 13.5px; margin-top: 3px; }
+.dr-tabs { margin-top: 12px; }
+.dr-ctx { font-size: 12.5px; color: var(--muted); margin-top: 14px; }
+.dr-total { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 2px; }
+.dr-total b { font-size: 28px; letter-spacing: -.01em; }
+.dr-total span { color: var(--ink-2); font-size: 13px; }
+.dr-line { padding: 9px 0; border-bottom: 1px solid var(--border); }
+.dr-line-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.dr-line-label { font-weight: 600; font-size: 14px; }
+.dr-line-val { font-weight: 600; white-space: nowrap; }
+.dr-line-val small { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 6px; }
+.dr-line-desc { font-size: 12.5px; color: var(--ink-2); }
+.dr-line-how { font-size: 12px; color: var(--muted); }
+.dr-bar { height: 4px; background: var(--track); border-radius: 99px; margin-top: 6px; overflow: hidden; }
+.dr-bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+.dr-zero { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+.dr-h { font-size: 14px; font-weight: 700; margin: 22px 0 6px; }
+.dr-actions { margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; }
+.places tbody tr { cursor: pointer; }
+.places tbody tr:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.ms-link { margin-top: 10px; }
+
+.privacy-line { display: flex; align-items: center; gap: 7px; margin: 10px 0 0; font-size: 13px; color: var(--ink-2); }
+.privacy-line svg { width: 16px; height: 16px; flex: none; color: var(--accent); }
+.example-note { color: var(--accent); }
+.example-note[hidden] { display: none; }
+.remember-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.remember-row .field-note { margin: 0; max-width: none; }
+.check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.check input { width: 18px; height: 18px; accent-color: var(--accent); margin: 0; }
+footer a { color: var(--ink-2); }
+footer .legal { display: flex; gap: 18px; margin-top: 10px; }
+footer .legal a { color: var(--ink); font-weight: 600; }
+
+footer { margin-top: 22px; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+footer p { margin: 0 0 4px; }
+
+@media (max-width: 1000px) {
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .kpi-wealth { grid-column: 1 / -1; }
+}
+@media (max-width: 720px) {
+  .wrap { padding: 18px 16px 40px; }
+  h1 { font-size: 22px; }
+  .brand-lockup { font-size: 26px; gap: 10px; }
+  .brand-mark { width: 26px; height: 26px; }
+  .config { padding: 16px; }
+  .map-card { padding: 12px 12px 10px; }
+  .map-wrap { display: flex; flex-direction: column; height: auto; min-height: 0; }
+  #map { flex: none; height: clamp(220px, 60vw, 64vh); }
+  .map-wrap .legend {
+    position: static; max-width: none; flex: none; gap: 4px;
+    background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; box-shadow: none;
+    padding: 10px 12px 12px; font-size: 12.5px;
+  }
+  .map-wrap .legend-item.opt-off { display: inline-flex; visibility: hidden; }
+  .config-grid { gap: 14px; }
+  .config-grid .field { width: 100%; }
+  .config-grid .money { width: 100%; max-width: none; }
+  .seg { display: flex; width: 100%; }
+  .seg button { flex: 1 1 auto; padding: 6px 8px; }
+  .field-note { max-width: none; }
+  .tl-save { margin-left: 0; width: 100%; }
+  .drawer {
+    top: auto; left: 0; width: 100%; max-height: 88vh; border-left: 0; border-top: 1px solid var(--border);
+    border-radius: 16px 16px 0 0; transform: translateY(100%);
+  }
+  .se-amt .money { width: 112px; }
+  .se-row { grid-template-columns: 1fr; gap: 6px; }
+  .se-amt { justify-content: flex-start; }
+  .se-crow { grid-template-columns: minmax(0, 1fr) auto; }
+  .se-crow select { grid-column: 1; }
+  .tl-save .money { flex: 1; width: auto; }
+  .milestones { grid-template-columns: 1fr; }
+  .kpi-value { font-size: 24px; }
+  .kpi-wealth .kpi-value { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="page-head">
+    <h1 class="brand-lockup"><svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><style>.fa-line{stroke:var(--fa-line)}.fa-dot{fill:var(--fa-dot)}</style><defs><mask id="fa-gap" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff"/><circle cx="40.8" cy="20" r="8" fill="#000"/></mask></defs><circle class="fa-line" cx="32" cy="32" r="26" fill="none" stroke-width="4.5"/><g class="fa-line" mask="url(#fa-gap)" fill="none" stroke-linecap="round"><path d="M6 32H58" stroke-width="4.5"/><path d="M32 6A10 26 0 0 1 32 58" stroke-width="3.5"/></g><circle class="fa-dot" cx="40.8" cy="20" r="5.5"/></svg>Freiatlas</h1>
+    <p class="lede">Wo kannst du mit deinem Vermögen finanziell unabhängig leben, und wie viel Arbeit wäre dafür nötig? Trag deine Daten ein, die Karte rechnet sofort mit.</p>
+    <p class="privacy-line"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 2.5 3.8v3.6c0 3.3 2.3 6.2 5.5 7.1 3.2-.9 5.5-3.8 5.5-7.1V3.8L8 1.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Alles wird in deinem Browser berechnet. Deine Eingaben werden nicht übertragen.</p>
+  </header>
+
+  <main>
+    <section class="card config" aria-label="Konfigurator">
+      <div class="config-grid">
+        <div class="field">
+          <span class="field-label" id="lbl-adults">Erwachsene</span>
+          <div class="seg" id="seg-adults" role="group" aria-labelledby="lbl-adults"></div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="lbl-kids">Kinder</span>
+          <div class="seg" id="seg-kids" role="group" aria-labelledby="lbl-kids"></div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="lbl-births">Geburtsjahr je Kind</span>
+          <div class="births" id="births" role="group" aria-labelledby="lbl-births"></div>
+          <p class="field-note" id="births-note"></p>
+        </div>
+        <div class="field">
+          <div class="label-row"><span class="field-label" id="lbl-stage">FIRE-Stufe</span><button type="button" class="linkbtn" id="btn-open-editor">Was steckt drin?</button></div>
+          <div class="seg" id="seg-stage" role="group" aria-labelledby="lbl-stage"></div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="in-wealth" id="lbl-wealth">Dein FIRE-Vermögen heute</label>
+          <div class="money" id="money-wealth">
+            <input id="in-wealth" type="number" inputmode="numeric" min="0" step="1000">
+            <span class="unit">€</span>
+          </div>
+          <p class="field-note example-note" id="wealth-example">Beispielwert. Trag dein investiertes Vermögen ein, das du für FIRE nutzen willst.</p>
+        </div>
+        <div class="field">
+          <span class="field-label" id="lbl-mode">Ortsauswahl pro Land</span>
+          <div class="seg" id="seg-mode" role="group" aria-labelledby="lbl-mode"></div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="lbl-visa">Visum</span>
+          <div class="seg" id="seg-visa" role="group" aria-labelledby="lbl-visa"></div>
+        </div>
+      </div>
+
+      <details class="advanced" id="stage-editor">
+        <summary>Was steckt in den FIRE-Stufen? Ansehen und anpassen <span class="badge" id="se-badge" hidden>angepasst</span></summary>
+        <div class="se">
+          <div class="se-top">
+            <div class="seg" id="seg-stage2" role="group" aria-label="Stufe im Editor"></div>
+            <p class="se-note" id="se-note"></p>
+          </div>
+          <div id="se-list"></div>
+          <div class="se-sub">Eigene Posten<span>gelten für alle Stufen</span></div>
+          <div id="se-custom"></div>
+          <button type="button" class="linkbtn" id="se-add">+ Eigenen Posten hinzufügen</button>
+          <div class="se-foot">
+            <div class="field">
+              <label class="field-label" for="in-puffer">Puffer auf alle Posten</label>
+              <div class="money"><input id="in-puffer" type="number" inputmode="decimal" min="0" max="100" step="1"><span class="unit">%</span></div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="in-autofix">Fixer Anteil Autokosten</label>
+              <div class="money"><input id="in-autofix" type="number" inputmode="decimal" min="0" max="100" step="5"><span class="unit">%</span></div>
+            </div>
+            <button type="button" class="btn-text" id="se-reset">Alles auf Standardwerte zurücksetzen</button>
+          </div>
+          <p class="adv-note">Änderungen gelten sofort für Karte, Zeitachse und Tabelle.</p>
+        </div>
+      </details>
+
+      <details class="advanced">
+        <summary>Erweiterte Einstellungen</summary>
+        <div class="adv-grid adv">
+          <div class="field">
+            <label class="field-label" for="in-rate">Entnahmerate</label>
+            <div class="money"><input id="in-rate" type="number" inputmode="decimal" min="0.5" max="10" step="0.1"><span class="unit">%</span></div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="in-ret">Realrendite p.a.</label>
+            <div class="money"><input id="in-ret" type="number" inputmode="decimal" min="-5" max="15" step="0.5"><span class="unit">%</span></div>
+            <p class="adv-note">Für die Zeitachse. Alle Beträge in heutigen Preisen.</p>
+          </div>
+          <div class="field">
+            <label class="field-label" for="in-n20">Netto 20h je Person</label>
+            <div class="money"><input id="in-n20" type="number" inputmode="numeric" min="0" step="50"><span class="unit">€/Monat</span></div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="in-n40">Netto 40h je Person</label>
+            <div class="money"><input id="in-n40" type="number" inputmode="numeric" min="0" step="50"><span class="unit">€/Monat</span></div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="in-gkv">GKV-Ersparnis bei Job in DE</label>
+            <div class="money"><input id="in-gkv" type="number" inputmode="numeric" min="0" step="10"><span class="unit">€/Monat</span></div>
+            <p class="adv-note">Gilt in Deutschland bei Min und Lean, sobald gearbeitet wird.</p>
+          </div>
+        </div>
+      </details>
+      <div class="remember-row">
+        <label class="check"><input type="checkbox" id="in-remember"> Meine Eingaben in diesem Browser merken</label>
+        <span class="field-note">Wird nur lokal auf diesem Gerät gespeichert. Häkchen entfernen löscht die gespeicherten Eingaben.</span>
+      </div>
+    </section>
+
+    <section class="card map-card" aria-label="Weltkarte">
+      <div class="map-head">
+        <h2>Wo reicht dein Vermögen?</h2>
+        <div class="map-sub" id="map-sub"></div>
+      </div>
+      <div class="tl" aria-label="Zeitachse">
+        <div class="tl-top">
+          <button type="button" class="btn tl-play" id="tl-play" aria-label="Zeitachse abspielen"></button>
+          <div class="tl-now"><b id="tl-year"></b><span class="tl-sub" id="tl-sub"></span></div>
+          <div class="tl-save">
+            <label class="field-label" for="in-save">Sparrate</label>
+            <div class="money"><input id="in-save" type="number" inputmode="numeric" min="0" step="100"><span class="unit">€/Monat</span></div>
+          </div>
+        </div>
+        <div class="tl-chart" id="tl-chart" role="slider" tabindex="0" aria-label="Jahr der Zeitachse"></div>
+      </div>
+      <div class="map-wrap" id="map-wrap">
+        <svg id="map" role="img" aria-label="Weltkarte mit FIRE-Status pro Land"></svg>
+        <div class="map-msg" id="map-msg">Karte wird geladen</div>
+        <div class="zoom-ctl">
+          <button type="button" class="btn" id="zoom-in" aria-label="Hineinzoomen">+</button>
+          <button type="button" class="btn" id="zoom-out" aria-label="Herauszoomen">&minus;</button>
+          <button type="button" class="btn" id="zoom-reset" aria-label="Ansicht zurücksetzen">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8a5.5 5.5 0 1 0 1.6-3.9"/><path d="M2.5 2.5v3h3"/></svg>
+          </button>
+        </div>
+        <div class="legend" id="legend-overlay"></div>
+      </div>
+      <p class="hint">
+        <span class="mouse">Mausrad oder Doppelklick zum Zoomen, ziehen zum Verschieben. Land oder Punkt überfahren für Details. Beim Reinzoomen erscheinen Ortsnamen und größere Städte.</span>
+        <span class="touch">Mit zwei Fingern zoomen, danach mit einem Finger verschieben. Land oder Punkt antippen für Details.</span>
+      </p>
+    </section>
+
+    <section class="kpis" id="kpis" aria-label="Kennzahlen"></section>
+
+    <section aria-label="Nächster Meilenstein">
+      <div class="ms-head">
+        <h2>Nächster Meilenstein</h2>
+        <span class="meta" id="ms-meta"></span>
+      </div>
+      <div class="milestones" id="milestones"></div>
+    </section>
+
+    <section class="card table-card" aria-label="Alle Orte">
+      <div class="table-head">
+        <h2>Alle Orte</h2>
+        <span class="meta" id="table-meta"></span>
+      </div>
+      <div class="table-scroll">
+        <table class="places" id="places">
+          <thead><tr id="places-head"></tr></thead>
+          <tbody id="places-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><b>Keine Anlage-, Steuer- oder Rechtsberatung.</b> Alle Zahlen sind Modellrechnungen mit vereinfachten Annahmen und Schätzwerten. Prüfe Kosten, Krankenversicherung, Visum und Steuern vor einer Entscheidung im Einzelfall.</p>
+    <p>Preisniveaus je Land: <a href="https://www.worldbank.org/en/programs/icp" rel="noopener" target="_blank">Weltbank ICP 2021</a> nach Ausgabenkategorien, fortgeschrieben mit Weltbank-Kaufkraftdaten bis 2025 (CC BY 4.0), relativ zu Deutschland. Stadt und ländlich über Modellfaktoren, Bausteine in Köln-Preisen. Länderwerte für Krankenversicherung, Schule und Visum: grobe Schätzwerte, Stand Oktober 2026. Zeitachse in heutigen Preisen, Kinder zählen bis 17 zum Haushalt.</p>
+    <p>Koordinaten der Orte: © <a href="https://www.openstreetmap.org/copyright" rel="noopener" target="_blank">OpenStreetMap-Mitwirkende</a> (ODbL). Städtenamen: Natural Earth (gemeinfrei). Grenzen: world-atlas. Software: D3, topojson-client (<a href="../LICENSES.txt">Lizenzen</a>).</p>
+    <p class="legal"><a href="../impressum.html">Impressum</a><a href="../datenschutz.html">Datenschutz</a></p>
+  </footer>
+</div>
+
+<div class="tooltip" id="tooltip" role="dialog" aria-live="polite">
+  <button type="button" class="tt-close" id="tt-close" aria-label="Schließen">&times;</button>
+  <div id="tt-body"></div>
+</div>
+
+<aside class="drawer" id="drawer" role="dialog" aria-modal="false" aria-labelledby="dr-title">
+  <button type="button" class="tt-close" id="dr-close" aria-label="Detailansicht schließen">&times;</button>
+  <div id="dr-body"></div>
+</aside>
+
+<script id="fire-data">
+window.FIRE_DATA = {"indices":{"Albanien":{"col":0.7028,"rent":0.4504,"groc":0.9525,"rest":0.4954},"Argentinien":{"col":0.6244,"rent":0.256,"groc":0.7557,"rest":0.5836},"Australien":{"col":1.0772,"rent":1.3675,"groc":1.0901,"rest":1.1268},"Brasilien":{"col":0.6257,"rent":0.3499,"groc":0.7272,"rest":0.3592},"Bulgarien":{"col":0.6474,"rent":0.3477,"groc":0.8585,"rest":0.471},"Costa Rica":{"col":0.8368,"rent":0.4585,"groc":1.1732,"rest":0.6871},"Deutschland":{"col":1.0,"rent":1.0,"groc":1.0,"rest":1.0},"Ecuador":{"col":0.5752,"rent":0.3001,"groc":0.7996,"rest":0.5246},"Frankreich":{"col":1.0044,"rent":1.0092,"groc":1.0392,"rest":1.0397},"Georgien":{"col":0.5152,"rent":0.2572,"groc":0.8531,"rest":0.4401},"Griechenland":{"col":0.8522,"rent":0.598,"groc":1.0161,"rest":0.778},"Großbritannien":{"col":1.0331,"rent":1.431,"groc":0.9117,"rest":0.8851},"Indien":{"col":0.3049,"rent":0.1591,"groc":0.4456,"rest":0.2443},"Indonesien":{"col":0.4195,"rent":0.1952,"groc":0.6466,"rest":0.2657},"Irland":{"col":1.1398,"rent":1.5713,"groc":1.0886,"rest":1.0951},"Italien":{"col":0.9099,"rent":0.8095,"groc":0.9717,"rest":0.9403},"Japan":{"col":0.8503,"rent":0.7858,"groc":1.1721,"rest":0.7411},"Kambodscha":{"col":0.4775,"rent":0.3521,"groc":0.7537,"rest":0.3212},"Kanada":{"col":1.0459,"rent":1.1631,"groc":1.1668,"rest":0.9868},"Kolumbien":{"col":0.5172,"rent":0.377,"groc":0.7086,"rest":0.492},"Kroatien":{"col":0.8065,"rent":0.4244,"groc":1.039,"rest":0.7815},"Malaysia":{"col":0.4607,"rent":0.1956,"groc":0.6475,"rest":0.1958},"Marokko":{"col":0.5654,"rent":0.3137,"groc":0.7627,"rest":0.386},"Mexiko":{"col":0.7225,"rent":0.5709,"groc":0.9675,"rest":0.6651},"Montenegro":{"col":0.6719,"rent":0.3284,"groc":0.8814,"rest":0.5847},"Nepal":{"col":0.3394,"rent":0.1778,"groc":0.5212,"rest":0.234},"Neuseeland":{"col":0.9619,"rent":1.5241,"groc":1.0141,"rest":1.0262},"Niederlande":{"col":1.0267,"rent":1.144,"groc":0.9321,"rest":1.0771},"Panama":{"col":0.6429,"rent":0.4037,"groc":0.8467,"rest":0.4982},"Philippinen":{"col":0.4725,"rent":0.3133,"groc":0.6905,"rest":0.2937},"Polen":{"col":0.7603,"rent":0.4011,"groc":0.8536,"rest":0.807},"Portugal":{"col":0.8298,"rent":0.6697,"groc":0.9434,"rest":0.6108},"Rumänien":{"col":0.6293,"rent":0.4547,"groc":0.7789,"rest":0.6296},"Schweden":{"col":1.1265,"rent":1.0235,"groc":1.0593,"rest":1.1066},"Schweiz":{"col":1.4928,"rent":1.7203,"groc":1.6081,"rest":1.5521},"Spanien":{"col":0.8394,"rent":0.8333,"groc":0.8896,"rest":0.7056},"Sri Lanka":{"col":0.3803,"rent":0.1261,"groc":0.619,"rest":0.2301},"Südafrika":{"col":0.5278,"rent":0.4131,"groc":0.6625,"rest":0.3687},"Südkorea":{"col":0.8029,"rent":0.5203,"groc":1.3535,"rest":0.7681},"Taiwan":{"col":0.666,"rent":0.42,"groc":1.1477,"rest":0.4168},"Thailand":{"col":0.4673,"rent":0.1458,"groc":0.6613,"rest":0.2648},"Tschechien":{"col":0.8409,"rent":0.7395,"groc":0.9904,"rest":0.5936},"Türkei":{"col":0.6306,"rent":0.2589,"groc":0.8663,"rest":0.6585},"USA":{"col":1.1549,"rent":1.3699,"groc":1.0297,"rest":1.0258},"Ungarn":{"col":0.7331,"rent":0.5536,"groc":0.9351,"rest":0.6275},"Uruguay":{"col":0.9247,"rent":0.6887,"groc":1.3072,"rest":0.6717},"VAE":{"col":0.7718,"rent":0.6036,"groc":1.1272,"rest":0.7435},"Vietnam":{"col":0.3983,"rent":0.2195,"groc":0.6359,"rest":0.2374},"Zypern":{"col":0.8644,"rent":0.6407,"groc":1.0276,"rest":0.7782},"Österreich":{"col":1.0601,"rent":0.9671,"groc":1.0557,"rest":0.9502}},"places":[{"ort":"Varkala (ländlich)","land":"Indien","typ":"ländlich","ref":"Indien","mietf":0.75,"preisf":0.95,"auto":"Ja","lonlat":[76.7253,8.734]},{"ort":"Pune (Stadt)","land":"Indien","typ":"Stadt","ref":"Indien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[73.8545,18.5214]},{"ort":"Kathmandu (Stadt)","land":"Nepal","typ":"Stadt","ref":"Nepal","mietf":1,"preisf":1,"auto":"Nein","lonlat":[85.3206,27.7083]},{"ort":"Tansen (ländlich)","land":"Nepal","typ":"ländlich","ref":"Nepal","mietf":0.7,"preisf":0.95,"auto":"Ja","lonlat":[83.5469,27.8664]},{"ort":"Vilcabamba (ländlich)","land":"Ecuador","typ":"ländlich","ref":"Ecuador","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-79.2226,-4.2607]},{"ort":"Cuenca (Stadt)","land":"Ecuador","typ":"Stadt","ref":"Ecuador","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-79.0042,-2.8974]},{"ort":"Azrou (ländlich)","land":"Marokko","typ":"ländlich","ref":"Marokko","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-5.2231,33.4417]},{"ort":"Smolyan (ländlich)","land":"Bulgarien","typ":"ländlich","ref":"Bulgarien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[24.7127,41.5754]},{"ort":"Dumaguete (ländlich)","land":"Philippinen","typ":"ländlich","ref":"Philippinen","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[123.308,9.3055]},{"ort":"Telavi (ländlich)","land":"Georgien","typ":"ländlich","ref":"Georgien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[45.4703,41.9197]},{"ort":"Hanoi (Stadt)","land":"Vietnam","typ":"Stadt","ref":"Vietnam","mietf":1,"preisf":1,"auto":"Nein","lonlat":[105.854,21.0283]},{"ort":"Rabat (Stadt)","land":"Marokko","typ":"Stadt","ref":"Marokko","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-6.8409,34.0218]},{"ort":"Nuwara Eliya (ländlich)","land":"Sri Lanka","typ":"ländlich","ref":"Sri Lanka","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[80.767,6.974]},{"ort":"Cebu (Stadt)","land":"Philippinen","typ":"Stadt","ref":"Philippinen","mietf":1,"preisf":1,"auto":"Nein","lonlat":[123.9018,10.2935]},{"ort":"Sighișoara (ländlich)","land":"Rumänien","typ":"ländlich","ref":"Rumänien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[24.7934,46.2202]},{"ort":"Hoi An (ländlich)","land":"Vietnam","typ":"ländlich","ref":"Vietnam","mietf":0.8,"preisf":0.95,"auto":"Ja","lonlat":[108.3319,15.8796]},{"ort":"Kampot (ländlich)","land":"Kambodscha","typ":"ländlich","ref":"Kambodscha","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[104.1326,10.6315]},{"ort":"Kolašin (ländlich)","land":"Montenegro","typ":"ländlich","ref":"Montenegro","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[19.5218,42.8238]},{"ort":"Colombo (Stadt)","land":"Sri Lanka","typ":"Stadt","ref":"Sri Lanka","mietf":1,"preisf":1,"auto":"Nein","lonlat":[79.8542,6.9389]},{"ort":"Taiping (ländlich)","land":"Malaysia","typ":"ländlich","ref":"Malaysia","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[100.7439,4.8547]},{"ort":"Garopaba (ländlich)","land":"Brasilien","typ":"ländlich","ref":"Brasilien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-48.624,-28.0275]},{"ort":"Tiflis (Stadt)","land":"Georgien","typ":"Stadt","ref":"Georgien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[44.8014,41.6935]},{"ort":"Ayvalık (ländlich)","land":"Türkei","typ":"ländlich","ref":"Türkei","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[26.6917,39.3181]},{"ort":"Jakarta (Stadt)","land":"Indonesien","typ":"Stadt","ref":"Indonesien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[106.8272,-6.1754]},{"ort":"Salento (ländlich)","land":"Kolumbien","typ":"ländlich","ref":"Kolumbien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-75.5698,4.6373]},{"ort":"Villa General Belgrano (ländlich)","land":"Argentinien","typ":"ländlich","ref":"Argentinien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-64.559,-31.9765]},{"ort":"Gjirokastër (ländlich)","land":"Albanien","typ":"ländlich","ref":"Albanien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[20.1393,40.0771]},{"ort":"Cluj-Napoca (Stadt)","land":"Rumänien","typ":"Stadt","ref":"Rumänien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[23.59,46.7694]},{"ort":"Yuli (ländlich)","land":"Taiwan","typ":"ländlich","ref":"Taiwan","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[121.3215,23.3313]},{"ort":"Phnom Penh (Stadt)","land":"Kambodscha","typ":"Stadt","ref":"Kambodscha","mietf":1,"preisf":1,"auto":"Nein","lonlat":[104.9224,11.5683]},{"ort":"Kuala Lumpur (Stadt)","land":"Malaysia","typ":"Stadt","ref":"Malaysia","mietf":1,"preisf":1,"auto":"Nein","lonlat":[101.6942,3.1517]},{"ort":"Florianópolis (Stadt)","land":"Brasilien","typ":"Stadt","ref":"Brasilien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-48.5496,-27.5973]},{"ort":"Izmir (Stadt)","land":"Türkei","typ":"Stadt","ref":"Türkei","mietf":1,"preisf":1,"auto":"Nein","lonlat":[27.1285,38.4193]},{"ort":"Podgorica (Stadt)","land":"Montenegro","typ":"Stadt","ref":"Montenegro","mietf":1,"preisf":1,"auto":"Nein","lonlat":[19.2621,42.4415]},{"ort":"Córdoba (Stadt)","land":"Argentinien","typ":"Stadt","ref":"Argentinien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-64.1834,-31.4167]},{"ort":"Giżycko (ländlich)","land":"Polen","typ":"ländlich","ref":"Polen","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[21.7713,54.0401]},{"ort":"Medellín (Stadt)","land":"Kolumbien","typ":"Stadt","ref":"Kolumbien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-75.6026,6.2697]},{"ort":"Hitoyoshi (ländlich)","land":"Japan","typ":"ländlich","ref":"Japan","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[130.7601,32.2057]},{"ort":"Taichung (Stadt)","land":"Taiwan","typ":"Stadt","ref":"Taiwan","mietf":1,"preisf":1,"auto":"Nein","lonlat":[120.6478,24.1632]},{"ort":"Nafplio (ländlich)","land":"Griechenland","typ":"ländlich","ref":"Griechenland","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[22.8069,37.5659]},{"ort":"Tondela (ländlich)","land":"Portugal","typ":"ländlich","ref":"Portugal","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-8.0805,40.5164]},{"ort":"Sofia (Stadt)","land":"Bulgarien","typ":"Stadt","ref":"Bulgarien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[23.3217,42.6977]},{"ort":"Tirana (Stadt)","land":"Albanien","typ":"Stadt","ref":"Albanien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[19.8184,41.3281]},{"ort":"Knysna (ländlich)","land":"Südafrika","typ":"ländlich","ref":"Südafrika","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[23.0485,-34.0357]},{"ort":"Ubud (ländlich)","land":"Indonesien","typ":"ländlich","ref":"Indonesien","mietf":0.4,"preisf":0.95,"auto":"Ja","lonlat":[115.2551,-8.517]},{"ort":"Pazin (ländlich)","land":"Kroatien","typ":"ländlich","ref":"Kroatien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[13.9363,45.2392]},{"ort":"Keszthely (ländlich)","land":"Ungarn","typ":"ländlich","ref":"Ungarn","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[17.2463,46.7675]},{"ort":"Nong Khai (ländlich)","land":"Thailand","typ":"ländlich","ref":"Thailand","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[102.465,17.9301]},{"ort":"Colonia del Sacramento (ländlich)","land":"Uruguay","typ":"ländlich","ref":"Uruguay","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-57.8434,-34.4699]},{"ort":"Arvika (ländlich)","land":"Schweden","typ":"ländlich","ref":"Schweden","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[12.5916,59.6544]},{"ort":"Krakau (Stadt)","land":"Polen","typ":"Stadt","ref":"Polen","mietf":1,"preisf":1,"auto":"Nein","lonlat":[19.9972,50.0469]},{"ort":"Osaka (Stadt)","land":"Japan","typ":"Stadt","ref":"Japan","mietf":1,"preisf":1,"auto":"Nein","lonlat":[135.5015,34.6938]},{"ort":"Querétaro (Stadt)","land":"Mexiko","typ":"Stadt","ref":"Mexiko","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-100.3917,20.5923]},{"ort":"Magog (ländlich)","land":"Kanada","typ":"ländlich","ref":"Kanada","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-72.1481,45.2658]},{"ort":"Athen (Stadt)","land":"Griechenland","typ":"Stadt","ref":"Griechenland","mietf":1,"preisf":1,"auto":"Nein","lonlat":[23.7348,37.9756]},{"ort":"Órgiva (ländlich)","land":"Spanien","typ":"ländlich","ref":"Spanien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-3.4072,36.8691]},{"ort":"Boquete (ländlich)","land":"Panama","typ":"ländlich","ref":"Panama","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-82.3854,8.7407]},{"ort":"Nicoya (ländlich)","land":"Costa Rica","typ":"ländlich","ref":"Costa Rica","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-85.4153,10.1033]},{"ort":"Zagreb (Stadt)","land":"Kroatien","typ":"Stadt","ref":"Kroatien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[15.9773,45.8131]},{"ort":"Kapstadt (Stadt)","land":"Südafrika","typ":"Stadt","ref":"Südafrika","mietf":1,"preisf":1,"auto":"Nein","lonlat":[18.4172,-33.9288]},{"ort":"Whanganui (ländlich)","land":"Neuseeland","typ":"ländlich","ref":"Neuseeland","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[175.0519,-39.9325]},{"ort":"Český Krumlov (ländlich)","land":"Tschechien","typ":"ländlich","ref":"Tschechien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[14.3151,48.8107]},{"ort":"Budapest (Stadt)","land":"Ungarn","typ":"Stadt","ref":"Ungarn","mietf":1,"preisf":1,"auto":"Nein","lonlat":[19.0402,47.4979]},{"ort":"Montevideo (Stadt)","land":"Uruguay","typ":"Stadt","ref":"Uruguay","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-56.1913,-34.9059]},{"ort":"Bangkok (Stadt)","land":"Thailand","typ":"Stadt","ref":"Thailand","mietf":1,"preisf":1,"auto":"Nein","lonlat":[100.4935,13.7525]},{"ort":"Damyang (ländlich)","land":"Südkorea","typ":"ländlich","ref":"Südkorea","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[126.9824,35.3182]},{"ort":"Porto (Stadt)","land":"Portugal","typ":"Stadt","ref":"Portugal","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-8.6103,41.1502]},{"ort":"Platres (ländlich)","land":"Zypern","typ":"ländlich","ref":"Zypern","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[32.8649,34.8886]},{"ort":"Keswick (ländlich)","land":"Großbritannien","typ":"ländlich","ref":"Großbritannien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-3.1376,54.601]},{"ort":"Göteborg (Stadt)","land":"Schweden","typ":"Stadt","ref":"Schweden","mietf":1,"preisf":1,"auto":"Nein","lonlat":[11.967,57.7072]},{"ort":"Sulmona (ländlich)","land":"Italien","typ":"ländlich","ref":"Italien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[13.927,42.0474]},{"ort":"Sarlat-la-Canéda (ländlich)","land":"Frankreich","typ":"ländlich","ref":"Frankreich","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[1.2161,44.8879]},{"ort":"San José (Stadt)","land":"Costa Rica","typ":"Stadt","ref":"Costa Rica","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-84.0797,9.9327]},{"ort":"Valencia (Stadt)","land":"Spanien","typ":"Stadt","ref":"Spanien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-0.3763,39.4697]},{"ort":"Panama City (Stadt)","land":"Panama","typ":"Stadt","ref":"Panama","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-79.5342,8.9714]},{"ort":"Montreal (Stadt)","land":"Kanada","typ":"Stadt","ref":"Kanada","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-73.5698,45.5032]},{"ort":"Ras al-Khaimah (ländlich)","land":"VAE","typ":"ländlich","ref":"VAE","mietf":1,"preisf":1,"auto":"Ja","lonlat":[55.9382,25.7738]},{"ort":"Seoul (Stadt)","land":"Südkorea","typ":"Stadt","ref":"Südkorea","mietf":1,"preisf":1,"auto":"Nein","lonlat":[126.9783,37.5667]},{"ort":"Prag (Stadt)","land":"Tschechien","typ":"Stadt","ref":"Tschechien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[14.4213,50.0875]},{"ort":"Auckland (Stadt)","land":"Neuseeland","typ":"Stadt","ref":"Neuseeland","mietf":1,"preisf":1,"auto":"Nein","lonlat":[174.7632,-36.8521]},{"ort":"San Miguel de Allende (ländlich)","land":"Mexiko","typ":"ländlich","ref":"Mexiko","mietf":1,"preisf":1,"auto":"Ja","lonlat":[-100.7357,20.9131]},{"ort":"Lyon (Stadt)","land":"Frankreich","typ":"Stadt","ref":"Frankreich","mietf":1,"preisf":1,"auto":"Nein","lonlat":[4.832,45.7578]},{"ort":"Zwettl (ländlich)","land":"Österreich","typ":"ländlich","ref":"Österreich","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[15.1682,48.6053]},{"ort":"Bologna (Stadt)","land":"Italien","typ":"Stadt","ref":"Italien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[11.3426,44.4938]},{"ort":"Limassol (Stadt)","land":"Zypern","typ":"Stadt","ref":"Zypern","mietf":1,"preisf":1,"auto":"Nein","lonlat":[33.0333,34.6853]},{"ort":"Manchester (Stadt)","land":"Großbritannien","typ":"Stadt","ref":"Großbritannien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-2.2325,53.4425]},{"ort":"Coevorden (ländlich)","land":"Niederlande","typ":"ländlich","ref":"Niederlande","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[6.7407,52.6612]},{"ort":"Westport (ländlich)","land":"Irland","typ":"ländlich","ref":"Irland","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-9.5202,53.8001]},{"ort":"Gympie (ländlich)","land":"Australien","typ":"ländlich","ref":"Australien","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[152.66,-26.19]},{"ort":"Berlin (Stadt)","land":"Deutschland","typ":"Stadt","ref":"Deutschland","mietf":1,"preisf":1,"auto":"Nein","lonlat":[13.3951,52.5174]},{"ort":"Wien (Stadt)","land":"Österreich","typ":"Stadt","ref":"Österreich","mietf":1,"preisf":1,"auto":"Nein","lonlat":[16.3725,48.2084]},{"ort":"Utrecht (Stadt)","land":"Niederlande","typ":"Stadt","ref":"Niederlande","mietf":1,"preisf":1,"auto":"Nein","lonlat":[5.1216,52.0907]},{"ort":"Brisbane (Stadt)","land":"Australien","typ":"Stadt","ref":"Australien","mietf":1,"preisf":1,"auto":"Nein","lonlat":[153.0235,-27.469]},{"ort":"Hendersonville (ländlich)","land":"USA","typ":"ländlich","ref":"USA","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[-82.461,35.3187]},{"ort":"Dubai (Stadt)","land":"VAE","typ":"Stadt","ref":"VAE","mietf":1,"preisf":1,"auto":"Nein","lonlat":[55.2924,25.2647]},{"ort":"Dublin (Stadt)","land":"Irland","typ":"Stadt","ref":"Irland","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-6.2606,53.3494]},{"ort":"Raleigh (Stadt)","land":"USA","typ":"Stadt","ref":"USA","mietf":1,"preisf":1,"auto":"Nein","lonlat":[-78.6391,35.7804]},{"ort":"Langnau im Emmental (ländlich)","land":"Schweiz","typ":"ländlich","ref":"Schweiz","mietf":0.65,"preisf":0.9,"auto":"Ja","lonlat":[7.7883,46.9392]},{"ort":"Zürich (Stadt)","land":"Schweiz","typ":"Stadt","ref":"Schweiz","mietf":1,"preisf":1,"auto":"Nein","lonlat":[8.541,47.3744]}],"countries":[{"land":"Deutschland","kvMin":270,"kvFat":0,"schuleMin":30,"schuleKomfort":30,"schuleFat":3000,"visum":0,"visumText":"ja"},{"land":"Österreich","kvMin":520,"kvFat":0,"schuleMin":30,"schuleKomfort":30,"schuleFat":2800,"visum":0,"visumText":"ja (EU)"},{"land":"Schweiz","kvMin":1150,"kvFat":1150,"schuleMin":40,"schuleKomfort":40,"schuleFat":6000,"visum":0,"visumText":"ja (EU, Mittelnachweis)"},{"land":"Niederlande","kvMin":330,"kvFat":330,"schuleMin":40,"schuleKomfort":900,"schuleFat":3000,"visum":0,"visumText":"ja (EU)"},{"land":"Frankreich","kvMin":350,"kvFat":200,"schuleMin":30,"schuleKomfort":2000,"schuleFat":3500,"visum":0,"visumText":"ja (EU)"},{"land":"Spanien","kvMin":220,"kvFat":0,"schuleMin":40,"schuleKomfort":1300,"schuleFat":2800,"visum":0,"visumText":"ja (EU)"},{"land":"Portugal","kvMin":0,"kvFat":0,"schuleMin":40,"schuleKomfort":1500,"schuleFat":2500,"visum":0,"visumText":"ja (EU)"},{"land":"Italien","kvMin":300,"kvFat":0,"schuleMin":40,"schuleKomfort":1700,"schuleFat":3000,"visum":0,"visumText":"ja (EU)"},{"land":"Griechenland","kvMin":250,"kvFat":0,"schuleMin":30,"schuleKomfort":1400,"schuleFat":2500,"visum":0,"visumText":"ja (EU)"},{"land":"Kroatien","kvMin":250,"kvFat":0,"schuleMin":30,"schuleKomfort":1200,"schuleFat":2200,"visum":0,"visumText":"ja (EU)"},{"land":"Tschechien","kvMin":250,"kvFat":250,"schuleMin":30,"schuleKomfort":1300,"schuleFat":2500,"visum":0,"visumText":"ja (EU)"},{"land":"Polen","kvMin":200,"kvFat":0,"schuleMin":30,"schuleKomfort":1100,"schuleFat":2200,"visum":0,"visumText":"ja (EU)"},{"land":"Ungarn","kvMin":200,"kvFat":0,"schuleMin":30,"schuleKomfort":1100,"schuleFat":2400,"visum":0,"visumText":"ja (EU)"},{"land":"Rumänien","kvMin":100,"kvFat":0,"schuleMin":20,"schuleKomfort":800,"schuleFat":1800,"visum":0,"visumText":"ja (EU)"},{"land":"Bulgarien","kvMin":100,"kvFat":0,"schuleMin":20,"schuleKomfort":700,"schuleFat":1500,"visum":0,"visumText":"ja (EU)"},{"land":"Montenegro","kvMin":150,"kvFat":0,"schuleMin":20,"schuleKomfort":700,"schuleFat":1200,"visum":30,"visumText":"ja (Wohnsitz/Immobilie)"},{"land":"Albanien","kvMin":120,"kvFat":0,"schuleMin":20,"schuleKomfort":600,"schuleFat":1200,"visum":30,"visumText":"ja (Einkommensnachweis)"},{"land":"Georgien","kvMin":120,"kvFat":0,"schuleMin":20,"schuleKomfort":1100,"schuleFat":2000,"visum":0,"visumText":"ja (1 Jahr visumfrei)"},{"land":"Türkei","kvMin":200,"kvFat":0,"schuleMin":50,"schuleKomfort":1500,"schuleFat":2800,"visum":40,"visumText":"ja (Kurzaufenthalt)"},{"land":"Zypern","kvMin":100,"kvFat":0,"schuleMin":30,"schuleKomfort":1400,"schuleFat":2400,"visum":0,"visumText":"ja (EU)"},{"land":"Irland","kvMin":150,"kvFat":0,"schuleMin":30,"schuleKomfort":30,"schuleFat":2500,"visum":0,"visumText":"ja (EU)"},{"land":"Großbritannien","kvMin":0,"kvFat":0,"schuleMin":30,"schuleKomfort":30,"schuleFat":3500,"visum":0,"visumText":"nein (kein Rentnervisum)"},{"land":"Schweden","kvMin":50,"kvFat":0,"schuleMin":30,"schuleKomfort":30,"schuleFat":2500,"visum":0,"visumText":"ja (EU)"},{"land":"Japan","kvMin":265,"kvFat":265,"schuleMin":60,"schuleKomfort":2150,"schuleFat":2500,"visum":50,"visumText":"schwierig (kein Rentnervisum)"},{"land":"Südkorea","kvMin":200,"kvFat":200,"schuleMin":50,"schuleKomfort":2500,"schuleFat":3500,"visum":50,"visumText":"schwierig (kein Rentnervisum)"},{"land":"Taiwan","kvMin":150,"kvFat":150,"schuleMin":50,"schuleKomfort":1800,"schuleFat":2500,"visum":50,"visumText":"schwierig"},{"land":"Thailand","kvMin":250,"kvFat":0,"schuleMin":50,"schuleKomfort":2000,"schuleFat":4400,"visum":200,"visumText":"ja (Privilege/DTV)"},{"land":"Vietnam","kvMin":200,"kvFat":0,"schuleMin":200,"schuleKomfort":1850,"schuleFat":5400,"visum":150,"visumText":"schwierig (Kettenvisa)"},{"land":"Malaysia","kvMin":200,"kvFat":0,"schuleMin":300,"schuleKomfort":1300,"schuleFat":2500,"visum":50,"visumText":"ja (MM2H, Kaution)"},{"land":"Indonesien","kvMin":240,"kvFat":40,"schuleMin":150,"schuleKomfort":1700,"schuleFat":4500,"visum":200,"visumText":"ja (Second Home, Kaution)"},{"land":"Philippinen","kvMin":150,"kvFat":0,"schuleMin":150,"schuleKomfort":1200,"schuleFat":2500,"visum":80,"visumText":"schwierig (SRRV ab 50)"},{"land":"Kambodscha","kvMin":200,"kvFat":0,"schuleMin":150,"schuleKomfort":1300,"schuleFat":2800,"visum":40,"visumText":"ja (ER-Visum)"},{"land":"Nepal","kvMin":250,"kvFat":0,"schuleMin":80,"schuleKomfort":400,"schuleFat":3000,"visum":150,"visumText":"schwierig"},{"land":"Indien","kvMin":150,"kvFat":0,"schuleMin":60,"schuleKomfort":400,"schuleFat":1300,"visum":100,"visumText":"schwierig"},{"land":"Sri Lanka","kvMin":150,"kvFat":0,"schuleMin":80,"schuleKomfort":800,"schuleFat":1600,"visum":80,"visumText":"schwierig"},{"land":"VAE","kvMin":300,"kvFat":300,"schuleMin":700,"schuleKomfort":2000,"schuleFat":4000,"visum":150,"visumText":"ja (Immobilien/Golden Visa)"},{"land":"Mexiko","kvMin":200,"kvFat":0,"schuleMin":30,"schuleKomfort":1000,"schuleFat":2000,"visum":30,"visumText":"ja (Residente temporal)"},{"land":"Kolumbien","kvMin":150,"kvFat":150,"schuleMin":30,"schuleKomfort":1000,"schuleFat":1800,"visum":30,"visumText":"ja (Rentista/Investor)"},{"land":"Costa Rica","kvMin":150,"kvFat":150,"schuleMin":50,"schuleKomfort":1300,"schuleFat":2200,"visum":40,"visumText":"ja (Rentista)"},{"land":"Panama","kvMin":200,"kvFat":0,"schuleMin":50,"schuleKomfort":1200,"schuleFat":2200,"visum":40,"visumText":"ja (Investor)"},{"land":"Ecuador","kvMin":160,"kvFat":0,"schuleMin":30,"schuleKomfort":800,"schuleFat":1300,"visum":30,"visumText":"ja (Rentista/Investor)"},{"land":"Uruguay","kvMin":350,"kvFat":0,"schuleMin":40,"schuleKomfort":1200,"schuleFat":2200,"visum":20,"visumText":"ja (Einkommensnachweis)"},{"land":"Argentinien","kvMin":250,"kvFat":0,"schuleMin":20,"schuleKomfort":800,"schuleFat":1500,"visum":30,"visumText":"ja (Rentista)"},{"land":"Brasilien","kvMin":300,"kvFat":0,"schuleMin":30,"schuleKomfort":1200,"schuleFat":2000,"visum":30,"visumText":"ja (Rentner-/Investorvisum)"},{"land":"USA","kvMin":1200,"kvFat":1200,"schuleMin":40,"schuleKomfort":40,"schuleFat":3500,"visum":50,"visumText":"nein (nur Investor E-2/EB-5)"},{"land":"Kanada","kvMin":50,"kvFat":0,"schuleMin":40,"schuleKomfort":40,"schuleFat":2500,"visum":0,"visumText":"nein (kein Rentnervisum)"},{"land":"Australien","kvMin":400,"kvFat":0,"schuleMin":40,"schuleKomfort":40,"schuleFat":2500,"visum":0,"visumText":"nein (nur Investor)"},{"land":"Neuseeland","kvMin":0,"kvFat":0,"schuleMin":60,"schuleKomfort":60,"schuleFat":2800,"visum":0,"visumText":"schwierig (Active Investor Plus)"},{"land":"Südafrika","kvMin":350,"kvFat":0,"schuleMin":100,"schuleKomfort":250,"schuleFat":1500,"visum":30,"visumText":"ja (Retired Person Visa)"},{"land":"Marokko","kvMin":150,"kvFat":0,"schuleMin":30,"schuleKomfort":900,"schuleFat":1800,"visum":20,"visumText":"ja (Aufenthaltskarte)"}],"model":{"anchor":"Deutschland","wohnen":[1200,1550,2150,3500],"lebensmittel":[800,850,950,1300],"restaurant":[0,50,250,500],"mobilitaet":[160,350,650,1200],"mobilitaetLandMin":300,"freizeit":[350,550,900,1600],"reisen":[0,167,500,1667],"kvInt":[0,0,550,1500],"haushaltshilfe":[0,0,0,750],"puffer":0.1,"autoFix":0.5,"desc":{"wohnen":["3 Zi 70 m² einfach","4 Zi 85 m²","110 m² gute Lage","Haus Top-Lage"],"lebensmittel":["Selbst kochen, lokaler Warenkorb, ab Komfort Importware","Selbst kochen, lokaler Warenkorb, ab Komfort Importware","Selbst kochen, lokaler Warenkorb, ab Komfort Importware","Selbst kochen, lokaler Warenkorb, ab Komfort Importware"],"restaurant":["keine Restaurantbesuche","2× im Monat","wöchentlich","ohne Limit"],"mobilitaet":["ÖPNV","Gebrauchtwagen","Neuwagen","2 Autos"],"mobilitaetLandMin":"Gilt im Minimum, wenn Auto nötig = Ja","freizeit":["Handy, Internet, Kleidung, Haushalt, Hobbys","Handy, Internet, Kleidung, Haushalt, Hobbys","Handy, Internet, Kleidung, Haushalt, Hobbys","Handy, Internet, Kleidung, Haushalt, Hobbys"],"reisen":["0 € pro Jahr","2.000 € pro Jahr","6.000 € pro Jahr","20.000 € pro Jahr"],"kvInt":["Komfort ohne USA, Fat weltweit. Dazu kommen Pflichtbeiträge laut Tab Länder","Komfort ohne USA, Fat weltweit. Dazu kommen Pflichtbeiträge laut Tab Länder","Komfort ohne USA, Fat weltweit. Dazu kommen Pflichtbeiträge laut Tab Länder","Komfort ohne USA, Fat weltweit. Dazu kommen Pflichtbeiträge laut Tab Länder"],"haushaltshilfe":["Nur Fat","Nur Fat","Nur Fat","Nur Fat"]},"anchorLabel":"Köln"},"inputs":{"entnahmerate":0.035,"rendite":0.05,"netto20":1000,"gkv":270,"preisstand":2026},"cities":[["New York City",-73.982,40.752,1.7,14],["Moskau",37.614,55.754,1.7,14],["Peking",116.386,39.931,1.7,14],["Kairo",31.248,30.052,1.7,14],["Tokio",139.749,35.687,1.7,14],["Mumbai",72.855,19.019,1.7,14],["Rio de Janeiro",-43.227,-22.923,1.7,14],["London",-0.119,51.502,1.7,13],["Paris",2.331,48.869,1.7,13],["Sydney",151.183,-33.918,1.7,12],["Los Angeles",-118.182,33.992,2,14],["Shanghai",121.435,31.218,2,14],["Lagos",3.39,6.445,2,13],["Santiago de Chile",-70.669,-33.448,2,13],["Nairobi",36.815,-1.281,2,12],["Buenos Aires",-58.399,-34.601,2.1,14],["Mexiko-Stadt",-99.133,19.444,2.1,14],["Miami",-80.226,25.79,2.1,13],["Toronto",-79.422,43.702,2.1,13],["Bogotá",-74.085,4.598,2.1,13],["Singapur",103.854,1.295,2.1,13],["Vancouver",-123.124,49.275,2.1,12],["Washington",-77.011,38.901,2.1,12],["Neu-Delhi",77.2,28.6,2.1,10],["Manila",120.98,14.606,2.7,14],["San Francisco",-122.417,37.769,2.7,12],["Rom",12.481,41.898,2.7,12],["Istanbul",29.008,41.107,3,14],["São Paulo",-46.627,-23.557,3,14],["Chicago",-87.752,41.832,3,13],["Madrid",-3.685,40.402,3,13],["Lima",-77.052,-12.046,3,13],["Kinshasa",15.313,-4.328,3,13],["Teheran",51.422,35.674,3,13],["Hongkong",114.183,22.307,3,13],["Ottawa",-75.702,45.419,3,12],["Houston",-95.342,29.822,3,12],["Atlanta",-84.402,33.832,3,12],["Caracas",-66.919,10.503,3,12],["Stockholm",18.095,59.353,3,12],["Dakar",-17.475,14.718,3,12],["Johannesburg",28.028,-26.168,3,12],["Chengdu",104.068,30.672,3,12],["Addis Abeba",38.698,9.035,3,12],["Melbourne",144.973,-37.818,3,12],["Anchorage",-149.9,61.22,3,10],["Punta Arenas",-70.94,-53.165,3,9],["Kalkutta",88.323,22.497,3.7,14],["Bengaluru",77.558,12.972,3.7,13],["Bagdad",44.392,33.341,3.7,13],["Taipeh",121.568,25.036,3.7,13],["Omsk",73.398,54.992,3.7,12],["Samara",50.149,53.197,3.7,12],["Adelaide",138.598,-34.933,3.7,12],["Jerusalem",35.207,31.778,3.7,12],["Mekka",39.818,21.432,3.7,12],["Sankt Petersburg",30.314,59.941,3.7,12],["Xi’an",108.893,34.277,3.7,12],["Harbin",126.648,45.752,3.7,12],["Brasília",-47.918,-15.781,3.7,12],["Salvador da Bahía",-38.482,-12.968,3.7,12],["Recife",-34.918,-8.074,3.7,12],["Perth",115.838,-31.953,3.7,12],["Denver",-104.986,39.741,3.7,12],["Kiew",30.515,50.435,3.7,12],["Taschkent",69.293,41.314,3.7,12],["Genf",6.14,46.21,3.7,12],["Amsterdam",4.915,52.352,3.7,12],["Casablanca",-7.618,33.602,3.7,12],["Monterrey",-100.332,25.672,3.7,12],["Ürümqi",87.573,43.807,3.7,12],["Kabul",69.181,34.519,3.7,12],["Riad",46.771,24.643,3.7,12],["Irkutsk",104.245,52.32,3.7,11],["Murmansk",33.1,68.97,3.7,10],["Reykjavík",-21.95,64.15,3.7,9],["Tromsø",18.992,69.635,3.7,8],["Magadan",150.81,59.575,3.7,8],["Darwin",130.85,-12.425,3.7,8],["Prudhoe Bay",-148.669,70.292,3.7,4],["Karatschi",66.988,24.872,4,14],["Delhi",77.228,28.672,4,14],["Dhaka",90.407,23.725,4,14],["Ho-Chi-Minh-Stadt",106.693,10.782,4,13],["Lahore",74.348,31.562,4,13],["Chongqing",106.593,29.567,4,13],["Guangzhou",113.323,23.147,4,13],["Wuhan",114.268,30.582,4,13],["Tianjin",117.198,39.132,4,13],["Hyderabad",78.478,17.402,4,13],["Chennai",80.278,13.092,4,13],["Luanda",13.232,-8.836,4,13],["Portland",-122.682,45.522,4,12],["Lusaka",28.281,-15.415,4,12],["Harare",31.043,-17.816,4,12],["Glasgow",-4.253,55.876,4,12],["Asunción",-57.643,-25.294,4,12],["Mogadischu",45.365,2.069,4,12],["Abuja",7.531,9.085,4,12],["Quito",-78.502,-0.213,4,12],["Qiqihar",123.988,47.347,4,12],["Bamako",-8.002,12.652,4,12],["Manaus",-60.002,-3.098,4,12],["Calgary",-114.082,51.085,4,12],["La Paz",-68.152,-16.496,4,12],["Minneapolis",-93.254,44.982,4,12],["Seattle",-122.342,47.572,4,12],["Phoenix",-112.072,33.542,4,12],["San Diego",-117.182,32.822,4,12],["St. Louis",-90.242,38.637,4,12],["Dallas",-96.842,32.822,4,12],["Maracaibo",-71.662,10.732,4,12],["Boston",-71.072,42.332,4,12],["Detroit",-83.082,42.332,4,12],["Ankara",32.862,39.929,4,12],["Sanaa",44.205,15.357,4,12],["Barcelona",2.181,41.385,4,12],["Bukarest",26.098,44.435,4,12],["Lissabon",-9.147,38.725,4,12],["Khartum",32.532,15.59,4,12],["Dschidda",39.217,21.519,4,12],["Durban",30.978,-29.863,4,12],["Guadalajara",-103.332,20.672,4,12],["Puebla",-98.202,19.052,4,12],["Warschau",20.998,52.252,4,12],["Daressalam",39.266,-6.798,4,12],["Medan",98.648,3.582,4,12],["Monrovia",-10.8,6.315,4,12],["Lanzhou",103.79,36.058,4,12],["Nanning",108.318,22.822,4,12],["Surabaya",112.749,-7.247,4,12],["Cali",-76.502,3.402,4,12],["Havanna",-82.366,23.134,4,12],["Alexandria",29.948,31.202,4,12],["Frankfurt",8.675,50.1,4,12],["Kuwait",47.976,29.372,4,12],["Taiyuan",112.543,37.877,4,12],["Kunming",102.678,25.072,4,12],["Zhengzhou",113.663,34.757,4,12],["Shenyang",123.448,41.807,4,12],["Jinan",116.993,36.677,4,12],["Nanjing",118.778,32.052,4,12],["Hangzhou",120.168,30.252,4,12],["Hiroshima",132.441,34.39,4,12],["Changchun",125.338,43.867,4,12],["Baotou",109.82,40.654,4,12],["Sapporo",141.338,43.077,4,12],["Santo Domingo",-69.902,18.472,4,12],["Accra",-0.219,5.552,4,12],["Nagpur",79.088,21.172,4,12],["Tripolis",13.18,32.892,4,12],["Tel Aviv-Jaffa",34.768,32.082,4,12],["Helsinki",24.932,60.178,4,12],["Maschhad",59.568,36.272,4,12],["Jaipur",75.808,26.923,4,12],["Kanpur",80.318,26.462,4,12],["Surat",72.838,21.202,4,12],["Kopenhagen",12.562,55.681,4,12],["Abidjan",-4.042,5.322,4,12],["Belém",-48.482,-1.448,4,12],["Porto Alegre",-51.202,-30.048,4,12],["Curitiba",-49.322,-25.418,4,12],["Fortaleza",-38.582,-3.748,4,12],["Edmonton",-113.502,53.552,4,12],["Algier",3.049,36.765,4,12],["Chittagong",91.798,22.332,4,12],["Rangun",96.165,16.785,4,12],["Salt Lake City",-111.932,40.777,4,11],["Trujillo",-79.02,-8.12,4,11],["Tomsk",84.975,56.495,4,11],["Wolgograd",44.498,48.712,4,11],["Chihuahua",-106.087,28.647,4,11],["Cancún",-86.83,21.17,4,11],["Perm",56.248,58.002,4,11],["Ulaanbaatar",106.915,47.919,4,11],["Riga",24.1,56.95,4,11],["Winnipeg",-97.166,49.883,4,11],["Québec",-71.246,46.84,4,11],["Honolulu",-157.86,21.309,4,11],["New Orleans",-90.042,29.997,4,11],["Oslo",10.748,59.919,4,11],["Sewastopol",33.465,44.6,4,10],["Georgetown",-58.167,6.802,4,10],["Cusco",-71.972,-13.525,4,10],["Port Moresby",147.193,-9.465,4,10],["Archangelsk",40.545,64.575,4,10],["Surgut",73.425,61.26,4,10],["Jakutsk",129.735,62.035,4,10],["Lhasa",91.1,29.645,4,10],["Hotan",79.927,37.1,4,10],["Antofagasta",-70.4,-23.65,4,10],["Nur-Sultan",71.428,51.181,4,10],["Halifax",-63.6,44.65,4,10],["Canberra",149.129,-35.283,4,10],["Wellington",174.783,-41.3,4,10],["Christchurch",172.63,-43.535,4,10],["Trondheim",10.417,63.417,4,9],["Valdivia",-73.245,-39.795,4,9],["St. John’s",-52.681,47.585,4,9],["Fairbanks",-147.711,64.837,4,8],["Cayenne",-52.33,4.933,4,8],["Juneau",-134.42,58.314,4,7],["Port Vila",168.317,-17.733,4,7],["Whitehorse",-135.05,60.717,4,7],["Nuuk",-51.733,64.198,4,6],["Prince Rupert",-130.33,54.317,4,6],["Yellowknife",-114.397,62.442,4,6],["Tiksi",128.835,71.627,4,5],["Nome",-165.406,64.506,4,4],["Churchill",-94.166,58.766,4,2],["Naujaat",-86.283,66.529,4,2],["Shenzhen",114.12,22.554,4.7,13],["Ahmedabad",72.578,23.032,4.7,13],["Xining",101.768,36.622,4.7,12],["Bengasi",20.065,32.119,4.7,12],["Zibo",118.048,36.802,4.7,12],["Aleppo",37.168,36.232,4.7,12],["Damaskus",36.298,33.502,4.7,12],["Kano",8.518,12.002,4.7,12],["Pjöngjang",125.753,39.021,4.7,12],["Neapel",14.243,40.842,4.7,12],["Mailand",9.203,45.472,4.7,12],["Guiyang",106.718,26.582,4.7,12],["Fuzhou",119.298,26.082,4.7,12],["Bandung",107.568,-6.948,4.7,12],["Guayaquil",-79.922,-2.218,4.7,12],["München",11.573,48.132,4.7,12],["Changsha",112.968,28.202,4.7,12],["Nanchang",115.878,28.682,4.7,12],["Patna",85.128,25.627,4.7,12],["Goiânia",-49.302,-16.718,4.7,12],["Brüssel",4.331,50.835,4.7,12],["Sucre",-65.26,-19.041,4.7,10],["Philadelphia",-75.172,40.002,5,13],["Birmingham",-1.922,52.477,5,12],["Qingdao",120.328,36.092,5,12],["Marseille",5.373,43.292,5,12],["Jamshedpur",86.196,22.789,5,12],["Sacramento",-121.472,38.577,5,12],["Las Vegas",-115.222,36.212,5,12],["San Antonio",-98.509,29.489,5,12],["Cleveland",-81.697,41.472,5,12],["Cincinnati",-84.459,39.164,5,12],["Memphis",-90.002,35.122,5,12],["Milwaukee",-87.922,43.055,5,12],["Buffalo",-78.882,42.882,5,12],["Pittsburgh",-80.002,40.432,5,12],["Lomé",1.221,6.134,5,12],["Tunis",10.18,36.803,5,12],["Port-au-Prince",-72.338,18.543,5,12],["Kampala",32.581,0.319,5,12],["Sevilla",-5.98,37.405,5,12],["Duschanbe",68.774,38.56,5,12],["Multan",71.453,30.202,5,12],["Hyderabad",68.373,25.382,5,12],["Peschawar",71.533,34.007,5,12],["Pretoria",28.227,-25.705,5,12],["Fès",-5.002,34.057,5,12],["Gqeberha",25.598,-33.968,5,12],["Maputo",32.587,-25.953,5,12],["Nischni Nowgorod",43.998,56.335,5,12],["Ufa",56.038,54.792,5,12],["Jekaterinburg",60.598,56.852,5,12],["Kasan",49.124,55.752,5,12],["Nowosibirsk",82.958,55.032,5,12],["Davao City",125.628,7.112,5,12],["Tijuana",-117.082,32.502,5,12],["Amman",35.931,31.952,5,12],["Huainan",116.978,32.632,5,12],["Shantou",116.668,23.372,5,12],["Antananarivo",47.515,-18.915,5,12],["Semarang",110.418,-6.965,5,12],["Palembang",104.748,-2.978,5,12],["Makassar",119.43,-5.138,5,12],["San Salvador",-89.205,13.712,5,12],["Lubumbashi",27.478,-11.678,5,12],["Guatemala-Stadt",-90.529,14.623,5,12],["Visakhapatnam",83.303,17.732,5,12],["Beirut",35.508,33.874,5,12],["Almaty",76.913,43.327,5,12],["Isfahan",51.698,32.702,5,12],["Schiras",52.568,29.632,5,12],["Amritsar",74.868,31.642,5,12],["Varanasi",82.998,25.332,5,12],["Asansol",86.981,23.685,5,12],["Bhilai",81.431,21.219,5,12],["Bhopal",77.408,23.252,5,12],["Madurai",78.118,9.922,5,12],["Coimbatore",76.948,11.002,5,12],["Brazzaville",15.283,-4.257,5,12],["Conakry",-13.682,9.533,5,12],["Belgrad",20.466,44.821,5,12],["Yaoundé",11.515,3.869,5,12],["Jerewan",44.512,40.183,5,12],["Baku",49.86,40.397,5,12],["Huambo",15.758,-12.748,5,12],["Santa Cruz de la Sierra",-63.228,-17.752,5,12],["Minsk",27.565,53.902,5,12],["Ouagadougou",-1.527,12.372,5,12],["San Juan",-66.13,18.44,5,12],["Kaohsiung",120.267,22.633,5,12],["Tampa",-82.461,27.949,5,12],["Hamburg",9.998,53.552,5,12],["Richmond",-77.452,37.552,5,11],["Donezk",37.828,48.002,5,11],["Bilbao",-2.93,43.25,5,11],["Danzig",18.64,54.36,5,11],["Dresden",13.75,51.05,5,11],["Bordeaux",-0.597,44.852,5,11],["Gold Coast",153.448,-28.082,5,11],["Kozhikode",75.768,11.252,5,11],["Bhubaneswar",85.825,20.272,5,11],["Omaha",-96.01,41.24,5,11],["Oklahoma City",-97.521,35.472,5,11],["Nashville",-86.782,36.172,5,11],["Ciudad Guayana",-62.62,8.37,5,11],["Abu Dhabi",54.367,24.467,5,11],["Aşgabat",58.383,37.95,5,11],["Samarqand",66.945,39.67,5,11],["Bulawayo",28.58,-20.17,5,11],["Tegucigalpa",-87.219,14.104,5,11],["Aden",45.009,12.78,5,11],["Niamey",2.115,13.519,5,11],["Managua",-86.27,12.155,5,11],["Freetown",-13.236,8.472,5,11],["Islamabad",73.165,33.702,5,11],["Marrakesch",-8.002,31.632,5,11],["Chișinău",28.858,47.005,5,11],["Beira",34.87,-19.82,5,11],["Barnaul",83.745,53.355,5,11],["Maskat",58.593,23.613,5,11],["Krasnojarsk",92.864,56.016,5,11],["Wladiwostok",131.91,43.13,5,11],["Tampico",-97.87,22.3,5,11],["Acapulco",-99.916,16.85,5,11],["Veracruz",-96.16,19.177,5,11],["Mérida",-89.619,20.969,5,11],["Enugu",7.5,6.45,5,11],["Sokoto",5.24,13.06,5,11],["Padang",100.358,-0.958,5,11],["Palermo",13.348,38.127,5,11],["Vilnius",25.317,54.683,5,11],["Bischkek",74.583,42.875,5,11],["Guilin",110.278,25.282,5,11],["Mombasa",39.688,-4.038,5,11],["Banjarmasin",114.58,-3.33,5,11],["Kingston",-76.767,17.977,5,11],["Cartagena",-75.516,10.402,5,11],["N’Djamena",15.047,12.115,5,11],["Luxor",32.65,25.7,5,11],["Asmara",38.933,15.333,5,11],["Yizhou",93.515,42.827,5,11],["Kaxgar",75.97,39.476,5,11],["Yinchuan",106.271,38.47,5,11],["Pingxiang",113.848,27.622,5,11],["Kikwit",18.85,-5.03,5,11],["Lilongwe",33.783,-13.983,5,11],["Libreville",9.458,0.385,5,11],["Valparaíso",-71.623,-33.046,5,11],["Concepción",-73.05,-36.83,5,11],["Nouakchott",-15.975,18.086,5,11],["Thessaloniki",22.883,40.698,5,11],["Campo Grande",-54.619,-20.448,5,11],["Mendoza",-68.819,-32.881,5,11],["Mar del Plata",-57.58,-38.0,5,11],["Bangui",18.558,4.367,5,11],["Kandahar",65.695,31.61,5,11],["Oran",-0.622,35.712,5,11],["Cotonou",2.518,6.402,5,11],["Newcastle",151.815,-32.845,5,11],["Sarajevo",18.383,43.85,5,11],["Naypyidaw",96.117,19.769,5,11],["Belfast",-5.96,54.6,5,10],["Kaliningrad",20.497,54.7,5,10],["Grosny",45.699,43.319,5,10],["Xichang",102.3,27.88,5,10],["Le Havre",0.105,49.505,5,10],["Boise",-116.227,43.609,5,10],["Des Moines",-93.62,41.58,5,10],["San Cristóbal",-72.25,7.77,5,10],["Jackson",-90.185,32.299,5,10],["Dili",125.579,-8.559,5,10],["Paramaribo",-55.167,5.835,5,10],["Zinder",8.983,13.8,5,10],["Bur Sudan",37.216,19.616,5,10],["Tacna",-70.25,-18.0,5,10],["Ica",-75.725,-14.068,5,10],["Nyala",24.89,12.06,5,10],["Kassala",36.39,15.46,5,10],["Bergen",5.325,60.391,5,10],["Nacala",40.715,-14.519,5,10],["Bloemfontein",26.23,-29.12,5,10],["Iloilo City",122.545,10.705,5,10],["Bratsk",101.615,56.157,5,10],["Tschita",113.465,52.055,5,10],["Mazatlán",-106.42,23.221,5,10],["Tuxtla Gutiérrez",-93.15,16.75,5,10],["Mbeya",33.43,-8.89,5,10],["Windhoek",17.084,-22.57,5,10],["Sansibar",39.2,-6.16,5,10],["Bissau",-15.598,11.865,5,10],["Maseru",27.483,-29.317,5,10],["Tallinn",24.728,59.434,5,10],["Nagasaki",129.885,32.765,5,10],["Matadi",13.45,-5.817,5,10],["Kolwezi",25.472,-10.717,5,10],["Iquique",-70.13,-20.25,5,10],["Qaraghandy",73.115,49.885,5,10],["Yamoussoukro",-5.276,6.818,5,10],["Santarém",-54.7,-2.433,5,10],["Feira de Santana",-38.97,-12.25,5,10],["Victoria",-123.35,48.433,5,10],["Boa Vista",-60.666,2.816,5,10],["Macapá",-51.05,0.033,5,10],["Bandar Seri Begawan",114.933,4.883,5,10],["Bahía Blanca",-62.265,-38.74,5,10],["Posadas",-55.885,-27.358,5,10],["Maroua",14.325,10.596,5,10],["Gaborone",25.912,-24.646,5,10],["Hargeysa",44.065,9.56,5,10],["Valletta",14.515,35.9,5,10],["Nassau",-77.35,25.083,5,10],["Nikosia",33.367,35.167,5,10],["Dunhuang",94.662,40.143,5,9],["Golmud",94.883,36.417,5,9],["Atyrau",51.92,47.113,5,9],["Cairns",145.763,-16.888,5,9],["Hamilton",175.29,-37.778,5,9],["Dunedin",170.491,-45.885,5,9],["Agadez",7.983,16.996,5,9],["Wau",27.99,7.7,5,9],["Petropawlowsk-Kamtschatski",158.623,53.062,5,9],["Jiayuguan",98.3,39.82,5,9],["Tarakan",117.633,3.3,5,9],["Bumba",22.46,2.19,5,9],["Abéché",20.83,13.84,5,9],["Malabo",8.783,3.75,5,9],["Suva",178.442,-18.133,5,9],["Port-Gentil",8.78,-0.72,5,9],["Puerto Montt",-72.93,-41.47,5,9],["Sabha",14.433,27.033,5,9],["Gonder",37.46,12.61,5,9],["Caxias",-43.35,-4.833,5,9],["Marabá",-49.116,-5.35,5,9],["Regina",-104.617,50.45,5,9],["Saskatoon",-106.67,52.17,5,9],["Comodoro Rivadavia",-67.5,-45.87,5,9],["Ghardaia",3.67,32.49,5,9],["Townsville",146.77,-19.25,5,9],["Malé",73.5,4.167,5,9],["Praia",-23.517,14.917,5,9],["Xigazê",88.883,29.25,5,8],["Napier",176.926,-39.49,5,8],["Bismarck",-100.783,46.808,5,8],["Santa Fe",-105.937,35.687,5,8],["Cheyenne",-104.82,41.14,5,8],["Honiara",159.95,-9.438,5,8],["Erdenet",104.118,49.053,5,8],["Timbuktu",-3.017,16.767,5,8],["Cruzeiro do Sul",-72.67,-7.63,5,8],["Leticia",-69.955,-4.201,5,8],["Vilhena",-60.117,-12.717,5,8],["Ji-Paraná",-61.967,-10.833,5,8],["Thunder Bay",-89.275,48.446,5,8],["Río Gallegos",-69.217,-51.633,5,8],["Riberalta",-66.1,-10.983,5,8],["Tamanrasset",5.523,22.785,5,8],["Thimphu",89.639,27.473,5,8],["Hobart",147.295,-42.85,5,8],["Hamilton",-64.784,32.294,5,8],["São Tomé",6.733,0.333,5,8],["Apia",-171.739,-13.842,5,8],["Eureka",-124.147,40.802,5,7],["Albany",117.892,-35.017,5,7],["Geraldton",114.6,-28.767,5,7],["Dubbo",148.597,-32.26,5,7],["Whyalla",137.561,-33.025,5,7],["Blenheim",173.955,-41.514,5,7],["Helena",-112.035,46.593,5,7],["Dunqula",30.483,19.167,5,7],["Grootfontein",18.117,-19.567,5,7],["Atar",-13.05,20.517,5,7],["Djenné",-4.55,13.9,5,7],["Charlottetown",-63.131,46.249,5,7],["Alice Springs",133.88,-23.701,5,7],["Nukuʻalofa",-175.221,-21.139,5,7],["Victoria",55.45,-4.617,5,7],["Broome",122.231,-17.962,5,6],["Griffith",146.04,-34.29,5,6],["Portland",141.59,-38.34,5,6],["Pierre",-100.351,44.368,5,6],["Anadyr",177.475,64.737,5,6],["Ndélé",20.653,8.409,5,6],["Obo",26.5,5.4,5,6],["Belmopan",-88.767,17.252,5,6],["Menongue",17.7,-14.667,5,6],["Kodiak",-152.407,57.79,5,5],["Bethel",-161.756,60.793,5,5],["Mitú",-70.174,1.198,5,5],["Utqiaġvik",-156.789,71.291,5,4],["Valdez",-146.348,61.136,5,4],["Palana",159.95,59.084,5,4],["Puerto Deseado",-65.9,-47.75,5,4],["Stanley",-57.85,-51.7,5,4],["Dikson",80.545,73.507,5,3],["Nain",-61.686,56.547,5,3],["Point Hope",-166.808,68.348,5,2],["Nischnejansk",136.067,71.433,5,2],["Arctic Bay",-85.167,73.033,5,2],["Resolute Bay",-94.9,74.683,5,2],["Fort Good Hope",-128.633,66.267,5,2],["Windorah",142.65,-25.433,5,1],["Cold Bay",-162.715,55.2,5,1],["Fort Severn",-87.65,55.983,5,1],["Belo Horizonte",-43.917,-19.913,5.1,13],["Zaozhuang",117.568,34.882,5.1,12],["Kansas City",-94.606,39.109,5.1,12],["Fort Worth",-97.34,32.74,5.1,12],["Austin",-97.745,30.269,5.1,12],["Orlando",-81.382,28.512,5.1,12],["Indianapolis",-86.172,39.752,5.1,12],["Dnipro",34.998,48.482,5.1,12],["Charkiw",36.248,50.002,5.1,12],["Bursa",29.068,40.202,5.1,12],["Adana",35.318,36.997,5.1,12],["Medina",39.578,24.502,5.1,12],["Rostow am Don",39.711,47.237,5.1,12],["Tscheljabinsk",61.437,55.157,5.1,12],["Daejeon",127.423,36.337,5.1,12],["Ibadan",3.928,7.382,5.1,12],["George Town",100.329,5.414,5.1,12],["Handan",114.478,36.582,5.1,12],["Dalian",121.628,38.925,5.1,12],["Wenzhou",120.648,28.022,5.1,12],["Ningbo",121.548,29.882,5.1,12],["Hohhot",111.658,40.822,5.1,12],["Jiamusi",130.348,46.832,5.1,12],["Daqing",124.998,46.582,5.1,12],["Nagoya",136.913,35.157,5.1,12],["Kyōto",135.748,35.032,5.1,12],["Sendai",141.02,38.289,5.1,12],["Täbris",46.299,38.088,5.1,12],["Rosario",-60.668,-32.949,5.1,12],["Bari",16.873,41.114,5.1,11],["Edinburgh",-3.219,55.948,5.1,11],["Cardiff",-3.225,51.5,5.1,11],["Genua",8.93,44.41,5.1,11],["Rochester",-77.622,43.172,5.1,11],["Tucson",-110.892,32.207,5.1,11],["Fresno",-119.773,36.748,5.1,11],["Albuquerque",-106.641,35.105,5.1,11],["El Paso",-106.512,31.782,5.1,11],["Jacksonville",-81.672,30.332,5.1,11],["Taizz",44.037,13.606,5.1,11],["Lwiw",24.03,49.835,5.1,11],["Odessa",30.708,46.492,5.1,11],["Andijon",72.34,40.79,5.1,11],["Kigali",30.059,-1.952,5.1,11],["Jaroslawl",39.87,57.62,5.1,11],["Krasnodar",39.0,45.02,5.1,11],["Pensa",45.0,53.18,5.1,11],["Woronesch",39.268,51.732,5.1,11],["Astrachan",48.055,46.349,5.1,11],["Orenburg",55.11,51.78,5.1,11],["Saratow",46.028,51.582,5.1,11],["Nowokusnezk",87.115,53.75,5.1,11],["Oaxaca de Juárez",-96.67,17.083,5.1,11],["Shaoguan",113.58,24.8,5.1,11],["Santiago de Cuba",-75.821,20.025,5.1,11],["Gulja",81.35,43.9,5.1,11],["Naha",127.673,26.207,5.1,11],["Kolhapur",74.22,16.7,5.1,11],["Kirkuk",44.392,35.472,5.1,11],["Ahvaz",48.718,31.282,5.1,11],["Basra",47.812,30.515,5.1,11],["Cuiabá",-56.087,-15.568,5.1,11],["Nantes",-1.59,47.21,5.1,10],["Nancy",6.2,48.684,5.1,10],["Spokane",-117.42,47.67,5.1,10],["Reno",-119.82,39.53,5.1,10],["Port of Spain",-61.517,10.652,5.1,10],["Buchara",64.43,39.78,5.1,10],["Pucallpa",-74.535,-8.369,5.1,10],["Iquitos",-73.25,-3.75,5.1,10],["Bratislava",17.117,48.15,5.1,10],["Welkom",26.73,-27.97,5.1,10],["Pskow",28.33,57.83,5.1,10],["Brjansk",34.43,53.26,5.1,10],["Smolensk",32.047,54.783,5.1,10],["Petrosawodsk",34.28,61.85,5.1,10],["Wologda",39.92,59.21,5.1,10],["Sotschi",39.73,43.59,5.1,10],["Magnitogorsk",58.98,53.423,5.1,10],["Kirow",49.67,58.59,5.1,10],["Nischni Tagil",59.975,57.92,5.1,10],["Kemerowo",86.09,55.34,5.1,10],["Malmö",13.033,55.583,5.1,10],["Tampere",23.75,61.5,5.1,10],["Puducherry",79.83,11.935,5.1,10],["Porto Velho",-63.9,-8.75,5.1,10],["Venedig",12.335,45.439,5.1,10],["Neuquén",-68.06,-38.95,5.1,10],["Herat",62.17,34.33,5.1,10],["Masar-e Scharif",67.1,36.7,5.1,10],["Brest",23.7,52.1,5.1,10],["Las Palmas de Gran Canaria",-15.43,28.1,5.1,10],["Gibraltar",-5.378,36.132,5.1,9],["Fargo",-96.789,46.877,5.1,9],["Topeka",-95.67,39.05,5.1,9],["Savannah",-81.11,32.021,5.1,9],["Wilmington",-77.945,34.226,5.1,9],["Charleston",-81.633,38.35,5.1,9],["Mary",61.833,37.6,5.1,9],["Juba",31.58,4.83,5.1,9],["Juschno-Sachalinsk",142.74,46.965,5.1,9],["Toliara",43.69,-23.357,5.1,9],["Houma",111.21,35.62,5.1,9],["Gejiu",103.15,23.38,5.1,9],["Kushiro-shi",144.375,42.975,5.1,9],["Goma",29.222,-1.679,5.1,9],["Gao",-0.05,16.267,5.1,9],["Kankan",-9.31,10.39,5.1,9],["Nzérékoré",-8.83,7.76,5.1,9],["Santa Rosa de Toay",-64.3,-36.62,5.1,9],["Hilo",-155.09,19.7,5.1,8],["Flagstaff",-111.651,35.198,5.1,8],["Sault Ste. Marie",-84.345,46.495,5.1,8],["Sundsvall",17.317,62.4,5.1,8],["Vaasa",21.6,63.1,5.1,8],["Monaco",7.407,43.74,5.1,7],["Luleå",22.158,65.597,5.1,7],["Mirny",113.961,62.54,5.1,7],["Roseau",-61.387,15.301,5.1,7],["Rovaniemi",25.716,66.5,5.1,7],["Rawson",-65.1,-43.3,5.1,7],["Kalgoorlie-Boulder",121.46,-30.735,5.1,7],["Mount Isa",139.49,-20.724,5.1,7],["Kingstown",-61.212,13.148,5.1,7],["St. George’s",-61.742,12.053,5.1,7],["Saint John’s",-61.85,17.118,5.1,7],["Middelburg",25.01,-31.5,5.1,6],["Fort St. John",-120.833,56.25,5.1,6],["Port Hedland",118.606,-20.31,5.1,6],["Broken Hill",141.433,-31.95,5.1,6],["Sitka",-135.328,57.06,5.1,5],["Hammerfest",23.688,70.661,5.1,5],["Ochotsk",143.217,59.383,5.1,5],["Sisimiut",-53.667,66.95,5.1,5],["Iqaluit",-68.5,63.75,5.1,5],["Schigansk",123.371,66.77,5.1,4],["Upernavik",-56.142,72.709,5.1,3],["Dawson",-139.417,64.067,5.1,3],["Fort Smith",-111.883,60.0,5.1,2],["Narsarsuaq",-45.417,61.167,5.1,1],["Amaravati",80.524,16.534,5.6,13],["San Bernardino",-117.302,34.122,5.6,12],["Bridgeport",-73.202,41.182,5.6,12],["Gujranwala",74.183,32.162,5.6,12],["Incheon",126.64,37.478,5.6,12],["Benin City",5.618,6.342,5.6,12],["Xiamen",118.078,24.452,5.6,12],["Nanchong",106.128,30.782,5.6,12],["Neijiang",105.048,29.582,5.6,12],["Nanyang",112.528,33.002,5.6,12],["Lianshan",120.828,40.752,5.6,12],["Yantai",121.398,37.532,5.6,12],["Suzhou",120.618,31.302,5.6,12],["Xuzhou",117.178,34.282,5.6,12],["Wuxi",120.298,31.582,5.6,12],["Jilin",126.548,43.852,5.6,12],["Solapur",75.898,17.672,5.6,12],["Aurangabad",75.318,19.898,5.6,12],["Nashik",73.778,20.002,5.6,12],["Prayagraj",81.838,25.457,5.6,12],["Ghaziabad",77.406,28.662,5.6,12],["Agra",78.013,27.172,5.6,12],["Meerut",77.698,29.002,5.6,12],["Dhanbad",86.418,23.802,5.6,12],["Vadodara",73.178,22.312,5.6,12],["Rajkot",70.798,22.312,5.6,12],["Baltimore",-76.622,39.302,5.6,12],["Hải Phòng",106.678,20.832,5.6,12],["Duala",9.708,4.062,5.6,12],["Omdurman",32.48,15.617,5.6,12],["Den Haag",4.27,52.08,5.6,12],["Doha",51.533,25.287,5.6,12],["Busan",129.008,35.097,5.6,12],["Torreón",-103.422,25.572,5.6,12],["León",-101.702,21.152,5.6,12],["Port Harcourt",7.008,4.812,5.6,12],["Kaduna",7.438,10.522,5.6,12],["Florenz",11.25,43.78,5.6,12],["Tianshui",105.918,34.602,5.6,12],["Yulin",110.148,22.632,5.6,12],["Liupanshui",104.831,26.596,5.6,12],["Quanzhou",118.578,24.902,5.6,12],["Hefei",117.278,31.852,5.6,12],["Suzhou",116.977,33.638,5.6,12],["Zhanjiang",110.378,21.202,5.6,12],["Santiago de los Caballeros",-70.67,19.5,5.6,12],["Barranquilla",-74.802,10.962,5.6,12],["Ankang",109.02,32.68,5.6,12],["Hengyang",112.588,26.882,5.6,12],["Mianyang",104.768,31.472,5.6,12],["Shijiazhuang",114.478,38.052,5.6,12],["Anshan",122.938,41.117,5.6,12],["Linyi",118.328,35.082,5.6,12],["Huai’an",119.028,33.582,5.6,12],["Fukuoka",130.408,33.597,5.6,12],["Chifeng",118.948,42.272,5.6,12],["Mbuji-Mayi",23.598,-6.148,5.6,12],["Faridabad",77.315,28.435,5.6,12],["Srinagar",74.813,34.102,5.6,12],["Vijayawada",80.628,16.522,5.6,12],["Kochi",76.222,10.017,5.6,12],["Mossul",43.143,36.347,5.6,12],["Ludhiana",75.87,30.93,5.6,12],["Lucknow",80.913,26.857,5.6,12],["Ranchi",85.328,23.372,5.6,12],["Jabalpur",79.953,23.177,5.6,12],["Indore",75.863,22.717,5.6,12],["São Luís",-44.268,-2.514,5.6,12],["Maceió",-35.732,-9.618,5.6,12],["Vila Velha",-40.318,-20.368,5.6,12],["Natal",-35.242,-5.778,5.6,12],["Campinas",-47.102,-22.898,5.6,12],["Khulna",89.558,22.842,5.6,12],["Mandalay",96.083,21.972,5.6,12],["Dongguan",113.743,23.051,5.6,12],["Chandigarh",76.778,30.722,5.6,11],["Jammu",74.845,32.714,5.6,11],["Jalandhar",75.567,31.337,5.6,11],["Moradabad",78.755,28.844,5.6,11],["Aligarh",78.06,27.894,5.6,11],["Gwalior",78.178,26.232,5.6,11],["Saint Paul",-93.085,44.944,5.6,11],["Vancouver",-122.64,45.63,5.6,11],["Tulsa",-95.93,36.12,5.6,11],["Knoxville",-83.92,35.97,5.6,11],["Syracuse",-76.15,43.05,5.6,11],["Samsun",36.344,41.28,5.6,11],["Konya",32.473,37.877,5.6,11],["Arequipa",-71.532,-16.418,5.6,11],["Tabuk",36.555,28.384,5.6,11],["Quetta",67.023,30.222,5.6,11],["Rjasan",39.72,54.62,5.6,11],["Uljanowsk",48.41,54.33,5.6,11],["Tjumen",65.53,57.14,5.6,11],["Zamboanga City",122.078,6.922,5.6,11],["General Santos",125.175,6.111,5.6,11],["Chabarowsk",135.12,48.455,5.6,11],["Mexicali",-115.482,32.652,5.6,11],["Culiacán",-107.382,24.832,5.6,11],["Hermosillo",-110.954,29.099,5.6,11],["San Luis Potosí",-101.002,22.172,5.6,11],["Heroica Matamoros",-97.5,25.88,5.6,11],["Maiduguri",13.158,11.852,5.6,11],["Ogbomosho",4.238,8.132,5.6,11],["Warri",5.76,5.52,5.6,11],["Catania",15.08,37.5,5.6,11],["Banda Aceh",95.32,5.55,5.6,11],["Kuching",110.33,1.53,5.6,11],["Surakarta",110.825,-7.565,5.6,11],["Bandar Lampung",105.268,-5.428,5.6,11],["Malang",112.608,-7.978,5.6,11],["Sues",32.55,30.005,5.6,11],["Port Said",32.29,31.26,5.6,11],["Kisangani",25.22,0.52,5.6,11],["Dschibuti",43.148,11.595,5.6,11],["Yarkant",77.25,38.426,5.6,11],["Yueyang",113.098,29.382,5.6,11],["Baoshan",99.15,25.12,5.6,11],["Tongliao",122.268,43.622,5.6,11],["Jixi",130.968,45.302,5.6,11],["Nagano",138.17,36.65,5.6,11],["Kananga",22.398,-5.888,5.6,11],["Blantyre",34.99,-15.79,5.6,11],["Quetzaltenango",-91.52,14.83,5.6,11],["Thiruvananthapuram",76.948,8.502,5.6,11],["Cuttack",85.89,20.47,5.6,11],["Hubli-Dharwad",75.123,15.362,5.6,11],["Mangaluru",74.85,12.9,5.6,11],["Mysuru",76.658,12.312,5.6,11],["Nanded",77.3,19.17,5.6,11],["Akola",77.01,20.71,5.6,11],["Guwahati",91.768,26.162,5.6,11],["Nadschaf",44.335,32.0,5.6,11],["Hamadan",48.515,34.796,5.6,11],["Kota",75.833,25.182,5.6,11],["Jodhpur",73.015,26.294,5.6,11],["Raipur",81.633,21.237,5.6,11],["Salem",78.178,11.672,5.6,11],["Tiruchirappalli",78.688,10.812,5.6,11],["Pointe-Noire",11.88,-4.77,5.6,11],["Bouaké",-5.03,7.69,5.6,11],["Uberlândia",-48.28,-18.9,5.6,11],["Teresina",-42.782,-5.093,5.6,11],["Salta",-65.417,-24.783,5.6,11],["San Miguel de Tucumán",-65.219,-26.814,5.6,11],["Sorocaba",-47.47,-23.49,5.6,11],["Ribeirão Preto",-47.83,-21.17,5.6,11],["Annaba",7.76,36.92,5.6,11],["Constantine",6.6,36.36,5.6,11],["Rajshahi",88.603,24.377,5.6,11],["Port Louis",57.5,-20.167,5.6,11],["Gaza",34.445,31.53,5.6,11],["Manama",50.583,26.236,5.6,11],["Colorado Springs",-104.792,38.863,5.6,10],["Salem",-123.024,44.928,5.6,10],["Shreveport",-93.77,32.5,5.6,10],["Baton Rouge",-91.14,30.458,5.6,10],["Corpus Christi",-97.402,27.743,5.6,10],["Laredo",-99.507,27.506,5.6,10],["Mérida",-71.13,8.4,5.6,10],["Tallahassee",-84.28,30.45,5.6,10],["Columbia",-80.9,34.04,5.6,10],["Sousse",10.625,35.83,5.6,10],["Schytomyr",28.662,50.246,5.6,10],["Nukus",59.615,42.47,5.6,10],["Türkmenabat",63.58,39.11,5.6,10],["Kitwe",28.22,-12.81,5.6,10],["Chitungwiza",31.1,-18.0,5.6,10],["Maradi",7.096,13.492,5.6,10],["Konstanza",28.61,44.203,5.6,10],["Iași",27.575,47.168,5.6,10],["Chiang Mai",98.98,18.8,5.6,10],["Nakhon Ratchasima",102.1,15.0,5.6,10],["Piura",-80.63,-5.21,5.6,10],["Chimbote",-78.57,-9.07,5.6,10],["Huancayo",-75.2,-12.08,5.6,10],["Ciudad del Este",-54.616,-25.517,5.6,10],["Vigo",-8.73,42.22,5.6,10],["Kaolack",-16.1,14.15,5.6,10],["Al-Ubayyid",30.217,13.183,5.6,10],["Ljubljana",14.515,46.055,5.6,10],["Larkana",68.207,27.562,5.6,10],["Nampula",39.293,-15.136,5.6,10],["Oujda",-1.91,34.69,5.6,10],["Safi",-9.24,32.32,5.6,10],["East London",27.87,-32.97,5.6,10],["Naltschik",43.618,43.498,5.6,10],["Stawropol",41.98,45.05,5.6,10],["Twer",35.89,56.86,5.6,10],["Laoag",120.594,18.199,5.6,10],["Baguio City",120.57,16.43,5.6,10],["Angarsk",103.92,52.56,5.6,10],["Ulan-Ude",107.625,51.825,5.6,10],["Blagoweschtschensk",127.533,50.267,5.6,10],["Nuevo Laredo",-99.55,27.5,5.6,10],["Colima",-103.72,19.23,5.6,10],["Campeche",-90.5,19.83,5.6,10],["Makurdi",8.53,7.73,5.6,10],["Wŏnsan",127.431,39.16,5.6,10],["Sinŭiju",124.421,40.086,5.6,10],["Mwanza",32.93,-2.52,5.6,10],["Morogoro",37.66,-6.82,5.6,10],["Dodoma",35.75,-6.183,5.6,10],["Arusha",36.67,-3.36,5.6,10],["Ambon",128.2,-3.717,5.6,10],["Pristina",21.166,42.667,5.6,10],["Eldoret",35.27,0.52,5.6,10],["Zhangye",100.45,38.93,5.6,10],["Wuwei",102.641,37.928,5.6,10],["Wuzhou",111.32,23.48,5.6,10],["Balikpapan",116.83,-1.25,5.6,10],["Kupang",123.583,-10.179,5.6,10],["Manizales",-75.52,5.06,5.6,10],["Pasto",-77.281,1.214,5.6,10],["Mbandaka",18.26,0.04,5.6,10],["al-Fayyūm",30.84,29.31,5.6,10],["Assuan",32.899,24.088,5.6,10],["Asyut",31.18,27.19,5.6,10],["Miyazaki",131.418,31.918,5.6,10],["Kōchi",133.538,33.562,5.6,10],["Kota Gorontalo",123.07,0.55,5.6,10],["Ulanhot",122.08,46.08,5.6,10],["Hailar",119.7,49.2,5.6,10],["Hakodate",140.74,41.795,5.6,10],["Kalemie",29.2,-5.933,5.6,10],["Butembo",29.28,0.13,5.6,10],["Gulbarga",76.82,17.35,5.6,10],["Skopje",21.433,42.0,5.6,10],["Misrata",15.1,32.38,5.6,10],["Bahir Dar",37.383,11.6,5.6,10],["Dire Dawa",41.86,9.59,5.6,10],["Aqtöbe",57.17,50.28,5.6,10],["Qysylorda",65.465,44.8,5.6,10],["Pawlodar",76.95,52.3,5.6,10],["Semei",80.275,50.435,5.6,10],["Öskemen",82.615,49.99,5.6,10],["Yazd",54.37,31.92,5.6,10],["Bandar Abbas",56.272,27.204,5.6,10],["Schymkent",69.595,42.32,5.6,10],["Taras",71.365,42.9,5.6,10],["Saharanpur",77.55,29.97,5.6,10],["Bhagalpur",86.98,25.23,5.6,10],["Rio Branco",-67.8,-9.967,5.6,10],["Montes Claros",-43.86,-16.72,5.6,10],["Pelotas",-52.33,-31.75,5.6,10],["Caxias do Sul",-51.17,-29.18,5.6,10],["Ponta Grossa",-50.16,-25.09,5.6,10],["Vitória da Conquista",-40.84,-14.85,5.6,10],["San Juan",-68.52,-31.55,5.6,10],["Formosa",-58.183,-26.173,5.6,10],["Santa Fe",-60.69,-31.624,5.6,10],["Petrolina",-40.51,-9.38,5.6,10],["Bamenda",10.15,5.96,5.6,10],["Garoua",13.39,9.3,5.6,10],["Porto-Novo",2.617,6.483,5.6,10],["Bobo-Dioulasso",-4.29,11.18,5.6,10],["Bujumbura",29.36,-3.376,5.6,10],["Berbera",45.016,10.436,5.6,10],["Billings",-108.54,45.788,5.6,9],["Olympia",-122.899,47.038,5.6,9],["Santa Barbara",-119.72,34.435,5.6,9],["Sioux Falls",-96.73,43.55,5.6,9],["Amarillo",-101.83,35.23,5.6,9],["Montgomery",-86.279,32.362,5.6,9],["Kabwe",28.45,-14.44,5.6,9],["Mufulira",28.26,-12.55,5.6,9],["Livingstone",25.86,-17.86,5.6,9],["Gulu",32.28,2.78,5.6,9],["Tahoua",5.26,14.9,5.6,9],["Surat Thani",99.34,9.15,5.6,9],["Al-Dschunaina",22.44,13.45,5.6,9],["Malakal",31.656,9.537,5.6,9],["Worcester",19.44,-33.64,5.6,9],["George",22.45,-33.95,5.6,9],["Tete",33.58,-16.17,5.6,9],["Pemba",40.532,-12.983,5.6,9],["Xai-Xai",33.64,-25.04,5.6,9],["Lae",146.99,-6.733,5.6,9],["David",-82.433,8.433,5.6,9],["Quelimane",36.89,-17.88,5.6,9],["Kandy",80.67,7.28,5.6,9],["Ust-Ilimsk",102.633,57.99,5.6,9],["Abakan",91.445,53.704,5.6,9],["Norilsk",88.225,69.34,5.6,9],["Kysyl",94.383,51.707,5.6,9],["La Paz",-110.32,24.14,5.6,9],["Nogales",-110.945,31.305,5.6,9],["Guaymas",-110.89,27.93,5.6,9],["El Aaiún",-13.2,27.15,5.6,9],["Ternate",127.363,0.793,5.6,9],["Raba",118.767,-8.45,5.6,9],["Jayapura",140.7,-2.533,5.6,9],["Baicheng",106.613,23.9,5.6,9],["Fianarantsoa",47.083,-21.433,5.6,9],["Mahajanga",46.345,-15.67,5.6,9],["Moundou",16.09,8.55,5.6,9],["Assab",42.73,13.01,5.6,9],["Altay",88.117,47.867,5.6,9],["Shizuishan",106.769,39.233,5.6,9],["Yulin",109.733,38.283,5.6,9],["Bei’an",126.482,48.239,5.6,9],["Sakata",139.85,38.92,5.6,9],["Bandundu",17.38,-3.31,5.6,9],["Mzuzu",34.02,-11.46,5.6,9],["Arica",-70.29,-18.5,5.6,9],["Copiapó",-70.34,-27.36,5.6,9],["La Serena",-71.25,-29.9,5.6,9],["Los Ángeles",-72.36,-37.46,5.6,9],["Ségou",-6.26,13.44,5.6,9],["Zuwara",12.079,32.934,5.6,9],["Rudny",63.13,52.953,5.6,9],["Ekibastus",75.32,51.73,5.6,9],["Saint-Denis",55.448,-20.879,5.6,9],["Barreiras",-45.0,-12.14,5.6,9],["Battambang",103.2,13.1,5.6,9],["Siem Reap",103.85,13.367,5.6,9],["Malanje",16.34,-9.54,5.6,9],["Benguela",13.407,-12.578,5.6,9],["Lubango",13.49,-14.91,5.6,9],["Namibe",12.16,-15.19,5.6,9],["Tarija",-64.75,-21.517,5.6,9],["Bridgetown",-59.617,13.102,5.6,9],["Parakou",2.62,9.34,5.6,9],["Sittwe",92.88,20.14,5.6,9],["Papeete",-149.567,-17.533,5.6,9],["Great Falls",-111.3,47.5,5.6,8],["Missoula",-113.993,46.872,5.6,8],["Casper",-106.312,42.867,5.6,8],["Burlington",-73.212,44.476,5.6,8],["Puerto Ayacucho",-67.624,5.664,5.6,8],["Atakpamé",1.12,7.53,5.6,8],["Türkmenbaşy",52.97,40.023,5.6,8],["Mbabane",31.133,-26.317,5.6,8],["Ponta Delgada",-25.667,37.748,5.6,8],["Kristiansand",8.0,58.167,5.6,8],["Upington",21.23,-28.46,5.6,8],["Mount Hagen",144.217,-5.863,5.6,8],["Workuta",64.01,67.5,5.6,8],["Walvis Bay",14.505,-22.958,5.6,8],["Antsiranana",49.312,-12.277,5.6,8],["Tanjung Pandan",107.65,-2.75,5.6,8],["Pare-Pare",119.633,-4.017,5.6,8],["Puerto Limón",-83.033,10.0,5.6,8],["Putrajaya",101.702,2.914,5.6,8],["Kasongo",26.66,-4.45,5.6,8],["Kayes",13.28,-4.18,5.6,8],["Nouadhibou",-17.056,20.9,5.6,8],["Kayes",-11.44,14.45,5.6,8],["Mek’ele",39.47,13.5,5.6,8],["Corumbá",-57.65,-19.016,5.6,8],["North Bay",-79.45,46.3,5.6,8],["Ebolowa",11.15,2.9,5.6,8],["Bambari",20.667,5.762,5.6,8],["Trinidad",-64.9,-14.833,5.6,8],["Bariloche",-71.3,-41.15,5.6,8],["Francistown",27.5,-21.17,5.6,8],["Mahalapye",26.82,-23.1,5.6,8],["Mandurah",115.747,-32.523,5.6,8],["Bendigo",144.28,-36.76,5.6,8],["Rockhampton",150.52,-23.364,5.6,8],["Durazno",-56.51,-33.41,5.6,7],["Minot",-101.296,48.232,5.6,7],["Augusta",-69.78,44.311,5.6,7],["Cottica",-54.233,3.85,5.6,7],["Kaédi",-13.5,16.15,5.6,7],["Goroka",145.385,-6.083,5.6,7],["Lensk",114.947,60.725,5.6,7],["Aldan",125.389,58.603,5.6,7],["Ocha",142.948,53.574,5.6,7],["Chowd",91.633,48.017,5.6,7],["Tschoibalsan",114.506,48.067,5.6,7],["Meru",37.64,0.06,5.6,7],["Banjul",-16.592,13.454,5.6,7],["Franceville",13.583,-1.633,5.6,7],["Coyhaique",-72.07,-45.57,5.6,7],["al-Dschauf",23.29,24.2,5.6,7],["Colíder",-55.451,-10.817,5.6,7],["Alta Floresta",-55.91,-9.9,5.6,7],["Brandon",-99.95,49.833,5.6,7],["Fort McMurray",-111.383,56.733,5.6,7],["Timmins",-81.333,48.467,5.6,7],["Sydney",-60.18,46.066,5.6,7],["Serowe",26.71,-22.39,5.6,7],["Orange",149.1,-33.28,5.6,7],["Armidale",151.667,-30.512,5.6,7],["Castries",-61.0,14.002,5.6,7],["Basseterre",-62.717,17.302,5.6,7],["Freeport",-78.7,26.533,5.6,7],["Leh",77.572,34.162,5.6,7],["Dispur",91.767,26.144,5.6,6],["International Falls",-93.411,48.601,5.6,6],["Elko",-115.762,40.833,5.6,6],["Springbok",17.883,-29.667,5.6,6],["Dalandsadgad",104.44,43.584,5.6,6],["Lüderitz",15.159,-26.648,5.6,6],["Santa Cruz",-90.35,-0.533,5.6,6],["Alvorada",-49.082,-12.47,5.6,6],["Thompson",-97.867,55.75,5.6,6],["Labrador City",-66.916,52.941,5.6,6],["Katherine",132.267,-14.467,5.6,6],["Busselton",115.349,-33.656,5.6,6],["Karratha",116.87,-20.73,5.6,6],["Port Lincoln",135.867,-34.733,5.6,6],["Wangaratta",146.3,-36.36,5.6,6],["Devonport",146.331,-41.193,5.6,6],["Pago Pago",-170.707,-14.277,5.6,6],["Rabaul",152.143,-4.205,5.6,5],["Dalnegorsk",135.517,44.537,5.6,5],["Ust-Nera",143.2,64.567,5.6,5],["Peace River",-117.283,56.233,5.6,5],["El Calafate",-72.3,-50.333,5.6,5],["Ugolnyje Kopi",177.7,64.733,5.6,4],["Chatanga",102.465,72.041,5.6,4],["Bukatschatscha",116.917,52.983,5.6,4],["Batagai",134.635,67.656,5.6,4],["Tschokurdach",147.895,70.618,5.6,4],["Ayoûn el-Atroûs",-9.617,16.667,5.6,3],["Cambridge Bay",-105.033,69.117,5.6,3],["Kugluktuk",-115.125,67.799,5.6,3],["Arviat",-94.059,61.109,5.6,3],["Iglulik",-81.794,69.257,5.6,3],["Kuujjuarapik",-77.766,55.281,5.6,3],["Kuujjuaq",-68.4,58.1,5.6,3],["Qaanaaq",-69.332,77.483,5.6,2],["Tmissah",15.8,26.367,5.6,2],["Chesterfield Inlet",-90.7,63.338,5.6,2],["Taloyoak",-93.533,69.533,5.6,2],["Dulan",98.267,36.167,5.6,1],["Norfolk",-76.28,36.85,5.7,12],["Turin",7.668,45.072,6,12],["Lille",3.078,50.652,6,12],["Rouen",1.08,49.43,6,11],["Matsuyama",132.766,33.846,6,11],["Toulouse",1.448,43.622,6,11],["Macau",113.545,22.203,6,11],["Clermont-Ferrand",3.08,45.78,6,10],["Rennes",-1.67,48.1,6,10],["Straßburg",7.75,48.58,6,10],["Funchal",-16.88,32.65,6,10],["Al-Faschir",25.35,13.63,6,10],["Dijon",5.03,47.33,6,9],["Luxemburg",6.13,49.612,6,9],["Batumi",41.63,41.6,6,9],["Hagåtña",144.75,13.47,6,9],["Moroni",43.24,-11.704,6,9],["Nouméa",166.444,-22.263,6,8],["Sochumi",41.02,43.02,6,8],["Andorra la Vella",1.516,42.5,6,8],["Swakopmund",14.535,-22.669,6,7],["Majuro",171.38,7.103,6,7],["South Tarawa",173.018,1.338,6,7],["Keetmanshoop",18.13,-26.574,6,6],["Lobamba",31.2,-26.467,6,5],["Melekeok",134.627,7.487,6,5],["Palikir",158.15,6.917,6,4],["Funafuti",179.217,-8.517,6,4],["Longyearbyen",15.55,78.217,6,3],["Bir Lehlu",-9.653,26.119,6,2],["Cagliari",9.104,39.222,6.1,10],["Gifu",136.763,35.423,6.1,10],["Montpellier",3.87,43.61,6.1,10],["Orléans",1.9,47.9,6.1,10],["Neusatz",19.85,45.25,6.1,10],["Banja Luka",17.18,44.78,6.1,10],["Ancona",13.5,43.6,6.1,9],["Trient",11.12,46.08,6.1,9],["Reims",4.03,49.25,6.1,9],["Ajaccio",8.728,41.927,6.1,8],["San Marino",12.442,43.936,6.1,7],["Jinja",33.2,0.44,6.7,10],["Arua",30.9,3.02,6.7,10],["Mbale",34.17,1.09,6.7,10],["Triest",13.8,45.65,6.7,10],["Fort-de-France",-61.08,14.61,6.7,10],["Perugia",12.39,43.11,6.7,9],["Caen",-0.35,49.184,6.7,9],["Amiens",2.3,49.9,6.7,9],["Willemstad",-69.02,12.2,6.7,9],["Limoges",1.25,45.83,6.7,9],["Poitiers",0.333,46.583,6.7,8],["Chipata",32.64,-13.63,6.7,8],["Masaka",31.73,-0.33,6.7,8],["Mbarara",30.65,-0.6,6.7,8],["Catanzaro",16.6,38.9,6.7,8],["L’Aquila",13.39,42.35,6.7,8],["Oranjestad",-70.029,12.53,6.7,8],["Otjiwarongo",16.64,-20.46,6.7,7],["Saint-Laurent-du-Maroni",-54.033,5.498,6.7,7],["Douglas",-4.48,54.15,6.7,7],["Vaduz",9.517,47.134,6.7,7],["Cockburn Town",-71.136,21.466,6.7,5],["George Town",-81.33,19.28,6.7,4],["Moroto",34.64,2.54,6.7,2],["Basse-Terre",-61.705,16.01,6.7,2],["Besançon",6.03,47.23,7,9],["Bombo",32.533,0.583,7,8],["Potenza",15.799,40.642,7,8],["Campobasso",14.656,41.563,7,8],["Fort Portal",30.275,0.671,7,7],["Aosta",7.315,45.737,7,7],["Mariehamn",19.949,60.097,7,6],["Vatikanstadt",12.453,41.903,7,2],["Ramallah",35.206,31.903,9,7]]};
+</script>
+
+<script id="fire-model">
+(function (root) {
+  'use strict';
+  var D = root.FIRE_DATA;
+  var countryByName = {};
+  D.countries.forEach(function (c) { countryByName[c.land] = c; });
+
+  function visaClass(text) {
+    var t = String(text || '').trim().toLowerCase();
+    if (t.indexOf('ja') === 0) return 'ja';
+    if (t.indexOf('schwierig') === 0) return 'schwierig';
+    if (t.indexOf('nein') === 0) return 'nein';
+    return 'unbekannt';
+  }
+
+  function cleanName(ort) {
+    return String(ort).replace(/\s*\((Stadt|ländlich)\)\s*$/, '').trim();
+  }
+
+  // Faktoren relativ zur Anker-Stadt
+  function factors(place, M) {
+    var A = D.indices[M.anchor];
+    var R = D.indices[place.ref];
+    return {
+      rMiete: R.rent / A.rent * place.mietf,
+      rLM: R.groc / A.groc * place.preisf,
+      rRest: R.rest / A.rest * place.preisf,
+      rCoL: R.col / A.col * place.preisf
+    };
+  }
+
+  // OECD-Skala, Basis 2 Erwachsene + 2 Kinder
+  function personFactor(adults, kids) {
+    return (1 + 0.5 * (adults - 1) + 0.3 * kids) / 2.1;
+  }
+
+  // Monatsbedarf für Stufe j (0 Min, 1 Lean, 2 Komfort, 3 Fat), aufgeschlüsselt nach Bausteinen.
+  // s.model: angepasste Bausteine (sonst Werte aus der Datei), s.custom: eigene Posten für alle Stufen
+  function breakdown(place, j, s) {
+    var M = s.model || D.model;
+    var f = factors(place, M);
+    var c = countryByName[place.land];
+    var P = personFactor(s.adults, s.kids);
+    var autoMix = M.autoFix + (1 - M.autoFix) * f.rCoL;
+    var carMin = j === 0 && place.auto === 'Ja';
+    var mob;
+    if (j === 0) {
+      mob = carMin ? M.mobilitaetLandMin * autoMix : M.mobilitaet[0] * f.rCoL;
+    } else {
+      mob = M.mobilitaet[j] * autoMix;
+    }
+    var kv = j <= 1 ? c.kvMin : c.kvFat;
+    var schule = [c.schuleMin, c.schuleMin, c.schuleKomfort, c.schuleFat][j] * (s.school / 2);
+    var custom = (s.custom || []).map(function (it) { return it.amount * (it.scale === 'preis' ? f.rCoL : 1); });
+    var customSum = custom.reduce(function (a, b) { return a + b; }, 0);
+    var sum = M.wohnen[j] * f.rMiete
+      + (M.lebensmittel[j] * f.rLM + M.restaurant[j] * f.rRest + M.freizeit[j] * f.rCoL) * P
+      + mob + M.reisen[j] + M.kvInt[j] + M.haushaltshilfe[j] * f.rCoL
+      + kv + schule + c.visum + customSum;
+    return {
+      f: f, P: P, autoMix: autoMix, carMin: carMin, country: c,
+      items: {
+        wohnen: M.wohnen[j] * f.rMiete,
+        lebensmittel: M.lebensmittel[j] * f.rLM * P,
+        restaurant: M.restaurant[j] * f.rRest * P,
+        freizeit: M.freizeit[j] * f.rCoL * P,
+        mobilitaet: mob,
+        reisen: M.reisen[j],
+        kvInt: M.kvInt[j],
+        haushaltshilfe: M.haushaltshilfe[j] * f.rCoL,
+        kv: kv,
+        schule: schule,
+        visum: c.visum
+      },
+      custom: custom,
+      puffer: sum * M.puffer,
+      total: sum * (1 + M.puffer)
+    };
+  }
+
+  function monthlyNeed(place, j, s) {
+    return breakdown(place, j, s).total;
+  }
+
+  // Einkommen: ohne Arbeit, 20h, 40h
+  function incomes(place, j, s) {
+    var gkv = (place.land === 'Deutschland' && j <= 1) ? s.gkv : 0;
+    return [0, s.adults * s.netto20 + gkv, s.adults * s.netto40 + gkv];
+  }
+
+  function targetWealth(need, income, rate) {
+    return Math.max(0, need - income) * 12 / rate;
+  }
+
+  // 0 grün, 1 gelb, 2 orange, 3 rot
+  function statusIndex(wealth, t) {
+    if (wealth >= t[0]) return 0;
+    if (wealth >= t[1]) return 1;
+    if (wealth >= t[2]) return 2;
+    return 3;
+  }
+
+  function evaluate(s) {
+    return D.places.map(function (p, i) {
+      var c = countryByName[p.land];
+      var need = monthlyNeed(p, s.stage, s);
+      var inc = incomes(p, s.stage, s);
+      var t = inc.map(function (x) { return targetWealth(need, x, s.rate); });
+      return {
+        id: i,
+        ort: p.ort,
+        name: cleanName(p.ort),
+        land: p.land,
+        typ: p.typ,
+        need: need,
+        income: inc,
+        t: t,
+        status: statusIndex(s.wealth, t),
+        visa: visaClass(c.visumText),
+        visaText: c.visumText
+      };
+    });
+  }
+
+  // Vermögen nach n Jahren: Realrendite r, Sparrate pro Monat, jährliche Verzinsung, alles in heutigen Preisen
+  function wealthAt(w0, years, monthly, r) {
+    var g = Math.pow(1 + r, years);
+    return w0 * g + monthly * 12 * (r === 0 ? years : (g - 1) / r);
+  }
+
+  // Haushalt im Jahr y: Kinder zählen von 0 bis 17 Jahren, Schulalter 6 bis 17
+  var SCHOOL_FROM = 6, ADULT_AT = 18;
+  function householdAt(year, births) {
+    var kids = 0, school = 0;
+    births.forEach(function (b) {
+      var age = year - b;
+      if (age >= 0 && age < ADULT_AT) {
+        kids++;
+        if (age >= SCHOOL_FROM) school++;
+      }
+    });
+    return { kids: kids, school: school };
+  }
+
+  root.FireModel = {
+    evaluate: evaluate,
+    wealthAt: wealthAt,
+    householdAt: householdAt,
+    SCHOOL_FROM: SCHOOL_FROM,
+    ADULT_AT: ADULT_AT,
+    monthlyNeed: monthlyNeed,
+    breakdown: breakdown,
+    incomes: incomes,
+    targetWealth: targetWealth,
+    statusIndex: statusIndex,
+    visaClass: visaClass,
+    cleanName: cleanName,
+    personFactor: personFactor
+  };
+})(window);
+</script>
+
+<script src="vendor/d3.v7.9.0.min.js"></script>
+<script src="vendor/topojson-client.v3.1.0.min.js"></script>
+
+<script id="fire-ui">
+(function () {
+  'use strict';
+  var D = window.FIRE_DATA;
+  var FM = window.FireModel;
+
+  // Alle Dateien kommen vom eigenen Server, keine Drittanbieter
+  var TOPO_URL = 'data/countries-110m.json';
+  var TOPO_URL_FINE = 'data/countries-50m.json';
+  var BASE_YEAR = Math.max(D.inputs.preisstand, new Date().getFullYear());
+  var END_YEAR = 2050;
+  var STAGES = ['Min', 'Lean', 'Komfort', 'Fat'];
+  var STATUS = [
+    { key: 'green', name: 'Grün', short: 'ohne Arbeit', legend: 'FIRE ohne Arbeit möglich' },
+    { key: 'yellow', name: 'Gelb', short: 'mit 20h', legend: 'mit 20h pro Erwachsenem und Woche' },
+    { key: 'orange', name: 'Orange', short: 'mit 40h', legend: 'mit 40h pro Erwachsenem und Woche' },
+    { key: 'red', name: 'Rot', short: 'nicht erreichbar', legend: 'auch mit 40h nicht erreichbar' }
+  ];
+  var SCENARIOS = ['ohne Arbeit', 'mit 20h', 'mit 40h'];
+  var MODES = [
+    { v: 'cheapest', label: 'günstigster Ort' },
+    { v: 'stadt', label: 'nur Stadt' },
+    { v: 'land', label: 'nur ländlich' }
+  ];
+
+  // Deutscher Ländername -> ISO 3166-1 alpha-3 und numerisch (world-atlas nutzt numerische IDs)
+  var ISO = {
+    'Deutschland': ['DEU', '276'], 'Österreich': ['AUT', '040'], 'Schweiz': ['CHE', '756'],
+    'Niederlande': ['NLD', '528'], 'Frankreich': ['FRA', '250'], 'Spanien': ['ESP', '724'],
+    'Portugal': ['PRT', '620'], 'Italien': ['ITA', '380'], 'Griechenland': ['GRC', '300'],
+    'Kroatien': ['HRV', '191'], 'Tschechien': ['CZE', '203'], 'Polen': ['POL', '616'],
+    'Ungarn': ['HUN', '348'], 'Rumänien': ['ROU', '642'], 'Bulgarien': ['BGR', '100'],
+    'Montenegro': ['MNE', '499'], 'Albanien': ['ALB', '008'], 'Georgien': ['GEO', '268'],
+    'Türkei': ['TUR', '792'], 'Zypern': ['CYP', '196'], 'Irland': ['IRL', '372'],
+    'Großbritannien': ['GBR', '826'], 'Schweden': ['SWE', '752'], 'Japan': ['JPN', '392'],
+    'Südkorea': ['KOR', '410'], 'Taiwan': ['TWN', '158'], 'Thailand': ['THA', '764'],
+    'Vietnam': ['VNM', '704'], 'Malaysia': ['MYS', '458'], 'Indonesien': ['IDN', '360'],
+    'Philippinen': ['PHL', '608'], 'Kambodscha': ['KHM', '116'], 'Nepal': ['NPL', '524'],
+    'Indien': ['IND', '356'], 'Sri Lanka': ['LKA', '144'], 'VAE': ['ARE', '784'],
+    'Mexiko': ['MEX', '484'], 'Kolumbien': ['COL', '170'], 'Costa Rica': ['CRI', '188'],
+    'Panama': ['PAN', '591'], 'Ecuador': ['ECU', '218'], 'Uruguay': ['URY', '858'],
+    'Argentinien': ['ARG', '032'], 'Brasilien': ['BRA', '076'], 'USA': ['USA', '840'],
+    'Kanada': ['CAN', '124'], 'Australien': ['AUS', '036'], 'Neuseeland': ['NZL', '554'],
+    'Südafrika': ['ZAF', '710'], 'Marokko': ['MAR', '504']
+  };
+  var NUM_TO_LAND = {};
+  Object.keys(ISO).forEach(function (land) { NUM_TO_LAND[ISO[land][1]] = land; });
+
+  // Beispielwerte für den ersten Besuch, bis jemand eigene Daten einträgt
+  var EXAMPLE_WEALTH = 400000;
+  var state = {
+    adults: 2,
+    births: [],
+    stage: 0,
+    wealth: EXAMPLE_WEALTH,
+    wealthTouched: false,
+    mode: 'cheapest',
+    visaOnly: false,
+    rate: D.inputs.entnahmerate,
+    netto20: D.inputs.netto20,
+    netto40: 1750,
+    gkv: D.inputs.gkv,
+    rendite: D.inputs.rendite,
+    sparrate: 0,
+    year: BASE_YEAR,
+    model: JSON.parse(JSON.stringify(D.model)),
+    custom: []
+  };
+
+  // Zeitachse: pro Jahr Vermögen, Haushalt und Ergebnis aller Orte
+  var TL = [];
+  var placeSeries = [];
+  var placeFrom = [];
+  var countrySeries = new Map();
+  var countryFrom = new Map();
+  var cur = null;
+  var results = [];
+  var byCountry = new Map();
+  var sort = { key: 'need', dir: 1 };
+
+  // Formatierung
+  var nf0 = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 });
+  var nf1 = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 });
+  function eur(v) { return nf0.format(Math.round(v)) + ' €'; }
+  function pctValue(wealth, target) { return target <= 0 ? 1 : wealth / target; }
+  function pct(v) {
+    var p = v >= 1 ? Math.round(v * 100) : Math.min(99, Math.floor(v * 100));
+    return nf0.format(p) + ' %';
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+    });
+  }
+  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+  function householdText(hh) {
+    var t = plural(state.adults, 'Erwachsener', 'Erwachsene') + ', ' + plural(hh.kids, 'Kind', 'Kinder');
+    if (hh.kids > 0) t += ' (' + hh.school + ' im Schulalter)';
+    return t;
+  }
+  function fromText(from) { return from ? 'ohne Arbeit ab ' + from : 'ohne Arbeit nicht bis ' + END_YEAR; }
+
+  // Segment-Schalter
+  var segs = [];
+  function makeSeg(id, options, get, set) {
+    var el = document.getElementById(id);
+    el.innerHTML = options.map(function (o) {
+      return '<button type="button" data-v="' + esc(o.v) + '">' + esc(o.label) + '</button>';
+    }).join('');
+    el.addEventListener('click', function (ev) {
+      var b = ev.target.closest('button');
+      if (!b || b.disabled) return;
+      set(b.dataset.v);
+      update();
+    });
+    segs.push({ el: el, get: get });
+  }
+  function range(a, b) { var r = []; for (var i = a; i <= b; i++) r.push({ v: String(i), label: String(i) }); return r; }
+  function syncSegs() {
+    segs.forEach(function (s) {
+      var v = String(s.get());
+      s.el.querySelectorAll('button').forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.dataset.v === v));
+      });
+    });
+  }
+
+  makeSeg('seg-adults', range(1, 4), function () { return state.adults; }, function (v) { state.adults = Number(v); });
+  makeSeg('seg-kids', range(0, 5), function () { return state.births.length; }, function (v) { setKids(Number(v)); });
+  makeSeg('seg-stage', STAGES.map(function (s, i) { return { v: String(i), label: s }; }),
+    function () { return state.stage; }, function (v) { state.stage = Number(v); });
+  makeSeg('seg-mode', MODES, function () { return state.mode; }, function (v) { state.mode = v; });
+  makeSeg('seg-visa', [{ v: 'false', label: 'alle Länder' }, { v: 'true', label: 'nur Visum ja' }],
+    function () { return state.visaOnly; }, function (v) { state.visaOnly = v === 'true'; });
+
+  // Geburtsjahre der Kinder
+  var birthsEl = document.getElementById('births');
+  var BIRTH_MIN = BASE_YEAR - FM.ADULT_AT + 1;
+  var BIRTH_MAX = BASE_YEAR + 14;
+  function setKids(n) {
+    while (state.births.length < n) state.births.push(BASE_YEAR);
+    state.births.length = n;
+    renderBirths();
+  }
+  function renderBirths() {
+    if (!state.births.length) { birthsEl.innerHTML = '<span class="none">keine Kinder</span>'; return; }
+    birthsEl.innerHTML = state.births.map(function (b, i) {
+      var lo = Math.min(BIRTH_MIN, b), hi = Math.max(BIRTH_MAX, b), opts = '';
+      for (var y = lo; y <= hi; y++) opts += '<option' + (y === b ? ' selected' : '') + '>' + y + '</option>';
+      return '<label class="birth">Kind ' + (i + 1) + '<select data-i="' + i + '" aria-label="Geburtsjahr Kind ' + (i + 1) + '">' + opts + '</select></label>';
+    }).join('');
+  }
+  birthsEl.addEventListener('change', function (ev) {
+    var sel = ev.target.closest('select');
+    if (!sel) return;
+    state.births[Number(sel.dataset.i)] = Number(sel.value);
+    update();
+  });
+  function renderBirthsNote() {
+    var hh = cur.hh;
+    var txt = 'Schulalter ' + FM.SCHOOL_FROM + ' bis ' + (FM.ADULT_AT - 1) + ' Jahre, ab ' + FM.ADULT_AT + ' nicht mehr im Haushalt.';
+    if (state.births.length) txt = state.year + ': ' + plural(hh.kids, 'Kind', 'Kinder') + ' im Haushalt, ' + hh.school + ' im Schulalter. ' + txt;
+    document.getElementById('births-note').textContent = txt;
+  }
+
+  // Zahlenfelder
+  var boundInputs = [];
+  function bindNumber(id, getDisplay, apply) {
+    var input = document.getElementById(id);
+    input.value = getDisplay();
+    boundInputs.push({ input: input, getDisplay: getDisplay });
+    input.addEventListener('input', function () {
+      var v = input.valueAsNumber;
+      var ok = isFinite(v) && apply(v);
+      input.closest('.money').classList.toggle('invalid', !ok && input.value !== '');
+      if (ok) update();
+    });
+    input.addEventListener('blur', function () {
+      input.value = getDisplay();
+      input.closest('.money').classList.remove('invalid');
+    });
+    return input;
+  }
+  bindNumber('in-wealth', function () { return String(Math.round(state.wealth)); }, function (v) {
+    if (v < 0) return false;
+    state.wealth = v;
+    state.wealthTouched = true;
+    syncExampleHint();
+    return true;
+  });
+  function syncExampleHint() {
+    document.getElementById('wealth-example').hidden = state.wealthTouched;
+  }
+  bindNumber('in-rate', function () { return String(Math.round(state.rate * 1000) / 10); }, function (v) {
+    if (v <= 0 || v > 100) return false; state.rate = v / 100; return true;
+  });
+  bindNumber('in-ret', function () { return String(Math.round(state.rendite * 1000) / 10); }, function (v) {
+    if (v <= -100 || v > 100) return false; state.rendite = v / 100; return true;
+  });
+  bindNumber('in-n20', function () { return String(state.netto20); }, function (v) {
+    if (v < 0) return false; state.netto20 = v; return true;
+  });
+  bindNumber('in-n40', function () { return String(state.netto40); }, function (v) {
+    if (v < 0) return false; state.netto40 = v; return true;
+  });
+  bindNumber('in-gkv', function () { return String(state.gkv); }, function (v) {
+    if (v < 0) return false; state.gkv = v; return true;
+  });
+  bindNumber('in-save', function () { return String(Math.round(state.sparrate)); }, function (v) {
+    if (v < 0) return false; state.sparrate = v; return true;
+  });
+
+  // Stufen-Editor: Bausteine je Stufe ansehen, Beträge und Beschreibungen anpassen, eigene Posten
+  var UNDO_ICON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8a5.5 5.5 0 1 0 1.6-3.9"/><path d="M2.5 2.5v3h3"/></svg>';
+  var ANCHOR = D.model.anchorLabel || D.model.anchor;
+  function pctTxt(x) { return nf0.format(Math.round(x * 100)) + ' %'; }
+  var BAUSTEINE = [
+    { key: 'wohnen', label: 'Wohnen warm', scale: function () { return 'skaliert mit dem Mietniveau des Ortes'; } },
+    { key: 'lebensmittel', label: 'Lebensmittel', scale: function () { return 'skaliert mit Lebensmittelpreisen und Haushaltsgröße'; } },
+    { key: 'restaurant', label: 'Restaurant', scale: function () { return 'skaliert mit Restaurantpreisen und Haushaltsgröße'; } },
+    { key: 'mobilitaet', label: 'Mobilität', scale: function (j) {
+      return j === 0 ? 'skaliert mit dem Preisniveau' : pctTxt(state.model.autoFix) + ' fix, der Rest skaliert mit dem Preisniveau';
+    } },
+    { key: 'mobilitaetLandMin', label: 'Mobilität mit Kleinwagen', scalar: true, only: 0, scale: function () {
+      return 'ersetzt Mobilität bei Orten mit Auto nötig, ' + pctTxt(state.model.autoFix) + ' fix';
+    } },
+    { key: 'freizeit', label: 'Freizeit und Sonstiges', scale: function () { return 'skaliert mit Preisniveau und Haushaltsgröße'; } },
+    { key: 'reisen', label: 'Reisen', scale: function () { return 'fix, unabhängig vom Ort'; } },
+    { key: 'kvInt', label: 'Krankenversicherung international', scale: function () { return 'fix, dazu kommt der Pflichtbeitrag des Landes'; } },
+    { key: 'haushaltshilfe', label: 'Haushaltshilfe', scale: function () { return 'skaliert mit dem Preisniveau'; } }
+  ];
+  function bausteinByKey(k) { return BAUSTEINE.filter(function (b) { return b.key === k; })[0]; }
+  function valOf(m, b, j) { return b.scalar ? m[b.key] : m[b.key][j]; }
+  function descOf(m, b, j) { return b.scalar ? m.desc[b.key] : m.desc[b.key][j]; }
+  function setVal(b, j, v) { if (b.scalar) state.model[b.key] = v; else state.model[b.key][j] = v; }
+  function setDesc(b, j, v) { if (b.scalar) state.model.desc[b.key] = v; else state.model.desc[b.key][j] = v; }
+
+  // Nur Abweichungen von den Standardwerten speichern, damit spätere Daten-Updates nicht überdeckt werden
+  function customDiff() {
+    var out = { model: {}, desc: {}, custom: state.custom };
+    BAUSTEINE.forEach(function (b) {
+      for (var j = 0; j < 4; j++) {
+        if (b.scalar && j > 0) break;
+        var id = b.scalar ? b.key : b.key + '.' + j;
+        if (valOf(state.model, b, j) !== valOf(D.model, b, j)) out.model[id] = valOf(state.model, b, j);
+        if (descOf(state.model, b, j) !== descOf(D.model, b, j)) out.desc[id] = descOf(state.model, b, j);
+      }
+    });
+    ['puffer', 'autoFix'].forEach(function (k) { if (state.model[k] !== D.model[k]) out.model[k] = state.model[k]; });
+    return out;
+  }
+  function isCustomized() {
+    var d = customDiff();
+    return Object.keys(d.model).length > 0 || Object.keys(d.desc).length > 0 || state.custom.length > 0;
+  }
+  function applyStored(d) {
+    if (!d || typeof d !== 'object') return;
+    Object.keys(d.model || {}).forEach(function (id) {
+      var v = Number(d.model[id]);
+      if (!isFinite(v) || v < 0) return;
+      if (id === 'puffer' || id === 'autoFix') { state.model[id] = v; return; }
+      var parts = id.split('.'), b = bausteinByKey(parts[0]);
+      if (b) setVal(b, b.scalar ? 0 : Number(parts[1]), v);
+    });
+    Object.keys(d.desc || {}).forEach(function (id) {
+      var parts = id.split('.'), b = bausteinByKey(parts[0]);
+      if (b && typeof d.desc[id] === 'string') setDesc(b, b.scalar ? 0 : Number(parts[1]), d.desc[id]);
+    });
+    if (Array.isArray(d.custom)) {
+      state.custom = d.custom.filter(function (it) { return it && isFinite(Number(it.amount)); }).map(function (it) {
+        return { name: String(it.name || 'Eigener Posten'), amount: Number(it.amount), scale: it.scale === 'preis' ? 'preis' : 'fix' };
+      });
+    }
+  }
+  function saveSoon() { persistSoon(); }
+
+  var editorEl = document.getElementById('stage-editor');
+  var seList = document.getElementById('se-list');
+  var seCustom = document.getElementById('se-custom');
+  var editorStage = -1;
+  makeSeg('seg-stage2', STAGES.map(function (s, i) { return { v: String(i), label: s }; }),
+    function () { return state.stage; }, function (v) { state.stage = Number(v); });
+  document.getElementById('se-note').textContent = 'Beträge pro Monat in ' + ANCHOR +
+    ' für 2 Erwachsene mit 2 Kindern. Jeder Ort rechnet sie mit seinem Preisniveau und deiner Haushaltsgröße um. Krankenversicherung, Schule und Visum kommen pro Land dazu.';
+
+  function renderEditor() {
+    var j = state.stage;
+    editorStage = j;
+    seList.innerHTML = BAUSTEINE.filter(function (b) { return b.only === undefined || b.only === j; }).map(function (b) {
+      var v = valOf(state.model, b, j), fv = valOf(D.model, b, j);
+      var changed = v !== fv || descOf(state.model, b, j) !== descOf(D.model, b, j);
+      return '<div class="se-row' + (changed ? ' changed' : '') + '" data-k="' + b.key + '">' +
+        '<div><div class="se-name">' + esc(b.label) + '</div>' +
+        '<textarea class="se-desc" rows="1" aria-label="Was drinsteckt: ' + esc(b.label) + '">' + esc(descOf(state.model, b, j)) + '</textarea>' +
+        '<div class="se-scale">' + esc(b.scale(j)) + (v !== fv ? ' <span class="se-file">Standard: ' + eur(fv) + '</span>' : '') + '</div></div>' +
+        '<div class="se-amt"><div class="money"><input class="se-val" type="number" inputmode="numeric" min="0" step="10" value="' + v +
+        '" aria-label="' + esc(b.label) + ' in Euro pro Monat"><span class="unit">€</span></div>' +
+        '<button type="button" class="se-undo" title="Auf Standardwert zurücksetzen" aria-label="' + esc(b.label) + ' zurücksetzen">' + UNDO_ICON + '</button></div>' +
+        '</div>';
+    }).join('');
+    renderCustom();
+    document.getElementById('in-puffer').value = String(Math.round(state.model.puffer * 1000) / 10);
+    document.getElementById('in-autofix').value = String(Math.round(state.model.autoFix * 1000) / 10);
+  }
+  function renderCustom() {
+    seCustom.innerHTML = state.custom.map(function (it, i) {
+      return '<div class="se-crow" data-i="' + i + '">' +
+        '<input type="text" class="se-cname" value="' + esc(it.name) + '" aria-label="Name des Postens">' +
+        '<div class="se-amt"><div class="money"><input class="se-camt" type="number" inputmode="numeric" min="0" step="10" value="' + it.amount +
+        '" aria-label="Betrag in Euro pro Monat"><span class="unit">€</span></div></div>' +
+        '<select class="se-cscale" aria-label="Wie der Posten skaliert">' +
+        '<option value="fix"' + (it.scale === 'fix' ? ' selected' : '') + '>fix</option>' +
+        '<option value="preis"' + (it.scale === 'preis' ? ' selected' : '') + '>mit Preisniveau</option></select>' +
+        '<button type="button" class="se-del" aria-label="Posten entfernen">&times;</button></div>';
+    }).join('');
+  }
+  function editorChanged() {
+    document.getElementById('se-badge').hidden = !isCustomized();
+    saveSoon();
+    update();
+  }
+  seList.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Enter' && ev.target.classList.contains('se-desc')) { ev.preventDefault(); ev.target.blur(); }
+  });
+  seList.addEventListener('input', function (ev) {
+    var row = ev.target.closest('.se-row');
+    if (!row) return;
+    var b = bausteinByKey(row.dataset.k), j = state.stage;
+    if (ev.target.classList.contains('se-val')) {
+      var v = ev.target.valueAsNumber;
+      var ok = isFinite(v) && v >= 0;
+      ev.target.closest('.money').classList.toggle('invalid', !ok);
+      if (!ok) return;
+      setVal(b, j, v);
+    } else if (ev.target.classList.contains('se-desc')) {
+      setDesc(b, j, ev.target.value);
+    }
+    var fv = valOf(D.model, b, j), vChanged = valOf(state.model, b, j) !== fv;
+    row.classList.toggle('changed', vChanged || descOf(state.model, b, j) !== descOf(D.model, b, j));
+    row.querySelector('.se-scale').innerHTML = esc(b.scale(j)) + (vChanged ? ' <span class="se-file">Standard: ' + eur(fv) + '</span>' : '');
+    editorChanged();
+  });
+  seList.addEventListener('click', function (ev) {
+    var btn = ev.target.closest('.se-undo');
+    if (!btn) return;
+    var b = bausteinByKey(btn.closest('.se-row').dataset.k), j = state.stage;
+    setVal(b, j, valOf(D.model, b, j));
+    setDesc(b, j, descOf(D.model, b, j));
+    renderEditor();
+    editorChanged();
+  });
+  seCustom.addEventListener('input', function (ev) {
+    var row = ev.target.closest('.se-crow');
+    if (!row) return;
+    var it = state.custom[Number(row.dataset.i)];
+    if (ev.target.classList.contains('se-cname')) it.name = ev.target.value;
+    if (ev.target.classList.contains('se-camt')) {
+      var v = ev.target.valueAsNumber;
+      var ok = isFinite(v) && v >= 0;
+      ev.target.closest('.money').classList.toggle('invalid', !ok);
+      if (!ok) return;
+      it.amount = v;
+    }
+    editorChanged();
+  });
+  seCustom.addEventListener('change', function (ev) {
+    if (!ev.target.classList.contains('se-cscale')) return;
+    state.custom[Number(ev.target.closest('.se-crow').dataset.i)].scale = ev.target.value;
+    editorChanged();
+  });
+  seCustom.addEventListener('click', function (ev) {
+    if (!ev.target.closest('.se-del')) return;
+    state.custom.splice(Number(ev.target.closest('.se-crow').dataset.i), 1);
+    renderCustom();
+    editorChanged();
+  });
+  document.getElementById('se-add').addEventListener('click', function () {
+    state.custom.push({ name: 'Eigener Posten', amount: 0, scale: 'fix' });
+    renderCustom();
+    editorChanged();
+    var inputs = seCustom.querySelectorAll('.se-cname');
+    var last = inputs[inputs.length - 1];
+    if (last) { last.focus(); last.select(); }
+  });
+  bindNumber('in-puffer', function () { return String(Math.round(state.model.puffer * 1000) / 10); }, function (v) {
+    if (v < 0 || v > 100) return false; state.model.puffer = v / 100; editorDirty(); return true;
+  });
+  bindNumber('in-autofix', function () { return String(Math.round(state.model.autoFix * 1000) / 10); }, function (v) {
+    if (v < 0 || v > 100) return false; state.model.autoFix = v / 100; editorDirty(); return true;
+  });
+  function editorDirty() {
+    document.getElementById('se-badge').hidden = !isCustomized();
+    saveSoon();
+    seList.querySelectorAll('.se-row').forEach(function (row) {
+      row.querySelector('.se-scale').firstChild.textContent = bausteinByKey(row.dataset.k).scale(state.stage) + ' ';
+    });
+  }
+  document.getElementById('se-reset').addEventListener('click', function () {
+    state.model = JSON.parse(JSON.stringify(D.model));
+    state.custom = [];
+    renderEditor();
+    editorChanged();
+  });
+  document.getElementById('btn-open-editor').addEventListener('click', function () { openEditor(); });
+  function openEditor() {
+    editorEl.open = true;
+    editorEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.getElementById('se-badge').hidden = !isCustomized();
+
+  // Eingaben merken: nur wenn das Häkchen gesetzt ist, nur im Browser (localStorage), nichts geht an einen Server
+  var STORE_KEY = 'fire-weltkarte-v2';
+  var rememberEl = document.getElementById('in-remember');
+  var storageOk = (function () {
+    try { localStorage.setItem('fire-weltkarte-test', '1'); localStorage.removeItem('fire-weltkarte-test'); return true; } catch (e) { return false; }
+  })();
+  var remember = false;
+  var persistTimer = 0;
+  var SAVED_KEYS = ['adults', 'births', 'stage', 'wealth', 'wealthTouched', 'mode', 'visaOnly', 'rate', 'netto20', 'netto40', 'gkv', 'rendite', 'sparrate'];
+  function persistSoon() {
+    if (!remember) return;
+    clearTimeout(persistTimer);
+    persistTimer = setTimeout(function () {
+      var snap = { v: 2, editor: customDiff() };
+      SAVED_KEYS.forEach(function (k) { snap[k] = state[k]; });
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(snap)); } catch (e) { /* Speicher voll oder gesperrt */ }
+    }, 250);
+  }
+  function restore() {
+    var d;
+    try { d = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch (e) { return false; }
+    if (!d || d.v !== 2) return false;
+    function num(v, lo, hi) { return typeof v === 'number' && isFinite(v) && v >= lo && v <= hi; }
+    if (num(d.adults, 1, 4)) state.adults = Math.round(d.adults);
+    if (Array.isArray(d.births)) state.births = d.births.filter(function (b) { return num(b, 1900, 2100); }).slice(0, 5);
+    if (num(d.stage, 0, 3)) state.stage = Math.round(d.stage);
+    if (num(d.wealth, 0, 1e12)) state.wealth = d.wealth;
+    state.wealthTouched = d.wealthTouched === true;
+    if (['cheapest', 'stadt', 'land'].indexOf(d.mode) >= 0) state.mode = d.mode;
+    state.visaOnly = d.visaOnly === true;
+    if (num(d.rate, 0.0001, 1)) state.rate = d.rate;
+    if (num(d.netto20, 0, 1e6)) state.netto20 = d.netto20;
+    if (num(d.netto40, 0, 1e6)) state.netto40 = d.netto40;
+    if (num(d.gkv, 0, 1e6)) state.gkv = d.gkv;
+    if (num(d.rendite, -0.99, 1)) state.rendite = d.rendite;
+    if (num(d.sparrate, 0, 1e7)) state.sparrate = d.sparrate;
+    applyStored(d.editor);
+    return true;
+  }
+  if (!storageOk) {
+    rememberEl.disabled = true;
+    rememberEl.closest('label').title = 'Dein Browser erlaubt hier kein lokales Speichern.';
+  } else if (restore()) {
+    remember = true;
+    rememberEl.checked = true;
+    boundInputs.forEach(function (b) { b.input.value = b.getDisplay(); });
+  }
+  rememberEl.addEventListener('change', function () {
+    remember = rememberEl.checked;
+    if (remember) persistSoon();
+    else { try { localStorage.removeItem(STORE_KEY); } catch (e) { /* nichts zu tun */ } }
+  });
+  syncExampleHint();
+  document.getElementById('se-badge').hidden = !isCustomized();
+
+  // Gruppierung pro Land und Auswahl des Ortes für die Färbung
+  function groupByCountry(res) {
+    var m = new Map();
+    res.forEach(function (r) {
+      if (!m.has(r.land)) m.set(r.land, []);
+      m.get(r.land).push(r);
+    });
+    var out = new Map();
+    m.forEach(function (list, land) {
+      var cand = list;
+      if (state.mode === 'stadt') cand = list.filter(function (r) { return r.typ === 'Stadt'; });
+      if (state.mode === 'land') cand = list.filter(function (r) { return r.typ === 'ländlich'; });
+      if (!cand.length) cand = list;
+      var pick = cand.reduce(function (a, b) { return b.need < a.need ? b : a; });
+      out.set(land, { land: land, places: list, pick: pick, status: pick.status, visa: list[0].visa, visaText: list[0].visaText });
+    });
+    return out;
+  }
+
+  // Erstes Jahr, ab dem die Reihe bis END_YEAR durchgehend grün ist
+  function greenFrom(series) {
+    if (series[series.length - 1] !== 0) return null;
+    var i = series.length - 1;
+    while (i > 0 && series[i - 1] === 0) i--;
+    return BASE_YEAR + i;
+  }
+
+  function computeTimeline() {
+    TL = [];
+    for (var y = BASE_YEAR; y <= END_YEAR; y++) {
+      var hh = FM.householdAt(y, state.births);
+      var w = FM.wealthAt(state.wealth, y - BASE_YEAR, state.sparrate, state.rendite);
+      var res = FM.evaluate(Object.assign({}, state, { kids: hh.kids, school: hh.school, wealth: w }));
+      TL.push({ year: y, wealth: w, hh: hh, results: res, byCountry: groupByCountry(res) });
+    }
+    placeSeries = D.places.map(function (p, i) { return TL.map(function (t) { return t.results[i].status; }); });
+    placeFrom = placeSeries.map(greenFrom);
+    countrySeries = new Map();
+    countryFrom = new Map();
+    TL[0].byCountry.forEach(function (c, land) {
+      var s = TL.map(function (t) { return t.byCountry.get(land).status; });
+      countrySeries.set(land, s);
+      countryFrom.set(land, greenFrom(s));
+    });
+  }
+
+  function selectYear() {
+    cur = TL[state.year - BASE_YEAR];
+    results = cur.results;
+    byCountry = cur.byCountry;
+  }
+
+  function counted(bc) {
+    var arr = [];
+    (bc || byCountry).forEach(function (c) { if (!state.visaOnly || c.visa === 'ja') arr.push(c); });
+    return arr;
+  }
+
+  // Zusammenfassung über der Karte
+  function renderSummary() {
+    var list = counted();
+    var green = list.filter(function (c) { return c.status === 0; }).length;
+    var scope = state.visaOnly ? ' Ländern mit Visum ja' : ' Ländern';
+    document.getElementById('map-sub').textContent =
+      state.year + ', Stufe ' + STAGES[state.stage] + (isCustomized() ? ' (angepasst)' : '') + ': ohne Arbeit in ' + green + ' von ' + list.length + scope;
+  }
+
+  // Legende
+  function renderLegend() {
+    var html = STATUS.map(function (s) {
+      return '<span class="legend-item"><i class="sw sw-' + s.key + '"></i>' + esc(s.legend) + '</span>';
+    }).join('');
+    html += '<span class="legend-item"><i class="sw sw-nodata"></i>Land nicht in den Daten</span>';
+    html += '<span class="legend-item"><i class="sw-dot"></i>Punkt: einzelner Ort, Fläche: Ortsauswahl</span>';
+    html += '<span class="legend-item' + (state.visaOnly ? '' : ' opt-off') + '"><i class="sw sw-hatch"></i>schraffiert: Visum schwierig oder nein</span>';
+    document.getElementById('legend-overlay').innerHTML = html;
+  }
+
+  // Zeitachse: gestapelte Balken je Jahr, zugleich Schieberegler
+  var tlChart = document.getElementById('tl-chart');
+  var playBtn = document.getElementById('tl-play');
+  var PLAY_ICON = '<svg viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.8v10.4c0 .6.6.9 1.1.6l8.2-5.2c.5-.3.5-1 0-1.3L4.1 1.2C3.6.9 3 1.2 3 1.8z"/></svg>';
+  var PAUSE_ICON = '<svg viewBox="0 0 14 14" fill="currentColor"><rect x="2.5" y="1.5" width="3.2" height="11" rx="1"/><rect x="8.3" y="1.5" width="3.2" height="11" rx="1"/></svg>';
+  function renderTimeline() {
+    var w = tlChart.clientWidth || 600, h = tlChart.clientHeight || 84;
+    var axisH = 18, barsH = h - axisH;
+    var n = TL.length, slot = w / n, bw = Math.max(2, slot - Math.min(4, slot * 0.25));
+    var LW = 30; // ungefähre Breite einer Jahreszahl
+    function labelSpan(j) {
+      var x = j * slot + (slot - bw) / 2;
+      if (j === 0) return [x, x + LW];
+      if (j === n - 1) return [x + bw - LW, x + bw];
+      return [x + bw / 2 - LW / 2, x + bw / 2 + LW / 2];
+    }
+    var selSpan = labelSpan(state.year - BASE_YEAR);
+    var html = '';
+    TL.forEach(function (t, j) {
+      var list = counted(t.byCountry);
+      var counts = [0, 0, 0, 0];
+      list.forEach(function (c) { counts[c.status]++; });
+      var total = list.length || 1;
+      var x = j * slot + (slot - bw) / 2;
+      var y = barsH;
+      var sel = t.year === state.year;
+      var title = t.year + ': ' + STATUS.map(function (s, i) { return counts[i] + ' ' + s.short; }).join(', ');
+      html += '<g class="bar" opacity="' + (sel ? 1 : 0.42) + '"><title>' + esc(title) + '</title>';
+      counts.forEach(function (cnt, i) {
+        if (!cnt) return;
+        var sh = cnt / total * barsH;
+        y -= sh;
+        html += '<rect x="' + x.toFixed(1) + '" y="' + (y + 1).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + Math.max(0.5, sh - 1).toFixed(1) +
+          '" rx="1.5" style="fill:var(--' + STATUS[i].key + ')"/>';
+      });
+      html += '</g>';
+      var span = labelSpan(j);
+      var showAxis = sel || ((t.year % 5 === 0 || j === 0 || j === n - 1) && (span[1] < selSpan[0] - 6 || span[0] > selSpan[1] + 6));
+      if (showAxis) {
+        var anchor = j === 0 ? 'start' : (j === n - 1 ? 'end' : 'middle');
+        var ax = j === 0 ? x : (j === n - 1 ? x + bw : x + bw / 2);
+        html += '<text class="axis' + (sel ? ' now' : '') + '" x="' + ax.toFixed(1) + '" y="' + (h - 3) + '" text-anchor="' + anchor + '">' + t.year + '</text>';
+      }
+    });
+    tlChart.innerHTML = '<svg viewBox="0 0 ' + w + ' ' + h + '" aria-hidden="true">' + html + '</svg>';
+    var greenNow = counted().filter(function (c) { return c.status === 0; }).length;
+    tlChart.setAttribute('aria-valuemin', BASE_YEAR);
+    tlChart.setAttribute('aria-valuemax', END_YEAR);
+    tlChart.setAttribute('aria-valuenow', state.year);
+    tlChart.setAttribute('aria-valuetext', state.year + ': ' + greenNow + ' Länder ohne Arbeit');
+    document.getElementById('tl-year').textContent = state.year;
+    document.getElementById('tl-sub').textContent = 'Vermögen ' + eur(cur.wealth) + (state.year > BASE_YEAR ? ' (Prognose)' : '') + ', ' + householdText(cur.hh);
+    playBtn.innerHTML = playTimer ? PAUSE_ICON : PLAY_ICON;
+    playBtn.setAttribute('aria-label', playTimer ? 'Zeitachse anhalten' : 'Zeitachse abspielen');
+  }
+  function yearFromX(clientX) {
+    var r = tlChart.getBoundingClientRect();
+    var j = Math.floor((clientX - r.left) / r.width * TL.length);
+    return BASE_YEAR + Math.max(0, Math.min(TL.length - 1, j));
+  }
+  var scrubbing = false;
+  tlChart.addEventListener('pointerdown', function (ev) {
+    stopPlay();
+    scrubbing = true;
+    try { tlChart.setPointerCapture(ev.pointerId); } catch (e) { /* ältere Browser */ }
+    setYear(yearFromX(ev.clientX));
+  });
+  tlChart.addEventListener('pointermove', function (ev) { if (scrubbing) setYear(yearFromX(ev.clientX)); });
+  tlChart.addEventListener('pointerup', function () { scrubbing = false; });
+  tlChart.addEventListener('pointercancel', function () { scrubbing = false; });
+  tlChart.addEventListener('keydown', function (ev) {
+    var y = state.year;
+    if (ev.key === 'ArrowRight' || ev.key === 'ArrowUp') y++;
+    else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowDown') y--;
+    else if (ev.key === 'Home') y = BASE_YEAR;
+    else if (ev.key === 'End') y = END_YEAR;
+    else if (ev.key === 'PageUp') y += 5;
+    else if (ev.key === 'PageDown') y -= 5;
+    else return;
+    ev.preventDefault();
+    stopPlay();
+    setYear(y);
+  });
+  var playTimer = null;
+  function stopPlay() {
+    if (!playTimer) return;
+    clearInterval(playTimer);
+    playTimer = null;
+    renderTimeline();
+  }
+  playBtn.addEventListener('click', function () {
+    if (playTimer) { stopPlay(); return; }
+    if (state.year >= END_YEAR) setYear(BASE_YEAR);
+    playTimer = setInterval(function () {
+      if (state.year >= END_YEAR) { stopPlay(); return; }
+      setYear(state.year + 1);
+    }, 650);
+    renderTimeline();
+  });
+  if (window.ResizeObserver) new ResizeObserver(function () { if (cur) renderTimeline(); }).observe(tlChart);
+
+  // Kennzahlen
+  function renderKpis() {
+    var list = counted();
+    var counts = [0, 0, 0, 0];
+    list.forEach(function (c) { counts[c.status]++; });
+    var sub = state.visaOnly ? 'Länder mit Visum ja' : 'von ' + list.length + ' Ländern';
+    var future = state.year > BASE_YEAR;
+    var wsub = future
+      ? 'Prognose bei ' + nf1.format(state.rendite * 100) + ' % Realrendite und ' + eur(state.sparrate) + ' Sparrate pro Monat, in heutigen Preisen'
+      : 'Entnahmerate ' + nf1.format(state.rate * 100) + ' %, also ' + eur(cur.wealth * state.rate / 12) + ' pro Monat';
+    var html = '<div class="card kpi kpi-wealth"><div class="kpi-label">FIRE-Vermögen ' + state.year + '</div>' +
+      '<div class="kpi-value">' + eur(cur.wealth) + '</div><div class="kpi-sub">' + wsub + '</div></div>';
+    html += STATUS.map(function (s, i) {
+      return '<div class="card kpi"><div class="kpi-label"><i class="sw sw-' + s.key + '"></i>' + s.name + ': ' + esc(s.short) + '</div>' +
+        '<div class="kpi-value">' + counts[i] + '</div><div class="kpi-sub">' + esc(sub) + '</div></div>';
+    }).join('');
+    document.getElementById('kpis').innerHTML = html;
+  }
+
+  // Nächster Meilenstein
+  function msCard(kicker, r) {
+    if (!r) {
+      return '<div class="card ms"><div class="ms-kicker">' + esc(kicker) + '</div>' +
+        '<div class="ms-place">Alle erreicht</div><div class="ms-empty">Jeder Ort dieser Auswahl ist ohne Arbeit finanzierbar.</div></div>';
+    }
+    var p = pctValue(cur.wealth, r.t[0]);
+    var from = placeFrom[r.id];
+    return '<div class="card ms"><div class="ms-kicker">' + esc(kicker) + '</div>' +
+      '<div class="ms-place">' + esc(r.name) + '</div>' +
+      '<div class="ms-meta">' + esc(r.typ) + ', ' + esc(r.land) + ', Visum ' + esc(r.visaText) + '</div>' +
+      '<div class="ms-nums">' +
+      '<div class="ms-num"><span>Zielvermögen ohne Arbeit</span><b>' + eur(r.t[0]) + '</b></div>' +
+      '<div class="ms-num"><span>Es fehlen</span><b>' + eur(r.t[0] - cur.wealth) + '</b></div>' +
+      '<div class="ms-num"><span>Voraussichtlich</span><b>' + (from ? 'ab ' + from : 'nicht bis ' + END_YEAR) + '</b></div>' +
+      '</div>' +
+      '<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.floor(p * 100) + '"><i style="width:' + Math.min(100, p * 100).toFixed(1) + '%"></i></div>' +
+      '<div class="bar-label">' + pct(p) + ' erreicht, Monatsbedarf ' + eur(r.need) + '</div>' +
+      '<button type="button" class="linkbtn ms-link" data-idx="' + r.id + '">Kostenaufschlüsselung ansehen</button></div>';
+  }
+  function renderMilestones() {
+    var open = results.filter(function (r) { return r.t[0] > cur.wealth; })
+      .sort(function (a, b) { return a.t[0] - b.t[0]; });
+    var next = open[0];
+    var nextVisa = open.filter(function (r) { return r.visa === 'ja'; })[0];
+    var reached = results.length - open.length;
+    document.getElementById('ms-meta').textContent =
+      state.year + ', Stufe ' + STAGES[state.stage] + ': ohne Arbeit erreicht in ' + reached + ' von ' + results.length + ' Orten';
+    document.getElementById('milestones').innerHTML =
+      msCard('Günstigster noch nicht erreichter Ort', next) +
+      msCard('Günstigster noch nicht erreichter Ort mit Visum ja', nextVisa);
+  }
+
+  // Tabelle
+  var COLS = [
+    { key: 'name', label: 'Ort', get: function (r) { return r.name; } },
+    { key: 'typ', label: 'Kategorie', get: function (r) { return r.typ; } },
+    { key: 'land', label: 'Land', get: function (r) { return r.land; } },
+    { key: 'need', label: 'Monatsbedarf', num: true, get: function (r) { return r.need; } },
+    { key: 't0', label: 'Ziel ohne Arbeit', num: true, get: function (r) { return r.t[0]; } },
+    { key: 't20', label: 'Ziel 20h', num: true, get: function (r) { return r.t[1]; } },
+    { key: 't40', label: 'Ziel 40h', num: true, get: function (r) { return r.t[2]; } },
+    { key: 'from', label: 'ohne Arbeit ab', num: true, get: function (r) { return placeFrom[r.id] || 99999; } },
+    { key: 'status', label: 'Status', get: function (r) { return r.status; } }
+  ];
+  var collator = new Intl.Collator('de');
+  function renderTableHead() {
+    document.getElementById('places-head').innerHTML = COLS.map(function (c) {
+      var active = sort.key === c.key;
+      var aria = active ? ' aria-sort="' + (sort.dir > 0 ? 'ascending' : 'descending') + '"' : '';
+      var arrow = active ? (sort.dir > 0 ? '▲' : '▼') : '';
+      var arrowEl = '<span class="arrow" aria-hidden="true">' + arrow + '</span>';
+      return '<th' + aria + (c.num ? ' class="num"' : '') + '><button type="button" data-k="' + c.key + '">' +
+        (c.num ? arrowEl + esc(c.label) : esc(c.label) + arrowEl) + '</button></th>';
+    }).join('');
+  }
+  document.getElementById('places-head').addEventListener('click', function (ev) {
+    var b = ev.target.closest('button');
+    if (!b) return;
+    var k = b.dataset.k;
+    if (sort.key === k) sort.dir = -sort.dir; else { sort.key = k; sort.dir = 1; }
+    renderTableHead();
+    renderTable();
+  });
+  function renderTable() {
+    var col = COLS.filter(function (c) { return c.key === sort.key; })[0];
+    var rows = results.slice().sort(function (a, b) {
+      var va = col.get(a), vb = col.get(b), d;
+      d = typeof va === 'string' ? collator.compare(va, vb) : va - vb;
+      if (d === 0) d = a.t[0] - b.t[0];
+      if (d === 0) d = a.need - b.need;
+      return d * sort.dir;
+    });
+    document.getElementById('places-body').innerHTML = rows.map(function (r) {
+      var s = STATUS[r.status];
+      var dim = state.visaOnly && r.visa !== 'ja';
+      var from = placeFrom[r.id];
+      return '<tr tabindex="0" data-idx="' + r.id + '"' + (dim ? ' class="dim" title="Visum ' + esc(r.visaText) + '"' : '') + '>' +
+        '<td class="name">' + esc(r.name) + '</td>' +
+        '<td class="cat">' + esc(r.typ) + '</td>' +
+        '<td class="land">' + esc(r.land) + (dim ? '<span class="visa-tag">Visum ' + esc(r.visa) + '</span>' : '') + '</td>' +
+        '<td class="num">' + eur(r.need) + '</td>' +
+        '<td class="num">' + eur(r.t[0]) + '</td>' +
+        '<td class="num">' + eur(r.t[1]) + '</td>' +
+        '<td class="num">' + eur(r.t[2]) + '</td>' +
+        '<td class="num">' + (from || 'nach ' + END_YEAR) + '</td>' +
+        '<td><span class="status"><i class="sw sw-' + s.key + (dim ? ' hatched' : '') + '"></i>' + esc(s.short) + '</span></td>' +
+        '</tr>';
+    }).join('');
+    var meta = results.length + ' Orte, ' + state.year + ', Stufe ' + STAGES[state.stage] +
+      '. „ohne Arbeit ab“: ab diesem Jahr reicht es bis ' + END_YEAR + ' durchgehend ohne Arbeit';
+    if (state.visaOnly) meta += '. Orte ohne Visum ja ausgegraut';
+    document.getElementById('table-meta').textContent = meta;
+  }
+
+  // Tooltip
+  var tooltip = document.getElementById('tooltip');
+  var ttBody = document.getElementById('tt-body');
+  var tip = { kind: null, key: null, pinned: false, x: 0, y: 0 };
+  var TYP_ORDER = { 'Stadt': 0, 'Stadtrand': 1, 'ländlich': 2 };
+  function stripHTML(series, from) {
+    var cells = series.map(function (st, j) {
+      var y = BASE_YEAR + j;
+      return '<i class="sw-' + STATUS[st].key + (y === state.year ? ' now' : '') + '" title="' + y + ': ' + STATUS[st].short + '"></i>';
+    }).join('');
+    return '<div class="strip" style="grid-template-columns:repeat(' + series.length + ',1fr)">' + cells + '</div>' +
+      '<div class="strip-axis"><span>' + BASE_YEAR + '</span><b>' + fromText(from) + '</b><span>' + END_YEAR + '</span></div>';
+  }
+  function placeBlock(r, isPick, withHead) {
+    var head = withHead ? '<div class="tt-place-head"><span class="tt-name">' + esc(r.name) + '</span>' +
+      '<span class="tt-cat">' + esc(r.typ) + '</span>' + (isPick ? '<span class="tt-pick">für Färbung genutzt</span>' : '') + '</div>' : '';
+    var html = '<div class="tt-place">' + head +
+      '<div class="tt-need">Monatsbedarf <b>' + eur(r.need) + '</b></div>' +
+      '<table class="tt-table"><thead><tr><th>Szenario</th><th>Zielvermögen</th><th>Fortschritt</th></tr></thead><tbody>';
+    r.t.forEach(function (t, i) {
+      var p = pctValue(cur.wealth, t);
+      html += '<tr><th>' + SCENARIOS[i] + '</th><td>' + eur(t) + '</td><td class="pc">' + pct(p) +
+        '<span class="ok" aria-hidden="true">' + (p >= 1 ? '✓' : '') + '</span></td></tr>';
+    });
+    return html + '</tbody></table>' + stripHTML(placeSeries[r.id], placeFrom[r.id]) + '</div>';
+  }
+  function countryTooltipHTML(land) {
+    var c = byCountry.get(land);
+    if (!c) return '';
+    var list = c.places.slice().sort(function (a, b) { return (TYP_ORDER[a.typ] || 0) - (TYP_ORDER[b.typ] || 0); });
+    var html = '<div class="tt-title">' + esc(land) + '</div>' +
+      '<div class="tt-visa">' + state.year + ', Visum machbar: ' + esc(c.visaText) + '</div>';
+    list.forEach(function (r) { html += placeBlock(r, r === c.pick, true); });
+    var modeLabel = MODES.filter(function (m) { return m.v === state.mode; })[0].label;
+    html += '<div class="tt-foot">Färbung nach ' + esc(c.pick.name) + ' (' + esc(c.pick.typ) + '), Ortsauswahl: ' + esc(modeLabel) +
+      ', Status: ' + esc(STATUS[c.status].legend) + '. Klicken für die Kostenaufschlüsselung.</div>';
+    return html;
+  }
+  function placeTooltipHTML(i) {
+    var r = results[i];
+    return '<div class="tt-title">' + esc(r.name) + '</div>' +
+      '<div class="tt-visa">' + esc(r.typ) + ', ' + esc(r.land) + ', ' + state.year + '. Visum machbar: ' + esc(r.visaText) + '</div>' +
+      placeBlock(r, false, false) +
+      '<div class="tt-foot">Status: ' + esc(STATUS[r.status].legend) + '. Klicken für die Kostenaufschlüsselung.</div>';
+  }
+  function tooltipHTML() {
+    return tip.kind === 'place' ? placeTooltipHTML(tip.key) : countryTooltipHTML(tip.key);
+  }
+  function positionTooltip() {
+    if (tip.pinned) return;
+    var w = tooltip.offsetWidth, h = tooltip.offsetHeight;
+    var vw = document.documentElement.clientWidth, vh = window.innerHeight;
+    var left = tip.x + 16, top = tip.y + 16;
+    if (left + w > vw - 8) left = tip.x - w - 16;
+    if (left < 8) left = 8;
+    if (top + h > vh - 8) top = Math.max(8, vh - h - 8);
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+  }
+  function showTooltip(kind, key, pinned) {
+    tip.kind = kind;
+    tip.key = key;
+    tip.pinned = pinned;
+    ttBody.innerHTML = tooltipHTML();
+    tooltip.classList.toggle('sheet', pinned);
+    tooltip.classList.add('show');
+    if (pinned) tooltip.scrollTop = 0;
+    positionTooltip();
+  }
+  function hideTooltip() {
+    tip.kind = null;
+    tip.key = null;
+    tip.pinned = false;
+    tooltip.classList.remove('show', 'sheet');
+    setHighlight(null);
+    markPlace(null);
+  }
+  function refreshTooltip() {
+    if (tip.kind) { ttBody.innerHTML = tooltipHTML(); positionTooltip(); }
+  }
+  document.getElementById('tt-close').addEventListener('click', hideTooltip);
+
+  // Detailansicht eines Ortes: Monatsbedarf aufgeschlüsselt mit Rechenweg
+  var drawerEl = document.getElementById('drawer');
+  var drBody = document.getElementById('dr-body');
+  var drawer = { open: false, idx: null };
+  var nf2 = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function openDrawer(i) {
+    hideTooltip();
+    drawer.open = true;
+    drawer.idx = i;
+    renderDrawer();
+    drawerEl.classList.add('open');
+    drawerEl.scrollTop = 0;
+    markSelected();
+  }
+  function closeDrawer() {
+    drawer.open = false;
+    drawerEl.classList.remove('open');
+    markSelected();
+  }
+  document.getElementById('dr-close').addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && drawer.open) closeDrawer(); });
+  drBody.addEventListener('click', function (ev) {
+    var tab = ev.target.closest('[data-idx]');
+    if (tab) { drawer.idx = Number(tab.dataset.idx); renderDrawer(); markSelected(); return; }
+    if (ev.target.closest('#dr-edit')) {
+      if (window.matchMedia('(max-width: 720px)').matches) closeDrawer();
+      openEditor();
+    }
+  });
+  function renderDrawer() {
+    if (!drawer.open) return;
+    var i = drawer.idx, r = results[i], p = D.places[i], j = state.stage, M = state.model;
+    var c = byCountry.get(r.land);
+    var hh = cur.hh;
+    var b = FM.breakdown(p, j, Object.assign({}, state, { kids: hh.kids, school: hh.school }));
+    var f = b.f, it = b.items;
+    var fixShare = pctTxt(M.autoFix);
+    function base(x) { return ANCHOR + ' ' + eur(x); }
+    function d(key) { return descOf(M, bausteinByKey(key), j); }
+    var lines = [
+      { label: 'Wohnen warm', desc: d('wohnen'), val: it.wohnen, how: base(M.wohnen[j]) + ' × Mietniveau ' + nf2.format(f.rMiete) },
+      { label: 'Lebensmittel', desc: d('lebensmittel'), val: it.lebensmittel, how: base(M.lebensmittel[j]) + ' × Preise ' + nf2.format(f.rLM) + ' × Haushalt ' + nf2.format(b.P) },
+      { label: 'Restaurant', desc: d('restaurant'), val: it.restaurant, how: base(M.restaurant[j]) + ' × Preise ' + nf2.format(f.rRest) + ' × Haushalt ' + nf2.format(b.P) },
+      { label: 'Freizeit und Sonstiges', desc: d('freizeit'), val: it.freizeit, how: base(M.freizeit[j]) + ' × Preisniveau ' + nf2.format(f.rCoL) + ' × Haushalt ' + nf2.format(b.P) },
+      b.carMin
+        ? { label: 'Mobilität', desc: 'Kleinwagen, weil hier ein Auto nötig ist', val: it.mobilitaet,
+            how: base(M.mobilitaetLandMin) + ' × (' + fixShare + ' fix, Rest × Preisniveau ' + nf2.format(f.rCoL) + ')' }
+        : { label: 'Mobilität', desc: d('mobilitaet'), val: it.mobilitaet,
+            how: j === 0 ? base(M.mobilitaet[0]) + ' × Preisniveau ' + nf2.format(f.rCoL)
+              : base(M.mobilitaet[j]) + ' × (' + fixShare + ' fix, Rest × Preisniveau ' + nf2.format(f.rCoL) + ')' },
+      { label: 'Reisen', desc: d('reisen'), val: it.reisen, how: 'fix' },
+      { label: 'Krankenversicherung international', desc: d('kvInt'), val: it.kvInt, how: 'fix' },
+      { label: 'Haushaltshilfe', desc: d('haushaltshilfe'), val: it.haushaltshilfe, how: base(M.haushaltshilfe[j]) + ' × Preisniveau ' + nf2.format(f.rCoL) },
+      { label: 'Krankenversicherung ' + r.land, desc: j <= 1 ? 'Beitrag für Min und Lean' : 'Pflichtbeitrag für Komfort und Fat', val: it.kv, how: 'Länderwert (Schätzung)' },
+      { label: 'Schule', desc: hh.school ? plural(hh.school, 'Kind', 'Kinder') + ' im Schulalter' : 'kein Kind im Schulalter', val: it.schule,
+        how: 'Länderwert für 2 Kinder × ' + hh.school + '/2' },
+      { label: 'Visum', desc: 'Visum machbar: ' + r.visaText, val: it.visum, how: 'Länderwert (Schätzung)' }
+    ];
+    state.custom.forEach(function (cu, k) {
+      lines.push({ label: cu.name, desc: 'eigener Posten', val: b.custom[k],
+        how: cu.scale === 'preis' ? eur(cu.amount) + ' × Preisniveau ' + nf2.format(f.rCoL) : 'fix' });
+    });
+    lines.push({ label: 'Puffer', desc: pctTxt(M.puffer) + ' auf alle Posten', val: b.puffer, how: '' });
+    var shown = lines.filter(function (l) { return l.val > 0.005; });
+    var zero = lines.filter(function (l) { return l.val <= 0.005; }).map(function (l) { return l.label; });
+    var max = Math.max.apply(null, shown.map(function (l) { return l.val; }).concat([1]));
+
+    var html = '<h3 class="dr-title" id="dr-title">' + esc(r.name) + '</h3>' +
+      '<div class="dr-meta">' + esc(r.typ) + ', ' + esc(r.land) + ', Visum ' + esc(r.visaText) + '</div>';
+    if (c.places.length > 1) {
+      var TYP = { 'Stadt': 0, 'Stadtrand': 1, 'ländlich': 2 };
+      html += '<div class="seg dr-tabs" role="group" aria-label="Ort im Land wählen">' + c.places.slice()
+        .sort(function (a, z) { return (TYP[a.typ] || 0) - (TYP[z.typ] || 0); })
+        .map(function (q) {
+          return '<button type="button" data-idx="' + q.id + '" aria-pressed="' + (q.id === i) + '">' + esc(q.name) + '</button>';
+        }).join('') + '</div>';
+    }
+    html += '<div class="dr-ctx">Stufe ' + STAGES[j] + (isCustomized() ? ' (angepasst)' : '') + ', ' + state.year + ', ' + esc(householdText(hh)) + '</div>' +
+      '<div class="dr-total"><b>' + eur(r.need) + '</b><span>Monatsbedarf</span></div>';
+    shown.forEach(function (l) {
+      html += '<div class="dr-line"><div class="dr-line-top"><span class="dr-line-label">' + esc(l.label) + '</span>' +
+        '<span class="dr-line-val">' + eur(l.val) + '<small>' + pct(l.val / r.need) + '</small></span></div>' +
+        (l.desc ? '<div class="dr-line-desc">' + esc(l.desc) + '</div>' : '') +
+        (l.how ? '<div class="dr-line-how">' + esc(l.how) + '</div>' : '') +
+        '<div class="dr-bar"><i style="width:' + (l.val / max * 100).toFixed(1) + '%"></i></div></div>';
+    });
+    if (zero.length) html += '<div class="dr-zero">Nicht enthalten: ' + esc(zero.join(', ')) + '</div>';
+
+    html += '<div class="dr-h">Zielvermögen ' + state.year + '</div><table class="tt-table"><thead><tr><th>Szenario</th><th>Zielvermögen</th><th>Fortschritt</th></tr></thead><tbody>';
+    r.t.forEach(function (t, k) {
+      var pv = pctValue(cur.wealth, t);
+      html += '<tr><th>' + SCENARIOS[k] + '</th><td>' + eur(t) + '</td><td class="pc">' + pct(pv) +
+        '<span class="ok" aria-hidden="true">' + (pv >= 1 ? '✓' : '') + '</span></td></tr>';
+    });
+    html += '</tbody></table>' + stripHTML(placeSeries[i], placeFrom[i]);
+    html += '<div class="dr-actions"><button type="button" class="btn-text" id="dr-edit">Bausteine der Stufe ' + STAGES[j] + ' anpassen</button></div>';
+    drBody.innerHTML = html;
+  }
+  var placesBody = document.getElementById('places-body');
+  placesBody.addEventListener('click', function (ev) {
+    var tr = ev.target.closest('tr[data-idx]');
+    if (tr) openDrawer(Number(tr.dataset.idx));
+  });
+  placesBody.addEventListener('keydown', function (ev) {
+    if (ev.key !== 'Enter' && ev.key !== ' ') return;
+    var tr = ev.target.closest('tr[data-idx]');
+    if (!tr) return;
+    ev.preventDefault();
+    openDrawer(Number(tr.dataset.idx));
+  });
+  document.getElementById('milestones').addEventListener('click', function (ev) {
+    var b = ev.target.closest('.ms-link');
+    if (b) openDrawer(Number(b.dataset.idx));
+  });
+  function markSelected() {
+    if (!map.ready) return;
+    map.pts.classed('sel', function (d) { return drawer.open && d === drawer.idx; });
+  }
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') hideTooltip(); });
+
+  // Karte
+  var map = {
+    ready: false, svg: null, svgNode: null, root: null, gCountries: null, hl: null, gCities: null, gPlaces: null, gPlaceLabels: null,
+    paths: null, pts: null, hlFeature: null, zoom: null, features: [], fine: false, loadingFine: false,
+    w: 0, h: 0, k: 1, path: null, projection: null, worldW: 1000, placeXY: [], cityXY: []
+  };
+  var lastPointer = 'mouse';
+  var labelRaf = 0;
+
+  function fillFor(land) {
+    var c = byCountry.get(land);
+    var key = STATUS[c.status].key;
+    if (state.visaOnly && c.visa !== 'ja') return 'url(#hatch-' + key + ')';
+    return 'var(--' + key + ')';
+  }
+  function renderMap() {
+    if (!map.ready) return;
+    map.paths.filter('.has-data').style('fill', function (d) { return fillFor(NUM_TO_LAND[d.id]); });
+    map.pts
+      .classed('dim', function (d) { return state.visaOnly && results[d].visa !== 'ja'; })
+      .select('.dot').style('fill', function (d) { return 'var(--' + STATUS[results[d].status].key + ')'; });
+  }
+  function setHighlight(feature) {
+    if (!map.ready) return;
+    map.hlFeature = feature;
+    map.hl.attr('d', feature ? map.path(feature) : null);
+  }
+  function markPlace(i) {
+    if (!map.ready) return;
+    map.pts.classed('on', function (d) { return d === i; });
+  }
+  function applyTransform(t) {
+    var ext = [[0, 0], [map.w, map.h]];
+    var k = Math.max(1, Math.min(16, t.k));
+    t = d3.zoomIdentity.translate(t.x, t.y).scale(k);
+    t = map.zoom.constrain()(t, ext, ext);
+    map.svg.call(map.zoom.transform, t);
+  }
+
+  function initMap() {
+    var msg = document.getElementById('map-msg');
+    var fail = function () {
+      msg.textContent = 'Karte konnte nicht geladen werden. Für die Weltkarte ist eine Internetverbindung nötig, Kennzahlen und Tabelle funktionieren trotzdem.';
+    };
+    if (!window.d3 || !window.topojson) { fail(); return; }
+    d3.json(TOPO_URL).then(function (topo) {
+      map.features = topojson.feature(topo, topo.objects.countries).features
+        .filter(function (f) { return f.id !== '010'; }); // ohne Antarktis
+      buildMap();
+      msg.remove();
+    }).catch(fail);
+  }
+
+  function drawCountries() {
+    map.gCountries.selectAll('*').remove();
+    map.paths = map.gCountries.selectAll('path').data(map.features).join('path')
+      .attr('class', function (d) { return NUM_TO_LAND[d.id] ? 'country has-data' : 'country nodata'; })
+      .style('fill', function (d) { return NUM_TO_LAND[d.id] ? fillFor(NUM_TO_LAND[d.id]) : null; });
+    if (map.path) map.paths.attr('d', map.path);
+    map.paths.filter('.has-data')
+      .on('pointermove', function (ev, d) {
+        if (ev.pointerType !== 'mouse' || tip.pinned) return;
+        var land = NUM_TO_LAND[d.id];
+        tip.x = ev.clientX; tip.y = ev.clientY;
+        if (tip.kind !== 'country' || tip.key !== land) { markPlace(null); showTooltip('country', land, false); setHighlight(d); }
+        else positionTooltip();
+      })
+      .on('pointerleave', function (ev) {
+        if (ev.pointerType !== 'mouse' || tip.pinned) return;
+        hideTooltip();
+      })
+      .on('click', function (ev, d) {
+        ev.stopPropagation();
+        openDrawer(byCountry.get(NUM_TO_LAND[d.id]).pick.id);
+      });
+  }
+
+  function drawPlaces() {
+    map.pts = map.gPlaces.selectAll('g.pt').data(D.places.map(function (p, i) { return i; })).join('g')
+      .attr('class', 'pt');
+    map.pts.append('circle').attr('class', 'hit');
+    map.pts.append('circle').attr('class', 'dot');
+    map.pts
+      .on('pointermove', function (ev, i) {
+        if (ev.pointerType !== 'mouse' || tip.pinned) return;
+        ev.stopPropagation();
+        tip.x = ev.clientX; tip.y = ev.clientY;
+        if (tip.kind !== 'place' || tip.key !== i) { setHighlight(null); showTooltip('place', i, false); markPlace(i); }
+        else positionTooltip();
+      })
+      .on('pointerleave', function (ev) {
+        if (ev.pointerType !== 'mouse' || tip.pinned) return;
+        hideTooltip();
+      })
+      .on('click', function (ev, i) {
+        ev.stopPropagation();
+        openDrawer(i);
+      });
+  }
+
+  function positionAll() {
+    map.paths.attr('d', map.path);
+    map.placeXY = D.places.map(function (p) { return map.projection(p.lonlat); });
+    map.cityXY = D.cities.map(function (c) { return map.projection([c[1], c[2]]); });
+    map.pts.attr('transform', function (i) { return 'translate(' + map.placeXY[i][0].toFixed(2) + ',' + map.placeXY[i][1].toFixed(2) + ')'; });
+    if (map.hlFeature) map.hl.attr('d', map.path(map.hlFeature));
+  }
+
+  // Größen, die auf dem Bildschirm konstant bleiben sollen
+  function applyScale(k) {
+    var r = Math.min(6.5, 3 + 1.65 * Math.log2(k));
+    map.pts.select('.dot').attr('r', r / k);
+    map.pts.select('.hit').attr('r', 10 / k);
+    map.gPlaceLabels.style('font-size', (11.5 / k) + 'px').style('stroke-width', 3 / k);
+    map.gCities.style('font-size', (11 / k) + 'px').style('stroke-width', 3 / k);
+    map.gCities.selectAll('circle').attr('r', 1.7 / k);
+  }
+
+  function loadFine() {
+    if (map.fine || map.loadingFine) return;
+    map.loadingFine = true;
+    d3.json(TOPO_URL_FINE).then(function (topo) {
+      map.features = topojson.feature(topo, topo.objects.countries).features
+        .filter(function (f) { return f.id !== '010'; });
+      map.fine = true;
+      drawCountries();
+      if (map.hlFeature) {
+        var id = map.hlFeature.id;
+        setHighlight(map.features.filter(function (f) { return f.id === id; })[0] || null);
+      }
+    }).catch(function () { map.loadingFine = false; });
+  }
+
+  // Beschriftung: zuerst eigene Orte, dann Städte nach Natural-Earth-Zoomstufe, ohne Überlappung
+  function scheduleLabels() {
+    if (!labelRaf) labelRaf = requestAnimationFrame(layoutLabels);
+  }
+  function layoutLabels() {
+    labelRaf = 0;
+    if (!map.ready) return;
+    var t = d3.zoomTransform(map.svgNode), k = t.k;
+    var W = map.w, H = map.h;
+    var boxes = [];
+    function free(b) {
+      for (var i = 0; i < boxes.length; i++) {
+        var o = boxes[i];
+        if (b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]) return false;
+      }
+      return true;
+    }
+    function inView(b) { return b[0] >= 2 && b[2] <= W - 2 && b[1] >= 2 && b[3] <= H - 2; }
+    var placeLab = [], cityLab = [];
+    boxes.push([W - 56, 0, W, 160]); // Zoom-Knöpfe freihalten
+    var visible = [];
+    D.places.forEach(function (p, i) {
+      var s = t.apply(map.placeXY[i]);
+      if (s[0] < -20 || s[0] > W + 20 || s[1] < -20 || s[1] > H + 20) return;
+      visible.push(i);
+      boxes.push([s[0] - 5, s[1] - 5, s[0] + 5, s[1] + 5]);
+    });
+    if (k >= 2.2) {
+      visible.sort(function (a, b) { return results[a].status - results[b].status || results[a].need - results[b].need; });
+      visible.forEach(function (i) {
+        var s = t.apply(map.placeXY[i]);
+        var b = [s[0] + 6, s[1] - 7, s[0] + 8 + results[i].name.length * 6.6, s[1] + 7];
+        if (inView(b) && free(b)) { boxes.push(b); placeLab.push(i); }
+      });
+    }
+    if (k >= 1.8) {
+      var z = Math.log2(map.worldW * k / 256);
+      for (var j = 0; j < D.cities.length && cityLab.length < 140; j++) {
+        var c = D.cities[j];
+        if (c[3] > z) break;
+        var s = t.apply(map.cityXY[j]);
+        var b = [s[0] - 2, s[1] - 7, s[0] + 6 + c[0].length * 6.1, s[1] + 7];
+        if (inView(b) && free(b)) { boxes.push(b); cityLab.push(j); }
+      }
+    }
+    map.gPlaceLabels.selectAll('text').data(placeLab, function (i) { return i; }).join('text')
+      .attr('x', function (i) { return map.placeXY[i][0]; })
+      .attr('y', function (i) { return map.placeXY[i][1]; })
+      .attr('dx', '0.62em').attr('dy', '0.35em')
+      .text(function (i) { return results[i].name; });
+    var cg = map.gCities.selectAll('g').data(cityLab, function (j) { return j; }).join(function (enter) {
+      var g = enter.append('g');
+      g.append('circle');
+      g.append('text').attr('dx', '0.5em').attr('dy', '0.35em');
+      return g;
+    });
+    cg.attr('transform', function (j) { return 'translate(' + map.cityXY[j][0].toFixed(2) + ',' + map.cityXY[j][1].toFixed(2) + ')'; });
+    cg.select('text').text(function (j) { return D.cities[j][0]; });
+    cg.select('circle').attr('r', 1.7 / k);
+  }
+
+  function buildMap() {
+    var svg = d3.select('#map');
+    var svgNode = svg.node();
+    map.svg = svg;
+    map.svgNode = svgNode;
+    var defs = svg.append('defs');
+    STATUS.forEach(function (s) {
+      var p = defs.append('pattern').attr('id', 'hatch-' + s.key)
+        .attr('patternUnits', 'userSpaceOnUse').attr('width', 6).attr('height', 6)
+        .attr('patternTransform', 'rotate(45)');
+      p.append('rect').attr('class', 'hatch-bg').attr('width', 6).attr('height', 6);
+      p.append('rect').attr('width', 3).attr('height', 6).style('fill', 'var(--' + s.key + ')');
+    });
+    map.root = svg.append('g');
+    map.gCountries = map.root.append('g');
+    map.hl = map.root.append('path').attr('class', 'hl');
+    map.gCities = map.root.append('g').attr('class', 'lbl cities');
+    map.gPlaces = map.root.append('g');
+    map.gPlaceLabels = map.root.append('g').attr('class', 'lbl place-labels');
+    drawCountries();
+    drawPlaces();
+
+    svg.on('pointerdown.type', function (ev) { lastPointer = ev.pointerType || 'mouse'; });
+    svg.on('click.bg', function () { if (tip.pinned) hideTooltip(); });
+
+    map.zoom = d3.zoom()
+      .scaleExtent([1, 16])
+      .filter(function (ev) {
+        if (ev.type === 'touchstart') return false; // Touch wird unten selbst behandelt
+        return (!ev.ctrlKey || ev.type === 'wheel') && !ev.button;
+      })
+      .on('zoom', function (ev) {
+        var t = ev.transform;
+        map.k = t.k;
+        map.root.attr('transform', t);
+        defs.selectAll('pattern').attr('patternTransform', 'scale(' + (1 / t.k) + ') rotate(45)');
+        svg.classed('zoomed', t.k > 1.001).classed('detail', t.k >= 2.2);
+        applyScale(t.k);
+        if (t.k >= 2) loadFine();
+        scheduleLabels();
+      });
+    svg.call(map.zoom);
+
+    // Touch: ein Finger scrollt die Seite (solange nicht gezoomt), zwei Finger zoomen, gezoomt verschiebt ein Finger
+    var touch = { mode: null };
+    function local(t) {
+      var r = svgNode.getBoundingClientRect();
+      return [t.clientX - r.left, t.clientY - r.top];
+    }
+    function startPinch(T) {
+      var a = local(T[0]), b = local(T[1]);
+      touch.mode = 'pinch';
+      touch.t0 = d3.zoomTransform(svgNode);
+      touch.dist = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+      touch.mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    }
+    function startPan(t) {
+      touch.mode = 'pan';
+      touch.t0 = d3.zoomTransform(svgNode);
+      touch.p0 = local(t);
+    }
+    svgNode.addEventListener('touchstart', function (ev) {
+      var T = ev.touches;
+      if (T.length >= 2) { startPinch(T); ev.preventDefault(); }
+      else if (T.length === 1 && map.k > 1.001) startPan(T[0]);
+      else touch.mode = null;
+    }, { passive: false });
+    svgNode.addEventListener('touchmove', function (ev) {
+      var T = ev.touches;
+      if (touch.mode === 'pinch' && T.length >= 2) {
+        var a = local(T[0]), b = local(T[1]);
+        var dist = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+        var mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+        var k = Math.max(1, Math.min(16, touch.t0.k * dist / touch.dist));
+        var w = touch.t0.invert(touch.mid);
+        applyTransform(d3.zoomIdentity.translate(mid[0] - w[0] * k, mid[1] - w[1] * k).scale(k));
+        ev.preventDefault();
+      } else if (touch.mode === 'pan' && T.length === 1) {
+        var p = local(T[0]);
+        var t0 = touch.t0;
+        applyTransform(d3.zoomIdentity.translate(t0.x + p[0] - touch.p0[0], t0.y + p[1] - touch.p0[1]).scale(t0.k));
+        ev.preventDefault();
+      }
+    }, { passive: false });
+    function touchEnd(ev) {
+      var T = ev.touches;
+      if (T.length >= 2) startPinch(T);
+      else if (T.length === 1 && map.k > 1.001) startPan(T[0]);
+      else touch.mode = null;
+    }
+    svgNode.addEventListener('touchend', touchEnd);
+    svgNode.addEventListener('touchcancel', touchEnd);
+
+    function zoomBy(f) { map.svg.transition().duration(250).call(map.zoom.scaleBy, f); }
+    document.getElementById('zoom-in').addEventListener('click', function () { zoomBy(1.6); });
+    document.getElementById('zoom-out').addEventListener('click', function () { zoomBy(1 / 1.6); });
+    document.getElementById('zoom-reset').addEventListener('click', function () {
+      map.svg.transition().duration(300).call(map.zoom.transform, d3.zoomIdentity);
+    });
+
+    map.ready = true;
+    var wrap = document.getElementById('map-wrap');
+    var resize = function () {
+      var box = svgNode.getBoundingClientRect();
+      var w = Math.round(box.width), h = Math.round(box.height);
+      if (!w || !h || (w === map.w && h === map.h)) return;
+      map.w = w; map.h = h;
+      svg.attr('viewBox', '0 0 ' + w + ' ' + h);
+      var pad = Math.max(8, Math.min(24, w * 0.02));
+      map.projection = d3.geoNaturalEarth1()
+        .fitExtent([[pad, pad], [w - pad, h - pad]], { type: 'FeatureCollection', features: map.features });
+      map.path = d3.geoPath(map.projection);
+      // Breite der ganzen Welt in Pixeln bei Zoom 1, für den Vergleich mit Natural-Earth-Zoomstufen
+      map.worldW = map.projection.scale() * 2 * Math.PI * 0.8707;
+      positionAll();
+      map.zoom.extent([[0, 0], [w, h]]).translateExtent([[0, 0], [w, h]]);
+      svg.call(map.zoom.transform, d3.zoomIdentity);
+    };
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(wrap);
+    else window.addEventListener('resize', resize);
+    resize();
+    applyScale(1);
+    renderMap();
+    scheduleLabels();
+  }
+
+  function render() {
+    selectYear();
+    renderSummary();
+    renderLegend();
+    renderTimeline();
+    renderMap();
+    renderKpis();
+    renderMilestones();
+    renderTable();
+    renderBirthsNote();
+    refreshTooltip();
+    renderDrawer();
+    if (map.ready && map.k >= 2.2) scheduleLabels();
+  }
+  function setYear(y) {
+    y = Math.max(BASE_YEAR, Math.min(END_YEAR, y));
+    if (y === state.year && cur) return;
+    state.year = y;
+    render();
+  }
+  function update() {
+    syncSegs();
+    if (editorStage !== state.stage) renderEditor();
+    computeTimeline();
+    render();
+    persistSoon();
+  }
+
+  renderBirths();
+  renderTableHead();
+  update();
+  initMap();
+})();
+</script>
+</body>
+</html>
