@@ -15,6 +15,13 @@
 <meta property="og:description" content="Interaktive Weltkarte mit 99 Orten in 50 Ländern: wo dein Vermögen rechnerisch ohne Arbeit reicht, wo mit 20 oder 40 Stunden pro Woche. Beta, kostenlos, ohne Konto.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="de_DE">
+<meta property="og:url" content="https://peppe1337.github.io/freiatlas/">
+<meta property="og:image" content="https://peppe1337.github.io/freiatlas/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Freiatlas: Weltkarte mit Ampelfarben, wo dein Vermögen reicht">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://peppe1337.github.io/freiatlas/assets/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -131,7 +138,7 @@
   .brand { display: inline-flex; align-items: center; color: var(--fa-word); text-decoration: none; }
   .brand .lockup { display: block; width: 180px; height: 28px; }
   .brand .mark-only { display: none; width: 28px; height: 28px; }
-  @media (max-width: 479px) { .brand .lockup { display: none; } .brand .mark-only { display: block; } }
+  @media (max-width: 479px) { .brand .lockup { width: 154px; height: 24px; } }
   .topnav { display: flex; align-items: center; gap: 4px 16px; }
   .topnav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; }
   .topnav li { margin: 0; }
@@ -357,7 +364,7 @@
         <li><a href="#modell">Modell</a></li>
         <li><a href="#faq">Fragen</a></li>
       </ul>
-      <a class="cta" href="app/">Karte öffnen</a>
+      <a class="cta" href="app/#karte">Karte öffnen</a>
     </nav>
     <details class="menu">
       <summary>Menü</summary>
@@ -367,7 +374,7 @@
           <li><a href="#beispiel">Beispiel</a></li>
           <li><a href="#modell">Modell</a></li>
           <li><a href="#faq">Fragen</a></li>
-          <li><a class="cta" href="app/">Karte öffnen</a></li>
+          <li><a class="cta" href="app/#karte">Karte öffnen</a></li>
         </ul>
       </nav>
     </details>
@@ -391,7 +398,7 @@
         <h1 id="h-hero">Alle Orte, an denen dein Vermögen&nbsp;reicht</h1>
         <p class="lead">Freiatlas ist eine Weltkarte mit 99 Orten in 50 Ländern. Du trägst Haushalt und Vermögen ein, und die Karte zeigt nach einem offengelegten Modell, wo es ohne Arbeit reicht, wo mit 20 oder 40 Stunden pro Woche, und wo noch nicht.</p>
         <div class="btn-row">
-          <a class="btn btn-primary" href="app/">Karte öffnen</a>
+          <a class="btn btn-primary" href="app/#karte">Karte öffnen</a>
           <a class="btn btn-secondary" href="#modell">So rechnet Freiatlas</a>
         </div>
         <p class="privacy">Alles wird in deinem Browser gerechnet, ohne Konto, ohne Cookies und ohne Tracking.</p>
@@ -399,8 +406,8 @@
       <figure>
         <div class="shot">
           <picture>
-            <source media="(prefers-color-scheme: dark) and (max-width: 720px)" srcset="assets/screens/mobile-dark.webp" width="390" height="844">
-            <source media="(max-width: 720px)" srcset="assets/screens/mobile-light.webp" width="390" height="844">
+            <source media="(prefers-color-scheme: dark) and (max-width: 720px)" srcset="assets/screens/mobile-dark.webp" width="390" height="763">
+            <source media="(max-width: 720px)" srcset="assets/screens/mobile-light.webp" width="390" height="763">
             <source media="(prefers-color-scheme: dark)" srcset="assets/screens/map-dark.webp" width="1208" height="824">
             <img src="assets/screens/map-light.webp" width="1208" height="824" alt="Weltkarte im Jahr 2026 mit Ländern in den Ampelfarben grün, gelb und orange, darüber die Zeitachse von 2026 bis 2050 und das Vermögen 400.000&#160;€." loading="eager" decoding="async" fetchpriority="high">
           </picture>
@@ -560,7 +567,7 @@
           <source media="(prefers-color-scheme: dark) and (max-width: 720px)" srcset="assets/screens/mobile-drawer-dark.webp" width="390" height="844">
             <source media="(max-width: 720px)" srcset="assets/screens/mobile-drawer-light.webp" width="390" height="844">
             <source media="(prefers-color-scheme: dark)" srcset="assets/screens/mobile-dark.webp">
-          <img src="assets/screens/mobile-light.webp" width="390" height="844" loading="lazy" decoding="async" alt="Die App auf einem Handybildschirm: Zeitachse auf 2026, Weltkarte mit Ampelfarben und Legende, auf schmalen Bildschirmen stattdessen die Kostenaufschlüsselung für Varkala.">
+          <img src="assets/screens/mobile-light.webp" width="390" height="763" loading="lazy" decoding="async" alt="Die App auf einem Handybildschirm: Zeitachse auf 2026, Weltkarte mit Ampelfarben und Legende, auf schmalen Bildschirmen stattdessen die Kostenaufschlüsselung für Varkala.">
         </picture>
       </div>
     </article>
@@ -712,7 +719,7 @@
         <h2 id="h-final">Schau nach, wo es heute schon reicht</h2>
         <p>Trag deinen Haushalt und dein Vermögen ein, die Karte antwortet nach einem Modell, dessen Rechenweg du an jedem Ort nachlesen kannst.</p>
         <div class="btn-row">
-          <a class="btn btn-primary" href="app/">Karte öffnen</a>
+          <a class="btn btn-primary" href="app/#karte">Karte öffnen</a>
         </div>
       </div>
     </div>
