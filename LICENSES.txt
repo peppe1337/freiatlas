@@ -65,3 +65,133 @@ Koordinaten der Orte
 Preisniveaus je Land
 ============================================================
 Weltbank, International Comparison Program 2021 und World Development Indicators (PA.NUS.PRVT.PP, PA.NUS.PPP, PA.NUS.FCRF), Creative Commons Attribution 4.0 (CC BY 4.0), data.worldbank.org. Umrechnung relativ zu Deutschland (Deutschland = 1,0), getrennt nach Wohnen, Lebensmitteln, Restaurants und übrigem Konsum.
+
+============================================================
+Quellen der Schaufenster-Orte (Japan, Bali)
+============================================================
+geoBoundaries Indonesia ADM2 (Regencies and Cities), gbOpen (geoBoundaries (William and Mary geoLab); Daten Badan Pusat Statistik, World Food Programme, OCHA ROAP via HDX), Creative Commons Attribution 3.0 Intergovernmental Organisations (CC BY 3.0 IGO), Stand 2020, abgerufen 2026-10-13, https://www.geoboundaries.org/api/current/gbOpen/IDN/ADM2/. geoBoundaries (www.geoboundaries.org), BPS/WFP/OCHA via HDX, CC BY 3.0 IGO
+Natural Earth 10m Admin 1 States and Provinces, Version 5.1.0 (Natural Earth (Tom Patterson, Nathaniel Vaughn Kelso und Mitwirkende)), Public Domain, Stand 2022-05-05, abgerufen 2026-10-13, https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/. Made with Natural Earth
+Housing and Land Survey 2023 (令和5年住宅・土地統計調査), Tabelle 112-2: 住宅の所有の関係(4区分)別 借家(専用住宅)の1か月当たり家賃, 全国・都道府県・市区 (総務省統計局 (Statistics Bureau of Japan) via e-Stat), Government of Japan Standard Terms of Use v2.0 (CC BY 4.0 kompatibel), Stand 2023-10, abgerufen 2026-10-13, https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040210046&fileKind=0. 住宅・土地統計調査（総務省）を加工して作成
+BIMC Hospital Standorte Kuta, Nusa Dua (ACHSI-akkreditiert), Ubud (BIMC Hospital Bali), Unternehmensseite, Fakten frei, Stand 2026-10, abgerufen 2026-10-13, https://bimcbali.com/bimc-siloam-nusa-dua. BIMC Hospital Bali
+Iuran BPJS Kesehatan Peserta Mandiri (PBPU) ab 2. August 2026, Perpres 63/2022 (CNBC Indonesia, zitiert Peraturan Presiden Nr. 63 Tahun 2022), Rechtsgrundlage gemeinfrei, Zahlen frei, Stand 2026-08, abgerufen 2026-10-13, https://cnbcindonesia.com/news/20260802092453-4-755779/pemerintah-hapus-kelas-1-2-3-bpjs-kesehatan-ini-iuran-per-2-agustus. Iuran BPJS Kesehatan nach Perpres 63/2022, CNBC Indonesia 02.08.2026
+124 Ribu WNA jadi Peserta BPJS Kesehatan, 15 Ribu Orang di Bali (CNBC Indonesia, zitiert BPJS Kesehatan), Nachrichtenmeldung, Fakten frei, Stand 2025-09, abgerufen 2026-10-13, https://www.cnbcindonesia.com/lifestyle/20250917233751-33-667973/124-ribu-wna-jadi-peserta-bpjs-kesehatan-15-ribu-orang-di-bali. CNBC Indonesia, 18.09.2025
+Rata-rata Pengeluaran per Kapita Sebulan Menurut Kabupaten/Kota di Provinsi Bali (Rupiah), Susenas 2025 (Badan Pusat Statistik Provinsi Bali), BPS Terms of Use (Punkt 13: kommerzielle Nutzung mit Quellenangabe erlaubt, siehe docs/lizenzen/bps-nutzungsbedingungen-2026-10-13.md), Stand 2025, abgerufen 2026-10-13, https://bali.bps.go.id/id/statistics-table?subject=525. Sumber: Badan Pusat Statistik, Susenas 2025, abgerufen 13.10.2026
+International Comparison Program 2021, Preisniveau-Indizes je Ausgabenkategorie, Indonesien relativ zu Deutschland (src/icp.json) (Weltbank), CC BY 4.0, Stand 2021, fortgeschrieben bis 2025, abgerufen 2026-10-13, https://www.worldbank.org/en/programs/icp. Weltbank, International Comparison Program 2021 (CC BY 4.0)
+B1 Visa Kunjungan Wisata (Visa on Arrival / e-VoA), Direktorat Jenderal Imigrasi (Direktorat Jenderal Imigrasi), amtliche Gebühren, Stand 2026-10, abgerufen 2026-10-13, https://www.imigrasi.go.id/wna/daftar-visa-indonesia/B1. Direktorat Jenderal Imigrasi, Visa B1
+C1 Visa Kunjungan Wisata (60 Tage, verlängerbar bis 180 Tage), Direktorat Jenderal Imigrasi (Direktorat Jenderal Imigrasi), amtliche Gebühren, Stand 2026-10, abgerufen 2026-10-13, https://www.imigrasi.go.id/wna/daftar-visa-indonesia/C1. Direktorat Jenderal Imigrasi, Visa C1
+E33 Visa Rumah Kedua (Second Home Visa), Direktorat Jenderal Imigrasi (Direktorat Jenderal Imigrasi, Kementerian Imigrasi dan Pemasyarakatan), amtliche Gebühren und Rechtslage, Stand 2026-10, abgerufen 2026-10-13, https://imigrasi.go.id/wna/daftar-visa-indonesia/E33. Direktorat Jenderal Imigrasi, Visa E33
+E33F Visa Rumah Kedua Lansia (Rentner), Direktorat Jenderal Imigrasi (Direktorat Jenderal Imigrasi), amtliche Gebühren und Rechtslage, Stand 2026-10, abgerufen 2026-10-13, https://imigrasi.go.id/wna/daftar-visa-indonesia/E33F. Direktorat Jenderal Imigrasi, Visa E33F
+E33G Visa Rumah Kedua Pekerja Jarak Jauh (Remote Worker), Direktorat Jenderal Imigrasi (Direktorat Jenderal Imigrasi), amtliche Gebühren und Rechtslage, Stand 2026-10, abgerufen 2026-10-13, https://imigrasi.go.id/wna/daftar-visa-indonesia/E33G. Direktorat Jenderal Imigrasi, Visa E33G
+Peta Kawasan Rawan Bencana Gunungapi Agung (Badan Geologi, Kementerian ESDM 2015), zitiert nach Yuniartanti, Prosiding Seminar Nasional ASPI 2021 (Badan Geologi, Kementerian ESDM (Karte); Universitas Mahasaraswati (Prosiding)), amtliche Gefahrenkarte, Fakten frei, Stand 2015, abgerufen 2026-10-13, https://e-journal.unmas.ac.id/index.php/semnaspi2021/article/download/3052/2397. Badan Geologi 2015, KRB Gunungapi Agung
+Internationale Krankenversicherung für Bali, Prämienspanne 100 bis 250 Euro je Erwachsenem und Monat (kuratierte Schätzung) (Freiatlas, kuratiert aus Versichererseiten (April International, Allianz Care) und Marktübersicht freemarkethealthcareblog.com (Stand 24.09.2026)), kuratierte Schätzung mit Datum und Beleg, Stand 2026-10, abgerufen 2026-10-13, https://www.april-international.com/en/destinations/asia-pacific/health-insurance-in-indonesia/health-insurance-bali. Freiatlas-Schätzung, Stand 13.10.2026
+Jahresmiete 2-Schlafzimmer-Villa Canggu, 12 Angebotspreise einzeln zitiert, Stand 13.10.2026 (Freiatlas, kuratiert aus Agenturangeboten (Bali Home Immo, Kibarer)), kuratierte Schätzung mit Datum und Beleg, kein Scraping, Stand 2026-10, abgerufen 2026-10-13, https://bali-home-immo.com/realestate-property/for-rent/villa/yearly/canggu/2-bedroom-villa-for-yearly-rental-in-canggu-ya246. Freiatlas-Schätzung aus einzeln zitierten Angeboten, Stand Oktober 2026
+Jahresmiete 2-Schlafzimmer-Villa Denpasar, 1 Angebotspreise einzeln zitiert, Stand 13.10.2026 (Freiatlas, kuratiert aus Agenturangeboten (Kibarer)), kuratierte Schätzung mit Datum und Beleg, kein Scraping, Stand 2026-10, abgerufen 2026-10-13, https://www.villabalisale.com/realestate-property/for-rent/villa/annually/denpasar/effortless-living-two-bedrooms-villa-in-padangsambian-denpasar-yrc5317. Freiatlas-Schätzung aus einzeln zitierten Angeboten, Stand Oktober 2026
+Jahresmiete 2-Schlafzimmer-Villa Sanur, 5 Angebotspreise einzeln zitiert, Stand 13.10.2026 (Freiatlas, kuratiert aus Agenturangeboten (Bali Home Immo, Bali Villa Realty, Kibarer)), kuratierte Schätzung mit Datum und Beleg, kein Scraping, Stand 2026-10, abgerufen 2026-10-13, https://balivillarealty.com/villa/rental/east-coast/sanur/this-charming-2-bedrooms-villa-for-yearly-rental-in-sanur-bali/. Freiatlas-Schätzung aus einzeln zitierten Angeboten, Stand Oktober 2026
+Jahresmiete 2-Schlafzimmer-Villa Seminyak, 12 Angebotspreise einzeln zitiert, Stand 13.10.2026 (Freiatlas, kuratiert aus Agenturangeboten (Bali Home Immo, Kibarer)), kuratierte Schätzung mit Datum und Beleg, kein Scraping, Stand 2026-10, abgerufen 2026-10-13, https://bali-home-immo.com/realestate-property/for-rent/villa/yearly/seminyak/2-bedroom-villa-for-yearly-rental-in-seminyak-rf133. Freiatlas-Schätzung aus einzeln zitierten Angeboten, Stand Oktober 2026
+Jahresmiete 2-Schlafzimmer-Villa Ubud, 16 Angebotspreise einzeln zitiert, Stand 13.10.2026 (Freiatlas, kuratiert aus Agenturangeboten (Bali Home Immo, Kibarer)), kuratierte Schätzung mit Datum und Beleg, kein Scraping, Stand 2026-10, abgerufen 2026-10-13, https://bali-home-immo.com/realestate-property/for-rent/villa/yearly/ubud/charming-2-bedroom-villa-for-rent-in-ubud-im0024. Freiatlas-Schätzung aus einzeln zitierten Angeboten, Stand Oktober 2026
+Jahresmiete 2-Schlafzimmer-Villa Uluwatu, 9 Angebotspreise einzeln zitiert, Stand 13.10.2026 (Freiatlas, kuratiert aus Agenturangeboten (Bali Home Immo)), kuratierte Schätzung mit Datum und Beleg, kein Scraping, Stand 2026-10, abgerufen 2026-10-13, https://bali-home-immo.com/realestate-property/for-rent/villa/yearly/uluwatu/cozy-2-bedrooms-villa-for-yearly-monthly-rental-in-uluwatu-balangan-ad202. Freiatlas-Schätzung aus einzeln zitierten Angeboten, Stand Oktober 2026
+Bali Island School (Sanur), Fee Schedule and Terms School Year 2026-2027 (PDF vom 05.02.2026) (Bali Island School), Schuldokument, Gebühren sind Fakten, Stand 2026-27, abgerufen 2026-10-13, https://baliinternationalschool.com/wp-content/uploads/2026/02/TuitionfeesSY26-27.pdf. Bali Island School, School Fees 2026-2027
+Canggu Community School, Gebührenspanne Primary 2025/26 (Tutopiya, Schulwebsite am 13.10.2026 nicht erreichbar) (Tutopiya (Drittportal), Zahlen der Schule), Drittportal, Zahlen als Fakten der Schule zitiert, Stand 2025-26, abgerufen 2026-10-13, https://www.tutopiya.com/blog/international-school-fees/canggu-community-school-bali-fees/. Canggu Community School, Gebühren 2026/27 nach Tutopiya
+Sekolah Dyatmika (Denpasar), School Fees Year 2023-2024 (PDF) (Sekolah Dyatmika), Schuldokument 2023/24, als Schätzung geführt, weil veraltet, Stand 2023-24, abgerufen 2026-10-13, https://dyatmika.org/wp-content/uploads/2023/10/Dyatmika-School-Fees-23-24-eng.pdf. Dyatmika School Fees 2023-2024
+Green School Bali, Tuition and Fees Schedule 2026-2027 (PDF) (Green School Bali), Schuldokument, Gebühren sind Fakten, Stand 2026-27, abgerufen 2026-10-13, https://bali.greenschool.org/wp-content/uploads/sites/2/2026/02/26-27-GSB-Tuition-Fees-Schedule-.docx.pdf. Green School Bali, Tuition and Fees Schedule 2026/27
+Upah Minimum Kabupaten/Kota Provinsi Bali 2026, Keputusan Gubernur Bali Nr. 1021/03-M/HK/2025 (Pemerintah Provinsi Bali (zitiert nach Kompas TV, 26.12.2025)), amtliche Festsetzung, Zahlen frei, Stand 2026-01, abgerufen 2026-10-13, https://www.kompas.tv/regional/639859/upah-minimum-bali-2026-naik-umk-badung-paling-tinggi. Mindestlöhne Bali 2026 nach Keputusan Gubernur Bali 1021/03-M/HK/2025
+Indonesia Implements Tiered Visa Fees for Efficient Arrivals (VoA 1.000.000, e-VoA 750.000 Rupiah) (RRI (Radio Republik Indonesia), zitiert Ditjen Imigrasi), Nachrichtenmeldung, amtliche Ankündigung, Stand 2026-08, abgerufen 2026-10-13, https://rri.co.id/en/national/2646854/indonesia-implements-tiered-visa-fees-for-efficient-arrivals. RRI, 12.08.2026
+Bali, the tropical Indonesian island that is running out of water (Indonesia Water Portal, 01.12.2019) (Indonesia Water Portal), Medienbericht, Fakten frei, Stand 2019-12, abgerufen 2026-10-13, https://indonesiawaterportal.com/news/bali-the-tropical-indonesian-island-that-is-running-out-of-water/. Indonesia Water Portal 2019
+Klimanormalwerte 1991 bis 2020 je Station (平年値, 年の値), Japan Meteorological Agency (気象庁 (Japan Meteorological Agency)), JMA Public Data License 1.0 (CC BY 4.0 kompatibel), Stand 1991-2020, abgerufen 2026-10-13, https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php. 出典: 気象庁ホームページ (Japan Meteorological Agency)
+国民健康保険料の軽減 (7割・5割・2割), 福岡市, 令和8年度 (福岡市 (Fukuoka City)), amtliche Rechtslage, Fakten frei, Stand FY2026, abgerufen 2026-10-13, https://www.city.fukuoka.lg.jp/hofuku/kokuho/hp/seido/06-03.html. Fukuoka City
+外国籍のかたの国民健康保険への加入 (NHI-Pflicht und Ausnahmen nach Aufenthaltsstatus), 目黒区 (目黒区 (Meguro City, Tokyo)), amtliche Rechtslage, Fakten frei, Stand 2025, abgerufen 2026-10-13, https://www.city.meguro.tokyo.jp/kokuho/kurashi/kokuho/kanyu-gaikoku.html. Meguro City
+地震保険 基本料率 (Erdbebenversicherung, Grundprämie je 10 Mio. Yen und Jahr nach Präfektur und Bauart), 財務省 (財務省 (Ministry of Finance)), amtliche Festsetzung, Zahlen frei, Stand 2022-10-01, abgerufen 2026-10-13, https://www.mof.go.jp/policy/financial_system/earthquake_insurance/standard_premiums.html. Ministry of Finance Japan
+特定活動（長期滞在 ロングステイ, 観光・保養目的）: 在留資格の要件, 外務省 (外務省 (Ministry of Foreign Affairs of Japan); Bestätigung durch Botschaft Singapur via VFS Global PDF vom 26.9.2025), amtliche Rechtslage, Fakten frei, Stand 2025-09, abgerufen 2026-10-13, https://www.mofa.go.jp/mofaj/ca/fna/page22_002161.html. Ministry of Foreign Affairs of Japan
+Working Holiday Programme Deutschland und Japan, Auswärtiges Amt (Auswärtiges Amt (Bundesrepublik Deutschland); Botschaft von Japan in Deutschland (Seite beim Abruf gesperrt)), amtliche Rechtslage, Fakten frei, Stand 2026-10, abgerufen 2026-10-13, https://www.auswaertiges-amt.de/en/06-workingholiday/606672. Auswärtiges Amt; Botschaft von Japan in Deutschland
+在留資格「経営・管理」の上陸許可基準の見直し (Business Manager, gültig ab 16.10.2025), 出入国在留管理庁 (出入国在留管理庁 (Immigration Services Agency, MOJ)), amtliche Rechtslage, Fakten frei, Stand 2025-10-16, abgerufen 2026-10-13, https://www.moj.go.jp/isa/applications/resources/10_00237.html. Immigration Services Agency of Japan
+特定活動（デジタルノマド）: 在留資格の概要, 出入国在留管理庁 (出入国在留管理庁 (Immigration Services Agency, MOJ)), amtliche Rechtslage, Fakten frei, Stand 2024-03, abgerufen 2026-10-13, https://www.moj.go.jp/isa/applications/status/designatedactivities10_00001.html. Immigration Services Agency of Japan
+デジタルノマド 対象国・地域一覧 (Liste der zugelassenen Staaten, 特定活動53号/54号) (出入国在留管理庁 (Immigration Services Agency, MOJ)), amtliche Rechtslage, Fakten frei, Stand 2024-03, abgerufen 2026-10-13, https://www.moj.go.jp/isa/content/001416527.pdf. Immigration Services Agency of Japan
+国民年金保険料の額 (National Pension, Beitrag je Monat), 令和7年度 17.510 Yen (日本年金機構 (Japan Pension Service)), amtliche Festsetzung, Zahlen frei, Stand FY2025, abgerufen 2026-10-13, https://www.nenkin.go.jp/service/kokunen/hokenryo/hokenryogaku.html. Japan Pension Service
+国民年金保険料 (National Pension, Beitrag je Monat), 令和8年度 17.920 Yen (日本年金機構 (Japan Pension Service)), amtliche Festsetzung, Zahlen frei, Stand FY2026, abgerufen 2026-10-13, https://www.nenkin.go.jp/service/kokunen/hokenryo/hokenryo.html. Japan Pension Service
+国民健康保険料の計算方法 令和8年度 (保険料率), 福岡市 (福岡市 (Fukuoka City)), amtliche Festsetzung, Zahlen frei, Stand FY2026, abgerufen 2026-10-13, https://www.city.fukuoka.lg.jp/hofuku/kokuho/hp/seido/06-02.html. Fukuoka City
+令和7年度 市町村標準保険料率 (人吉市), 熊本県 (熊本県 (Kumamoto Prefecture)), amtliche Festsetzung, Zahlen frei, Stand FY2025, abgerufen 2026-10-13, https://www.pref.kumamoto.jp/uploaded/life/230781_653603_misc.pdf. Kumamoto Prefecture
+令和8年度 市町における国民健康保険料率 (資料5, 金沢市), 石川県 (石川県 (Ishikawa Prefecture), Sitzung des Landes-NHI-Beirats), amtliche Festsetzung, Zahlen frei, Stand FY2026, abgerufen 2026-10-13, https://www.pref.ishikawa.lg.jp/iryou/kokuho1/documents/r801shiryou5.pdf. Ishikawa Prefecture
+令和7年度 市町村標準保険料率 (熊本市), 熊本県 (熊本県 (Kumamoto Prefecture)), amtliche Festsetzung, Zahlen frei, Stand FY2025, abgerufen 2026-10-13, https://www.pref.kumamoto.jp/uploaded/life/230781_653603_misc.pdf. Kumamoto Prefecture
+令和8年度京都市国民健康保険料について (Beitragssätze), 京都市 (京都市 (Kyoto City)), amtliche Festsetzung, Zahlen frei, Stand FY2026, abgerufen 2026-10-13, https://www.city.kyoto.lg.jp/hokenfukushi/cmsfiles/contents/0000351/351038/madoguchi_chirashi.pdf. Kyoto City
+国民健康保険料の計算・軽減・減免 令和8年度, 長野市 (長野市 (Nagano City)), amtliche Festsetzung, Zahlen frei, Stand FY2026, abgerufen 2026-10-13, https://www.city.nagano.nagano.jp/soshiki/kokuho/1376.html. Nagano City
+令和7年度 標準保険料率算定結果 (市町村標準保険料率 那覇市), 沖縄県 (沖縄県 (Okinawa Prefecture)), amtliche Festsetzung, Zahlen frei, Stand FY2025, abgerufen 2026-10-13, https://www.pref.okinawa.jp/_res/projects/default_project/_page_/001/006/541/01r70hyoujyunnhokanryouritu.pdf. Okinawa Prefecture
+令和8年度 大阪府統一保険料率 (国民健康保険), 大阪府 (大阪府 (Osaka Prefecture)), amtliche Festsetzung, Zahlen frei, Stand FY2026, abgerufen 2026-10-13, https://www.pref.osaka.lg.jp/o100080/kokuho/iryouseido/hokenryouritsu/hokenryouritsu2.html. Osaka Prefecture
+保険料の賦課 (国民健康保険料率 令和8年度), 札幌市 (札幌市 (Sapporo City)), amtliche Festsetzung, Zahlen frei, Stand FY2026, abgerufen 2026-10-13, https://www.city.sapporo.jp/hoken-iryo/kokuho/fuka.html. Sapporo City
+国民健康保険料率 令和8年度, 世田谷区 (Tokio 23 Bezirke, Referenzbezirk) (世田谷区 (Setagaya City, Tokyo)), amtliche Festsetzung, Zahlen frei, Stand FY2026, abgerufen 2026-10-13, https://www.city.setagaya.lg.jp/02060/297.html. Setagaya City
+令和8年度の国民健康保険料率, 横浜市 (横浜市 (Yokohama City)), amtliche Festsetzung, Zahlen frei, Stand FY2026, abgerufen 2026-10-13, https://www.city.yokohama.lg.jp/kurashi/koseki-zei-hoken/kokuho/hokenryo/r7hokennryouritu.html. Yokohama City
+Regional Difference Index of Consumer Prices 2025 (消費者物価地域差指数 2025年), 別表1 10大費目別 (都道府県) (総務省統計局 (Statistics Bureau of Japan)), Government of Japan Standard Terms of Use v2.0 (CC BY 4.0 kompatibel), Stand 2025, abgerufen 2026-10-13, https://www.stat.go.jp/data/kouri/kouzou/pdf/g_2025.pdf. 小売物価統計調査（構造編）結果（総務省）を加工して作成
+Regional Difference Index of Consumer Prices 2025, 別表2 総合・家賃を除く総合・食料 (都道府県庁所在市及び政令指定都市, 52 Städte) (総務省統計局 (Statistics Bureau of Japan)), Government of Japan Standard Terms of Use v2.0 (CC BY 4.0 kompatibel), Stand 2025, abgerufen 2026-10-13, https://www.stat.go.jp/data/kouri/kouzou/pdf/g_2025.pdf. 小売物価統計調査（構造編）結果（総務省）を加工して作成
+Fukuoka International School, Tuition and Fees 2026/2027 (Fukuoka International School), Schulgebühren laut Schulwebsite, Fakten frei, Stand 2026/27, abgerufen 2026-10-13, https://www.fis.ed.jp/join/tuition-fees. Fukuoka International School
+Kyoto International School, Jahresgebühren 2025-2026 (Drittverzeichnis Schoozy) (Schoozy (Verzeichnis); Schule: Kyoto International School), kuratierte Zahl aus Drittverzeichnis, Schulwebsite beim Abruf nicht erreichbar, Stand 2025/26, abgerufen 2026-10-13, https://schoozy.com/schools/kyoto-international-school-kyoto/fees. Kyoto International School (Gebührenangaben via Schoozy)
+Okinawa International School (Naha und Nanjo), Gebühren 2026-2027 (Übersicht der OIST Educational Support Services) (OIST Graduate University (Übersicht); Schule: Okinawa International School, https://ois.ac.jp/), kuratierte Zahl aus Drittübersicht, Gebührenseiten der Schule beim Abruf nicht erreichbar, Stand 2026/27, abgerufen 2026-10-13, https://www.oist.jp/educational-support-service/okinawa-international-school-information. Okinawa International School (Gebührenangaben via OIST)
+Osaka International School of Kwansei Gakuin, Tuition and Fees 2026-2027 (Senri and Osaka International Schools of Kwansei Gakuin), Schulgebühren laut Schulwebsite, Fakten frei, Stand 2026/27, abgerufen 2026-10-13, https://sois.kwansei.ac.jp/osaka-international-school/admissions/fees. Osaka International School of Kwansei Gakuin
+Hokkaido International School, Tuition and Fees 2026-2027 (Hokkaido International School), Schulgebühren laut Schulwebsite, Fakten frei, Stand 2026/27, abgerufen 2026-10-13, https://www.his.ac.jp/admission/tuition-and-fees. Hokkaido International School
+The British School in Tokyo, Fees 2026/27 (The British School in Tokyo), Schulgebühren laut Schulwebsite, Fakten frei, Stand 2026/27, abgerufen 2026-10-13, https://www.bst.ac.jp/admissions/fees. The British School in Tokyo
+Deutsche Schule Tokyo Yokohama, Schulgebühren 2026/27 (Deutsche Schule Tokyo Yokohama), Schulgebühren laut Schulwebsite, Fakten frei, Stand 2026/27, abgerufen 2026-10-13, https://dsty.ac.jp/anmeldung/schulgebuehren/. Deutsche Schule Tokyo Yokohama
+
+============================================================
+Grenzen der Schaufenster-Länder
+============================================================
+{
+ "generated": "2026-10-13",
+ "files": {
+  "japan.json": {
+   "source": "Natural Earth 10m Admin 1 States and Provinces, Version 5.1.0",
+   "sourceKey": "geo-naturalearth",
+   "url": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/",
+   "file": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/117488dc884bad03366ff727eca013e434615127/geojson/ne_10m_admin_1_states_provinces.geojson",
+   "sha256": "22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5",
+   "license": "Public Domain",
+   "licenseUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+   "version": "5.1.0",
+   "dataDate": "2022-05-05",
+   "accessed": "2026-10-13",
+   "attribution": "Grenzen Japan: Made with Natural Earth (gemeinfrei)",
+   "regions": 47,
+   "idScheme": "ISO 3166-2 (JP-01 bis JP-47), name deutsch, gruppe = eine von 8 Regionen (Okinawa bei Kyushu)",
+   "processing": "mapshaper 45 % der Stützpunkte, keep-shapes, clean, Quantisierung 20.000; 143 Inseln ab 1 km² extrahiert, 125 nach Vereinfachung, zusammengefallen sind 18 Inseln bis 8 km²",
+   "bbox": [
+    122.9446,
+    24.257,
+    145.8132,
+    45.5159
+   ],
+   "bboxCore": [
+    127.6359,
+    26.0844,
+    145.825,
+    45.5204
+   ],
+   "bboxCoreNote": "Bounding Box nur über Inseln ab 300 km² (Hauptinseln bis Okinawa-Hauptinsel); entfernte Inseln (Ogasawara, Minami-Torishima, Sakishima) bleiben in der Geometrie, sprengen aber fitExtent nicht, wenn die App bboxCore nutzt"
+  },
+  "bali.json": {
+   "source": "geoBoundaries IDN ADM2 (Badan Pusat Statistik, World Food Programme, OCHA ROAP via HDX)",
+   "sourceKey": "geo-geoboundaries-idn",
+   "url": "https://www.geoboundaries.org/api/current/gbOpen/IDN/ADM2/",
+   "file": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/IDN/ADM2/geoBoundaries-IDN-ADM2.geojson",
+   "sha256": "947cedc058888c0c2b2628071d289956c85fe279adb369dcf1327ce2236a5602",
+   "license": "CC BY 3.0 IGO",
+   "licenseUrl": "https://creativecommons.org/licenses/by/3.0/igo/",
+   "version": "IDN-ADM2-22746128, Build Dec 12, 2023",
+   "dataDate": "2020",
+   "accessed": "2026-10-13",
+   "attribution": "Grenzen Bali: geoBoundaries (www.geoboundaries.org), Daten BPS, WFP und OCHA via HDX, CC BY 3.0 IGO",
+   "regions": 9,
+   "idScheme": "ID-BA-xx nach BPS-Kabupaten-Code (51.01 Jembrana bis 51.08 Buleleng, 51.71 Kota Denpasar)",
+   "processing": "mapshaper 8 % der Stützpunkte, keep-shapes, clean, Quantisierung 10.000; 13 Inseln ab 0,5 km² extrahiert, 13 nach Vereinfachung",
+   "bbox": [
+    114.4316,
+    -8.849,
+    115.7113,
+    -8.0614
+   ],
+   "bboxCore": [
+    114.4316,
+    -8.849,
+    115.7113,
+    -8.0614
+   ]
+  }
+ },
+ "tool": "src/geo.py, Vereinfachung mapshaper (MPL 2.0)"
+}

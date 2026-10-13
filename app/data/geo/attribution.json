@@ -1,0 +1,63 @@
+{
+  "generated": "2026-10-13",
+  "files": {
+    "japan.json": {
+      "source": "Natural Earth 10m Admin 1 States and Provinces, Version 5.1.0",
+      "sourceKey": "geo-naturalearth",
+      "url": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/",
+      "file": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/117488dc884bad03366ff727eca013e434615127/geojson/ne_10m_admin_1_states_provinces.geojson",
+      "sha256": "22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5",
+      "license": "Public Domain",
+      "licenseUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+      "version": "5.1.0",
+      "dataDate": "2022-05-05",
+      "accessed": "2026-10-13",
+      "attribution": "Grenzen Japan: Made with Natural Earth (gemeinfrei)",
+      "regions": 47,
+      "idScheme": "ISO 3166-2 (JP-01 bis JP-47), name deutsch, gruppe = eine von 8 Regionen (Okinawa bei Kyushu)",
+      "processing": "mapshaper 45 % der Stützpunkte, keep-shapes, clean, Quantisierung 20.000; 143 Inseln ab 1 km² extrahiert, 125 nach Vereinfachung, zusammengefallen sind 18 Inseln bis 8 km²",
+      "bbox": [
+        122.9446,
+        24.257,
+        145.8132,
+        45.5159
+      ],
+      "bboxCore": [
+        127.6359,
+        26.0844,
+        145.825,
+        45.5204
+      ],
+      "bboxCoreNote": "Bounding Box nur über Inseln ab 300 km² (Hauptinseln bis Okinawa-Hauptinsel); entfernte Inseln (Ogasawara, Minami-Torishima, Sakishima) bleiben in der Geometrie, sprengen aber fitExtent nicht, wenn die App bboxCore nutzt"
+    },
+    "bali.json": {
+      "source": "geoBoundaries IDN ADM2 (Badan Pusat Statistik, World Food Programme, OCHA ROAP via HDX)",
+      "sourceKey": "geo-geoboundaries-idn",
+      "url": "https://www.geoboundaries.org/api/current/gbOpen/IDN/ADM2/",
+      "file": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/IDN/ADM2/geoBoundaries-IDN-ADM2.geojson",
+      "sha256": "947cedc058888c0c2b2628071d289956c85fe279adb369dcf1327ce2236a5602",
+      "license": "CC BY 3.0 IGO",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/igo/",
+      "version": "IDN-ADM2-22746128, Build Dec 12, 2023",
+      "dataDate": "2020",
+      "accessed": "2026-10-13",
+      "attribution": "Grenzen Bali: geoBoundaries (www.geoboundaries.org), Daten BPS, WFP und OCHA via HDX, CC BY 3.0 IGO",
+      "regions": 9,
+      "idScheme": "ID-BA-xx nach BPS-Kabupaten-Code (51.01 Jembrana bis 51.08 Buleleng, 51.71 Kota Denpasar)",
+      "processing": "mapshaper 8 % der Stützpunkte, keep-shapes, clean, Quantisierung 10.000; 13 Inseln ab 0,5 km² extrahiert, 13 nach Vereinfachung",
+      "bbox": [
+        114.4316,
+        -8.849,
+        115.7113,
+        -8.0614
+      ],
+      "bboxCore": [
+        114.4316,
+        -8.849,
+        115.7113,
+        -8.0614
+      ]
+    }
+  },
+  "tool": "src/geo.py, Vereinfachung mapshaper (MPL 2.0)"
+}

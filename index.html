@@ -10,9 +10,9 @@
 <meta name="theme-color" content="#F4F4EF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111416" media="(prefers-color-scheme: dark)">
 <title>Freiatlas: Wo dein Vermögen heute schon reicht</title>
-<meta name="description" content="Interaktive Weltkarte mit 99 Orten in 50 Ländern: wo dein Vermögen rechnerisch ohne Arbeit reicht, wo mit 20 oder 40 Stunden pro Woche. Beta, kostenlos, ohne Konto.">
+<meta name="description" content="Interaktive Weltkarte mit 117 Orten in 50 Ländern: wo dein Vermögen rechnerisch ohne Arbeit reicht, wo mit 20 oder 40 Stunden pro Woche. Beta, kostenlos, ohne Konto.">
 <meta property="og:title" content="Freiatlas: Wo dein Vermögen heute schon reicht">
-<meta property="og:description" content="Interaktive Weltkarte mit 99 Orten in 50 Ländern: wo dein Vermögen rechnerisch ohne Arbeit reicht, wo mit 20 oder 40 Stunden pro Woche. Beta, kostenlos, ohne Konto.">
+<meta property="og:description" content="Interaktive Weltkarte mit 117 Orten in 50 Ländern: wo dein Vermögen rechnerisch ohne Arbeit reicht, wo mit 20 oder 40 Stunden pro Woche. Beta, kostenlos, ohne Konto.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="de_DE">
 <meta property="og:url" content="https://peppe1337.github.io/freiatlas/">
@@ -36,7 +36,7 @@
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "Web",
   "inLanguage": "de",
-  "description": "Interaktive Weltkarte mit 99 Orten in 50 Ländern: wo dein Vermögen rechnerisch ohne Arbeit reicht, wo mit 20 oder 40 Stunden pro Woche. Beta, kostenlos, ohne Konto.",
+  "description": "Interaktive Weltkarte mit 117 Orten in 50 Ländern: wo dein Vermögen rechnerisch ohne Arbeit reicht, wo mit 20 oder 40 Stunden pro Woche. Beta, kostenlos, ohne Konto.",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
 }
 </script>
@@ -396,7 +396,7 @@
       <div class="inner">
         <span class="caption">Beta, kostenlos</span>
         <h1 id="h-hero">Alle Orte, an denen dein Vermögen&nbsp;reicht</h1>
-        <p class="lead">Freiatlas ist eine Weltkarte mit 99 Orten in 50 Ländern. Du trägst Haushalt und Vermögen ein, und die Karte zeigt nach einem offengelegten Modell, wo es ohne Arbeit reicht, wo mit 20 oder 40 Stunden pro Woche, und wo noch nicht.</p>
+        <p class="lead">Freiatlas ist eine Weltkarte mit 117 Orten in 50 Ländern, für Japan und Bali mit Daten bis auf Orts- und Präfekturebene. Du trägst Haushalt und Vermögen ein, und die Karte zeigt nach einem offengelegten Modell, wo es ohne Arbeit reicht, wo mit 20 oder 40 Stunden pro Woche, und wo noch nicht.</p>
         <div class="btn-row">
           <a class="btn btn-primary" href="app/#karte">Karte öffnen</a>
           <a class="btn btn-secondary" href="#modell">So rechnet Freiatlas</a>
@@ -589,6 +589,43 @@
     </article>
   </section>
 
+  <!-- Schaufenster -->
+  <section class="sec wrap" id="schaufenster" aria-labelledby="h-schaufenster">
+    <div class="sec-head">
+      <h2 id="h-schaufenster">Zwei Länder in der Tiefe: Japan und Bali</h2>
+      <p class="lead num">Für die meisten Länder rechnet Freiatlas mit dem Preisniveau des Landes. Für Japan und Bali geht es eine Ebene tiefer: 21 kuratierte Orte mit amtlichen Mieten und Preisindizes je Präfektur, Ausgaben je Regentschaft, Visumpfaden, Klima und Schulen. Jede Zahl trägt ihre Quelle und Lizenz, und wo ein Wert fehlt, zeigt die App eine Lücke statt einer Schätzung.</p>
+    </div>
+
+    <article class="feat wide">
+      <div class="feat-text">
+        <span class="caption">Schaufenster Japan</span>
+        <h3>Elf Orte von Sapporo bis Naha</h3>
+        <p class="num">Die Präfekturen sind nach dem amtlichen Wohnindex 2025 in Graustufen gefärbt, die Punkte zeigen die Ampel für deinen Haushalt. Die Mieten stammen aus der Wohnungszählung 2023, die Preisindizes vom Statistikamt, das Klima vom Wetterdienst. Je Ort wählst du einen Visumpfad, Langzeit-Aufenthalt, Digital Nomad, Working Holiday oder Business Manager, und die Rechnung übernimmt Krankenversicherung und Rentenpflicht, wie der Pfad sie verlangt.</p>
+      </div>
+      <div class="feat-media shot">
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="assets/screens/japan-dark.webp">
+          <img src="assets/screens/japan-light.webp" width="1174" height="828" loading="lazy" decoding="async" alt="Fokuskarte Japan mit Präfekturen in Graustufen und elf Orten als gelbe Punkte, von Sapporo bis Naha, daneben die Liste der Orte mit Monatsbedarf, Kanazawa 2.248&#160;€ bis Tokio 23 Bezirke 3.042&#160;€.">
+        </picture>
+      </div>
+    </article>
+
+    <article class="feat narrow rev">
+      <div class="feat-text">
+        <span class="caption">Schaufenster Bali</span>
+        <h3>Zehn Orte, Mieten als Spanne</h3>
+        <p class="num">Villenmieten in Canggu, Ubud oder Uluwatu schwanken stark. Deshalb rechnet Freiatlas hier mit einer Spanne von günstig bis teuer und zeigt zwei Ampeln. Die Regentschaften sind nach den Ausgaben der lokalen Bevölkerung gefärbt (Susenas 2025). Für Sidemen, Amed, Lovina und Munduk fehlt noch eine belegte Miete, diese Orte bleiben grau.</p>
+        <p class="num">Direkt öffnen: <a href="app/#jp">Schaufenster Japan</a> oder <a href="app/#id">Schaufenster Bali</a>.</p>
+      </div>
+      <div class="feat-media shot">
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="assets/screens/bali-hub-dark.webp">
+          <img src="assets/screens/bali-hub-light.webp" width="440" height="1070" loading="lazy" decoding="async" alt="Profilkarte für Canggu, Bali: zwei Ampeln, günstige Villa gelb und teure Villa gelb, Monatsbedarf 1.908&#160;€ bis 2.502&#160;€, Datenpfad von der Weltbank über die Jahresmiete einer 2-Schlafzimmer-Villa, darunter die Visumpfade Second Home, Remote Worker und Rentner.">
+        </picture>
+      </div>
+    </article>
+  </section>
+
   <!-- Beispiel -->
   <section class="sec wrap" id="beispiel" aria-labelledby="h-beispiel">
     <div class="sec-head">
@@ -624,7 +661,7 @@
     </div>
     <div class="measure num">
       <p>Jede Stufe ist eine Liste von Bausteinen in Köln-Preisen für 2 Erwachsene mit 2 Kindern: Wohnen warm, Lebensmittel, Restaurant, Freizeit und Sonstiges, Mobilität, Reisen, Krankenversicherung international, Haushaltshilfe. Pro Land kommen Krankenversicherung, Schule und Visum dazu, auf alles 10&nbsp;% Puffer. Im Stufen-Editor siehst du jeden Betrag und kannst ihn ändern.</p>
-      <p>Für jeden der 99 Orte werden die Bausteine mit dem Preisniveau des Landes umgerechnet, getrennt nach Wohnen, Lebensmitteln, Restaurants und übrigem Konsum (Weltbank-Daten, relativ zu Deutschland), für ländliche Orte mit Abschlag, und mit der OECD-Skala, einem Gewichtungsschlüssel für Haushaltsgrößen, an deinen Haushalt angepasst. Kinder zählen bis 17 zum Haushalt, von 6 bis 17 kommen die Schulkosten des Landes dazu.</p>
+      <p>Für jeden der 117 Orte werden die Bausteine mit dem Preisniveau des Landes umgerechnet, getrennt nach Wohnen, Lebensmitteln, Restaurants und übrigem Konsum (Weltbank-Daten, relativ zu Deutschland), für ländliche Orte mit Abschlag, und mit der OECD-Skala, einem Gewichtungsschlüssel für Haushaltsgrößen, an deinen Haushalt angepasst. Die 21 Schaufenster-Orte in Japan und Bali rechnen stattdessen mit Mieten und Preisindizes vor Ort. Kinder zählen bis 17 zum Haushalt, von 6 bis 17 kommen die Schulkosten des Landes dazu.</p>
       <p>Das Zielvermögen eines Ortes ist der Monatsbedarf abzüglich Einkommen, mal 12, geteilt durch die Entnahmerate (Standard 3,5&nbsp;%). Die Zeitachse lässt dein Vermögen von 2026 bis 2050 mit Realrendite (Standard 5&nbsp;%) und Sparrate wachsen, alles in heutigen Preisen, und zeigt pro Ort, ab welchem Jahr es ohne Arbeit reicht.</p>
     </div>
     <p class="formula">Zielvermögen = (Monatsbedarf minus Einkommen) × 12 / Entnahmerate</p>
@@ -636,6 +673,9 @@
           <li>Krankenversicherung, Schule und Visum pro Land: grobe Schätzwerte, Stand Oktober 2026</li>
           <li>Koordinaten der Orte: <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap-Mitwirkende</a> (ODbL)</li>
           <li>Ländergrenzen: world-atlas, abgeleitet aus Natural Earth. Städtenamen: Natural Earth (gemeinfrei)</li>
+          <li>Schaufenster Japan: Statistics Bureau of Japan (Regional Difference Index 2025, Housing and Land Survey 2023, Standardnutzungsbedingungen der japanischen Regierung v2.0), Japan Meteorological Agency, Japan Pension Service, Gebühren und Visumregeln aus amtlichen Angaben. Präfekturgrenzen: Natural Earth (gemeinfrei)</li>
+          <li>Schaufenster Bali: Badan Pusat Statistik (Susenas 2025, abgerufen Oktober 2026), kuratierte Mietspannen aus Angeboten (Stand Oktober 2026), Visumregeln der indonesischen Einwanderungsbehörde. Regentschaftsgrenzen: geoBoundaries (CC BY 3.0 IGO)</li>
+          <li>Alle Quellen je Wert stehen in der App am Ort und in der <a href="LICENSES.txt">Lizenzübersicht</a></li>
         </ul>
       </div>
       <div class="card">
@@ -678,6 +718,10 @@
       <details>
         <summary>Woher kommen die Zahlen?</summary>
         <div class="a"><p class="num">Die Preisniveaus stammen von der Weltbank: Kategorien aus dem International Comparison Program 2021, fortgeschrieben mit Kaufkraftdaten bis 2025, frei nutzbar unter CC BY 4.0. Die Bausteine der Stufen sind in Köln-Preisen hinterlegt und werden pro Land mit diesen Preisniveaus umgerechnet, für ländliche Orte mit Abschlag. Krankenversicherung, Schule und Visum pro Land sind grobe Schätzwerte. Jeder Ort zeigt den Rechenweg je Posten.</p></div>
+      </details>
+      <details>
+        <summary>Warum sind Japan und Bali genauer als andere Länder?</summary>
+        <div class="a"><p class="num">Beide sind Schaufenster: Dort sind die Daten auf der kleinsten belegbaren Ebene gesammelt, in Japan amtliche Mieten und Preisindizes je Präfektur, in Bali Ausgaben je Regentschaft und Mietspannen aus Angeboten, dazu Visumpfade, Klima und Schulen. Jede Zahl trägt ihre Quelle. Wo etwas fehlt, zeigt die App eine Lücke statt einer Schätzung. Weitere Länder sollen nach dem gleichen Muster folgen.</p></div>
       </details>
       <details>
         <summary>Sind Steuern drin?</summary>
@@ -748,7 +792,7 @@
           </svg>
         </a>
         <p>Freiatlas ist eine Modellrechnung mit Durchschnittswerten und Annahmen, keine Anlage-, Steuer- oder Rechtsberatung. Jede Zahl gilt nur nach diesem Modell und bei den eingestellten Annahmen.</p>
-        <p class="num">Datenquellen: Preisniveaus je Land von der Weltbank (ICP 2021 und Kaufkraftdaten bis 2025, CC BY 4.0), Länderwerte für Krankenversicherung, Schule und Visum als grobe Schätzwerte (Stand Oktober 2026), Koordinaten der Orte von OpenStreetMap-Mitwirkenden (ODbL), Ländergrenzen von world-atlas und Städtenamen aus Natural Earth.</p>
+        <p class="num">Datenquellen: Preisniveaus je Land von der Weltbank (ICP 2021 und Kaufkraftdaten bis 2025, CC BY 4.0), Länderwerte für Krankenversicherung, Schule und Visum als grobe Schätzwerte (Stand Oktober 2026), Koordinaten der Orte von OpenStreetMap-Mitwirkenden (ODbL), Ländergrenzen von world-atlas und Städtenamen aus Natural Earth. Schaufenster Japan und Bali mit amtlichen Quellen (Statistikamt Japan, Japan Meteorological Agency, Badan Pusat Statistik) und kuratierten Mietspannen, Grenzen von Natural Earth und geoBoundaries (CC BY 3.0 IGO).</p>
         <p>Freiatlas ist eine Beta. Rückmeldungen und Korrekturen sind willkommen, Kontakt über das <a href="impressum.html">Impressum</a>.</p>
       </div>
       <nav aria-label="Rechtliches">
